@@ -1,0 +1,7 @@
+title: Second Course
+slug: second-course
+sections:
+  - title: Getting Started
+    chapters:
+      - slug: 01-intro
+        title: Introduction
