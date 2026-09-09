@@ -5,7 +5,7 @@ metadata:
   type: project
   tier: T0
   created: 2026-09-08 21:36
-  updated: 2026-09-09 01:28
+  updated: 2026-09-09 07:10
 ---
 
 # arti-lms — Memory Index
@@ -15,6 +15,8 @@ metadata:
 - [Option 3 implementation plan](memories/option3-implementation-plan.md) — full build checklist + Laravel setup commands, not yet run
 - [Testing DB isolation](memories/testing-db-isolation.md) — phpunit.xml must point at arti_lms_testing, not the dev DB; RefreshDatabase wiped dev data once already
 - [Course layout responsive](memories/course-layout-responsive.md) — off-canvas sidebar + sections/chapters manifest grouping implemented; browser visual QA still open; manifest content cache must be cleared when re-verifying after edits
+- [Branding: login page](memories/branding-login.md) — login redesign (no header, centered, real logo/favicon from ~/.arti/logo/export), `/` redirects to login/dashboard, primary blue re-sourced from logo dot color (#2563eb)
+- [Feedback: check memory before env probes](memories/feedback-check-memory-before-env-probes.md) — don't re-run `where`/`npm ls -g` discovery for facts memory already recorded (e.g. no browser tooling here)
 
 ## Change log
 - 2026-09-08 — scaffolded memory/ for arti-lms (Dev project, non-Paper category)
@@ -28,3 +30,7 @@ metadata:
 - 2026-09-09 00:32 — step 6 end-to-end HTTP verification passed; found + user-fixed Laragon vhost docroot bug; found open logout-UI gap
 - 2026-09-09 01:05 — step 8 done: Filament CourseResource + AccessRelationManager (grant/create-learner actions), panel gate test-verified
 - 2026-09-09 01:28 — implemented + functionally verified the course-layout-responsive plan (grouped sidebar sections + off-canvas mobile drawer); browser visual QA still open
+- 2026-09-09 06:39 — login page redesigned (no header, centered, real logo/favicon), `/` now redirects to login/dashboard, primary blue re-sourced from logo dot color; added branding-login memory
+- 2026-09-09 12:00 — flagged redundant chromium-cli/playwright probe during mobile-sidebar-toggle debugging; hardened course-layout-responsive memory, added feedback memory on checking memory before env probes
+- 2026-09-09 07:04 — real-browser QA started (user-driven); fixed Vite IPv6/CORS dev-server config and a relative-Markdown-image-path 404, both logged in course-layout-responsive
+- 2026-09-09 07:10 — fixed-viewport shell (pinned topbar + sidebar header, independently scrollable content/nav, hidden scrollbars) added to course-layout-responsive; build-verified only

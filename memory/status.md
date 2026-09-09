@@ -5,10 +5,30 @@ metadata:
   type: project
   tier: T0
   created: 2026-09-08 21:36
-  updated: 2026-09-09 01:28
+  updated: 2026-09-09 07:10
 ---
 
 ## Current state
+
+**Fixed-viewport shell layout (this session)**: `.app-shell` now pins to `height: 100vh; overflow:
+hidden` (was `min-height: 100vh`, document-scrolled). Topbar (`flex-shrink: 0`) and sidebar header
+(`flex-shrink: 0`) stay fixed at the top of their columns; `.content` and `.sidebar__nav` scroll
+independently (`min-height: 0; overflow-y: auto`), with scrollbars hidden on both
+(`scrollbar-width: none` + `::-webkit-scrollbar{display:none}`). Applies to both
+`content/show.blade.php` and `dashboard.blade.php` (shared classes). `npm run build` clean; not
+browser-verified (same no-automation limitation as below). Full detail in
+[[course-layout-responsive]].
+
+**Real-browser QA (prior session)**: the user opened `arti-lms.local` in their own browser (via
+the IDE) and reported two console errors, both fixed — Vite dev-server CORS/IPv6 binding
+(`vite.config.js`: `server.host: '127.0.0.1'`, `cors: true`, `hmr.host: 'localhost'` — requires
+restarting `npm run dev`) and a 404 on the example chapter's placeholder image (relative Markdown
+image paths were resolving against the wrong URL directory; fixed via a new
+`ContentController::resolveImageUrls()` that rewrites relative `<img src>` to the real
+`content.image` route). Both verified via tinker HTTP simulation only — not yet re-confirmed in
+the browser after the Vite restart. Full detail in [[course-layout-responsive]]. The
+drawer-specific visual QA items (animation, backdrop/Escape close, no horizontal scroll at
+~375/~768px) are still open — this was a prerequisite fix, not that QA itself.
 
 Steps 1-8 of [[option3-implementation-plan]] are done, plus §1-2 of the follow-on
 `option3-implementation-currently-finish-wobbly-swan` plan (logout UI, learner dashboard, progress
@@ -137,3 +157,4 @@ sessions ago. Test credentials: `test@example.com` / `password` (learner), `admi
 - 2026-09-09 01:05 — step 8 done: CourseResource + AccessRelationManager (grant-existing-learner and create-learner-and-grant actions), Filament panel gate verified via tinker + new FilamentPanelAccessTest (admin/learner at /jamrud)
 - 2026-09-09 01:20 — fixed RefreshDatabase wiping the real dev MySQL DB (no testing DB was configured in phpunit.xml); added arti_lms_testing DB + phpunit.xml env; restored dev users/course/access by hand
 - 2026-09-09 01:28 — implemented course-layout-responsive plan (grouped sidebar + off-canvas mobile drawer), functionally verified via artisan tinker (no browser tool available); real-browser visual QA left open
+- 2026-09-09 07:10 — fixed-viewport shell: topbar + sidebar header pinned, content/sidebar nav independently scrollable, scrollbars hidden on both; build-verified only

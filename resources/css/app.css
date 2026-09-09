@@ -6,9 +6,9 @@
 /* ---- Tokens -------------------------------------------------------------- */
 :root {
     /* Brand */
-    --color-primary: #2f8fc4;
-    --color-primary-dark: #23709c;
-    --color-primary-light: #eaf5fb;
+    --color-primary: #2563eb;
+    --color-primary-dark: #1d4ed8;
+    --color-primary-light: #eff6ff;
     --color-accent: #e8622c;
 
     /* Status */
@@ -95,7 +95,8 @@ button, input, select, textarea { font: inherit; color: inherit; }
 ---------------------------------------------------------------------------- */
 .app-shell {
     display: flex;
-    min-height: 100vh;
+    height: 100vh;
+    overflow: hidden;
 }
 
 .sidebar {
@@ -109,9 +110,11 @@ button, input, select, textarea { font: inherit; color: inherit; }
 
 .sidebar__header {
     display: flex;
-    align-items: center;
-    gap: var(--space-3);
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
     padding: var(--space-5) var(--space-4);
+    flex-shrink: 0;
 }
 
 .sidebar__avatar {
@@ -121,16 +124,27 @@ button, input, select, textarea { font: inherit; color: inherit; }
     object-fit: cover;
 }
 
+.sidebar__wordmark {
+    height: 3rem;
+    width: auto;
+    text-align: center;
+    margin: 0 0 1rem;
+}
+
 .sidebar__name {
     font-weight: 600;
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-lg);
 }
 
 .sidebar__nav {
     flex: 1;
+    min-height: 0;
     overflow-y: auto;
     padding: 0 var(--space-2);
+    scrollbar-width: none;
 }
+
+.sidebar__nav::-webkit-scrollbar { display: none; }
 
 .sidebar__link {
     display: flex;
@@ -164,6 +178,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 /* Topbar: light (dashboard) */
 .topbar {
     height: var(--topbar-height);
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -184,6 +199,19 @@ button, input, select, textarea { font: inherit; color: inherit; }
 
 .topbar__title { font-size: var(--font-size-lg); font-weight: 700; }
 
+.topbar__left {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+}
+
+.topbar__wordmark {
+    height: 1.75rem;
+    width: auto;
+}
+
+.topbar__back { flex-shrink: 0; }
+
 .topbar__user {
     text-align: right;
     font-size: var(--font-size-sm);
@@ -194,9 +222,14 @@ button, input, select, textarea { font: inherit; color: inherit; }
 
 .content {
     flex: 1;
+    min-height: 0;
+    overflow-y: auto;
     padding: var(--space-6);
     max-width: 860px;
+    scrollbar-width: none;
 }
+
+.content::-webkit-scrollbar { display: none; }
 
 /* ---- Course tree (sidebar nav for the reader) ----------------------------- */
 .tree-group {
@@ -218,9 +251,11 @@ button, input, select, textarea { font: inherit; color: inherit; }
     padding: var(--space-2) var(--space-3);
     border-radius: var(--radius-sm);
     font-size: var(--font-size-sm);
+    text-decoration: none;
+    transition: background-color 0.15s ease, color 0.15s ease;
 }
 
-.tree-item:hover { background: var(--color-bg); }
+.tree-item:hover { background: var(--color-primary-light); color: var(--color-primary-dark); text-decoration: none; }
 .tree-item--active { background: var(--color-primary-light); color: var(--color-primary-dark); }
 
 .tree-item__check {
@@ -252,6 +287,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 
 /* ---- Cards ----------------------------------------------------------------- */
 .card {
+    display: block;
     background: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
@@ -259,7 +295,18 @@ button, input, select, textarea { font: inherit; color: inherit; }
     overflow: hidden;
     width: 100%;
     max-width: 280px;
+    text-decoration: none;
+    transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
 }
+
+.card:hover {
+    background: var(--color-primary-light);
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-md);
+    text-decoration: none;
+}
+
+.card:hover .card__title { color: var(--color-primary-dark); }
 
 .card__image {
     width: 100%;
@@ -317,10 +364,10 @@ button, input, select, textarea { font: inherit; color: inherit; }
     font-weight: 700;
     cursor: pointer;
     text-decoration: none;
-    transition: background-color 0.15s ease, opacity 0.15s ease;
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
 }
 
-.btn:hover { text-decoration: none; opacity: 0.92; }
+.btn:hover { text-decoration: none; }
 
 .btn--primary { background: var(--color-primary); color: var(--color-text-inverse); width: 100%; }
 .btn--primary:hover { background: var(--color-primary-dark); }
@@ -330,6 +377,14 @@ button, input, select, textarea { font: inherit; color: inherit; }
     color: var(--color-primary);
     border: 1px solid var(--color-primary);
 }
+
+.btn--outline:hover {
+    background: var(--color-primary);
+    color: var(--color-text-inverse);
+}
+
+.topbar--dark .btn--outline { color: var(--color-text-inverse); border-color: var(--color-text-inverse); }
+.topbar--dark .btn--outline:hover { background: var(--color-text-inverse); color: var(--color-surface-dark); }
 
 .btn--block { width: 100%; }
 
@@ -419,20 +474,42 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 
 /* ---- Auth pages --------------------------------------------------------------- */
-.auth-content {
+.auth-page {
+    min-height: 100vh;
     display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
-    align-items: flex-start;
-    padding-top: var(--space-8);
+    gap: var(--space-6);
+    padding: var(--space-6);
+}
+
+.auth-brand {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.auth-brand__logo {
+    width: 48px;
+    height: 48px;
+}
+
+.auth-brand__name {
+    font-size: var(--font-size-xl);
+    font-weight: 700;
 }
 
 .auth-card {
+    width: 100%;
     max-width: 360px;
 }
 
 /* ---- Utilities ------------------------------------------------------------------ */
 .text-center { text-align: center; }
 .stack { display: flex; flex-direction: column; gap: var(--space-3); }
+
+.sidebar-toggle { display: none; }
 
 /* ---- Responsive ------------------------------------------------------------------ */
 @media (max-width: 900px) {
@@ -472,5 +549,3 @@ button, input, select, textarea { font: inherit; color: inherit; }
     .topbar { padding: 0 var(--space-4); }
     .content { padding: var(--space-4); }
 }
-
-.sidebar-toggle { display: none; }

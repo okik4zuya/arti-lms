@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('course_access', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('course_id')->constrained()->cascadeOnDelete();
+            $table->uuid('id')->primary();
+            $table->foreignUuid('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignUuid('course_id')->constrained()->cascadeOnDelete();
             $table->timestamp('granted_at');
             $table->timestamps();
 

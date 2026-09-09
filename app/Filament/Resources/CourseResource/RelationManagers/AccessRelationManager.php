@@ -24,7 +24,7 @@ class AccessRelationManager extends RelationManager
             ->schema([
                 Forms\Components\Select::make('user_id')
                     ->label('Learner')
-                    ->options(fn () => User::query()->where('role', 'learner')->pluck('email', 'id'))
+                    ->options(fn () => User::query()->role('learner')->pluck('email', 'id'))
                     ->searchable()
                     ->required(),
             ]);
@@ -82,8 +82,8 @@ class AccessRelationManager extends RelationManager
                             'name' => $data['name'],
                             'email' => $data['email'],
                             'password' => Hash::make($data['password']),
-                            'role' => 'learner',
                         ]);
+                        $user->assignRole('learner');
 
                         $this->getRelationship()->create([
                             'user_id' => $user->id,

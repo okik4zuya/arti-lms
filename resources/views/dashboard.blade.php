@@ -14,7 +14,10 @@
     <div class="app-shell">
         <main class="main">
             <div class="topbar">
-                <span class="topbar__title">My Courses</span>
+                <div class="topbar__left">
+                    <img src="{{ asset('images/wordmark.png') }}" alt="ARTi LMS" class="topbar__wordmark">
+                    <span class="topbar__title">My Courses</span>
+                </div>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit" class="btn btn--outline">Log out</button>

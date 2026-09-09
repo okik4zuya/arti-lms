@@ -5,7 +5,7 @@ metadata:
   type: project
   tier: T0
   created: 2026-09-08 21:36
-  updated: 2026-09-09 01:28
+  updated: 2026-09-09 07:04
 ---
 
 - [x] Brainstorm and redesign the tech stack next session (see [[tech-stack-options]] for the two prior drafts)
@@ -71,7 +71,17 @@ metadata:
 - [x] `content/show.blade.php` grouped sidebar (`.tree-group` headers) + hamburger toggle + backdrop markup
 - [x] `app.css` `.tree-group` styling + `@media (max-width: 900px)` off-canvas drawer block
 - [x] `app.js` toggle/backdrop-click/Escape handling
-- [ ] Real-browser visual QA (drawer animation, backdrop/Escape close, no horizontal scroll at ~375px/~768px) — no chromium-cli/Playwright available this session, only functionally verified via `artisan tinker` simulated requests (see [[course-layout-responsive]])
+- [x] Fix two console errors found during user-driven real-browser QA: Vite IPv6/CORS dev-server binding, relative-Markdown-image-path 404
+- [x] Fixed-viewport shell: topbar + sidebar header pinned to top, content + sidebar nav independently scrollable, scrollbars hidden on both (build-verified only)
+- [ ] Real-browser visual QA (drawer animation, backdrop/Escape close, no horizontal scroll at ~375px/~768px, fixed-topbar + independent scroll behavior) — still open, console errors were a prerequisite fix not the QA itself (see [[course-layout-responsive]])
+
+### Dashboard polish (branding + hover effects)
+
+- [x] Add wordmark branding to dashboard topbar
+- [x] Course card hover: removed underline, added fill-color effect ([[branding-login]] area, see app.css `.card:hover`)
+- [x] All `.btn`/`.btn--outline` hover effects made consistent app-wide (fill instead of opacity fade)
+- [x] Course-layout sidebar (`.tree-item`) hover: removed underline, added primary-tint fill effect
+- [ ] Real-browser visual QA of the above (build-verified only, no browser tool available)
 
 ## Change log
 - 2026-09-08 — scaffolded, empty
@@ -99,3 +109,9 @@ metadata:
   test-verified (admin 200 / learner 403 at /jamrud, not /admin — panel id is "jamrud")
 - 2026-09-09 01:28 — implemented the course-layout-responsive plan (grouped sidebar + off-canvas
   mobile drawer); added dedicated section above; left the browser-visual-QA line open
+- 2026-09-09 07:04 — checked off the two console-error fixes found during user-driven real-browser
+  QA (Vite IPv6/CORS binding, relative Markdown image path 404); drawer-specific visual QA item
+  still open
+- 2026-09-09 07:10 — checked off fixed-viewport shell (topbar + sidebar header pinned, content +
+  sidebar nav independently scrollable, hidden scrollbars); expanded the open visual-QA item to
+  cover it too

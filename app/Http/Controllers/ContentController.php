@@ -22,6 +22,7 @@ class ContentController extends Controller
         abort_unless($document->matter('published', false), 404);
 
         $html = (new CommonMarkConverter())->convert($document->body())->getContent();
+        $html = $this->resolveImageUrls($html, $course, $slug);
 
         $manifest = $this->manifest($course->slug);
 
@@ -49,6 +50,19 @@ class ContentController extends Controller
         abort_unless(is_file($path) && ! str_contains($file, '..'), 404);
 
         return response()->file($path);
+    }
+
+    protected function resolveImageUrls(string $html, Course $course, string $slug): string
+    {
+        return preg_replace_callback(
+            '/<img\s+([^>]*?)src="(?!https?:\/\/|\/)(?:\.\/)?images\/([^"]+)"/i',
+            fn (array $matches) => sprintf(
+                '<img %ssrc="%s"',
+                $matches[1],
+                route('content.image', ['course' => $course, 'slug' => $slug, 'file' => $matches[2]])
+            ),
+            $html
+        );
     }
 
     protected function manifest(string $courseSlug): array
