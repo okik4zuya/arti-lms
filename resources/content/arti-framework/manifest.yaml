@@ -1,0 +1,103 @@
+title: ARTi Framework
+slug: arti-framework
+sections:
+  - title: Pendahuluan
+    chapters:
+      - slug: kenapa-ai-belum-memuaskan
+        title: "Kenapa AI Belum Memuaskan (Halusinasi & Memori)"
+        subchapters:
+          - slug: 01-intro
+            title: Pendahuluan
+      - slug: claude-dan-claude-code
+        title: Claude dan Claude Code
+        subchapters:
+          - slug: claude-dan-claude-code-01
+            title: Claude dan Claude Code
+      - slug: why-arti-framework
+        title: Why ARTi Framework
+        subchapters:
+          - slug: why-arti-framework-01
+            title: Why ARTi Framework
+  - title: Amati
+    chapters:
+      - slug: the-researcher-profile
+        title: The Researcher Profile
+        subchapters:
+          - slug: the-researcher-profile-01
+            title: The Researcher Profile
+      - slug: mapping-the-gap-not-guessing-it
+        title: Mapping the Gap, Not Guessing It
+        subchapters:
+          - slug: mapping-the-gap-not-guessing-it-01
+            title: Mapping the Gap, Not Guessing It
+      - slug: reading-a-journal-tactically
+        title: Reading a Journal Tactically
+        subchapters:
+          - slug: reading-a-journal-tactically-01
+            title: Reading a Journal Tactically
+  - title: Replikasi
+    chapters:
+      - slug: feasibility-before-ambition
+        title: Feasibility Before Ambition
+        subchapters:
+          - slug: feasibility-before-ambition-01
+            title: Feasibility Before Ambition
+      - slug: the-scratchbook-discipline
+        title: The Scratchbook Discipline
+        subchapters:
+          - slug: the-scratchbook-discipline-01
+            title: The Scratchbook Discipline
+  - title: Tambah Inovasi
+    chapters:
+      - slug: scoring-novelty-honestly
+        title: Scoring Novelty Honestly
+        subchapters:
+          - slug: scoring-novelty-honestly-01
+            title: Scoring Novelty Honestly
+      - slug: building-the-manuscript-blueprint
+        title: Building the Manuscript Blueprint
+        subchapters:
+          - slug: building-the-manuscript-blueprint-01
+            title: Building the Manuscript Blueprint
+      - slug: matching-voice-and-technical-depth
+        title: Matching Voice and Technical Depth
+        subchapters:
+          - slug: matching-voice-and-technical-depth-01
+            title: Matching Voice and Technical Depth
+      - slug: the-iteration-log-and-the-novelty-floor
+        title: The Iteration Log and the Novelty Floor
+        subchapters:
+          - slug: the-iteration-log-and-the-novelty-floor-01
+            title: The Iteration Log and the Novelty Floor
+      - slug: cover-letters-and-the-submission-checklist
+        title: Cover Letters and the Submission Checklist
+        subchapters:
+          - slug: cover-letters-and-the-submission-checklist-01
+            title: Cover Letters and the Submission Checklist
+      - slug: answering-reviewers-without-losing-the-paper
+        title: Answering Reviewers Without Losing the Paper
+        subchapters:
+          - slug: answering-reviewers-without-losing-the-paper-01
+            title: Answering Reviewers Without Losing the Paper
+      - slug: after-acceptance-feeding-the-next-amati
+        title: "After Acceptance: Feeding the Next Amati"
+        subchapters:
+          - slug: after-acceptance-feeding-the-next-amati-01
+            title: "After Acceptance: Feeding the Next Amati"
+  - title: BONUS
+    chapters:
+      - slug: toolkit-quick-reference
+        title: Toolkit Quick Reference
+        subchapters:
+          - slug: toolkit-quick-reference-01
+            title: Toolkit Quick Reference
+      - slug: panduan-instalasi
+        title: Panduan Instalasi
+        subchapters:
+          - slug: panduan-instalasi-01
+            title: Panduan Instalasi
+      - slug: prompt-guide
+        title: Prompt Guide
+        subchapters:
+          - slug: prompt-guide-01
+            title: Prompt Guide

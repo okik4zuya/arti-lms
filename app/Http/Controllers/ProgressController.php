@@ -15,7 +15,7 @@ class ProgressController extends Controller
             [
                 'user_id' => $request->user()->id,
                 'course_id' => $course->id,
-                'chapter_slug' => $slug,
+                'subchapter_slug' => $slug,
             ],
             [
                 'completed_at' => now(),

@@ -21,15 +21,23 @@
                 @foreach ($manifest['sections'] ?? [] as $section)
                     <div class="tree-group">{{ $section['title'] ?? '' }}</div>
                     @foreach ($section['chapters'] ?? [] as $chapter)
-                        <a
-                            href="{{ route('content.show', ['course' => $course, 'slug' => $chapter['slug']]) }}"
-                            class="tree-item @if ($chapter['slug'] === $slug) tree-item--active @endif"
-                        >
-                            <span>{{ $chapter['title'] ?? $chapter['slug'] }}</span>
-                            @if ($completedSlugs->contains($chapter['slug']))
-                                <span class="tree-item__check tree-item__check--done">&check;</span>
-                            @endif
-                        </a>
+                        @php
+                            $chapterIsActive = collect($chapter['subchapters'] ?? [])->contains('slug', $slug);
+                        @endphp
+                        <details class="tree-chapter" @if ($chapterIsActive) open @endif>
+                            <summary class="tree-subgroup">{{ $chapter['title'] ?? '' }}</summary>
+                            @foreach ($chapter['subchapters'] ?? [] as $subchapter)
+                                <a
+                                    href="{{ route('content.show', ['course' => $course, 'slug' => $subchapter['slug']]) }}"
+                                    class="tree-item @if ($subchapter['slug'] === $slug) tree-item--active @endif"
+                                >
+                                    <span>{{ $subchapter['title'] ?? $subchapter['slug'] }}</span>
+                                    @if ($completedSlugs->contains($subchapter['slug']))
+                                        <span class="tree-item__check tree-item__check--done">&check;</span>
+                                    @endif
+                                </a>
+                            @endforeach
+                        </details>
                     @endforeach
                 @endforeach
             </nav>

@@ -7,10 +7,11 @@ use Symfony\Component\Yaml\Yaml;
 
 class DashboardController extends Controller
 {
-    protected function flattenChapters(array $manifest): array
+    protected function flattenSubchapters(array $manifest): array
     {
         return collect($manifest['sections'] ?? [])
             ->flatMap(fn ($section) => $section['chapters'] ?? [])
+            ->flatMap(fn ($chapter) => $chapter['subchapters'] ?? [])
             ->all();
     }
 
@@ -23,26 +24,26 @@ class DashboardController extends Controller
             ->pluck('course')
             ->map(function ($course) use ($request) {
                 $manifestPath = resource_path("content/{$course->slug}/manifest.yaml");
-                $chapters = [];
+                $subchapters = [];
 
                 if (is_file($manifestPath)) {
                     $manifest = Yaml::parseFile($manifestPath);
-                    $chapters = $this->flattenChapters($manifest);
+                    $subchapters = $this->flattenSubchapters($manifest);
                 }
 
-                $course->firstChapterSlug = $chapters[0]['slug'] ?? null;
+                $course->firstSubchapterSlug = $subchapters[0]['slug'] ?? null;
 
                 $completedCount = $request->user()
                     ->progress()
                     ->where('course_id', $course->id)
                     ->whereNotNull('completed_at')
-                    ->whereIn('chapter_slug', array_column($chapters, 'slug'))
+                    ->whereIn('subchapter_slug', array_column($subchapters, 'slug'))
                     ->count();
 
-                $course->totalChapters = count($chapters);
-                $course->completedChapters = $completedCount;
-                $course->progressPercent = $course->totalChapters > 0
-                    ? (int) round($completedCount / $course->totalChapters * 100)
+                $course->totalSubchapters = count($subchapters);
+                $course->completedSubchapters = $completedCount;
+                $course->progressPercent = $course->totalSubchapters > 0
+                    ? (int) round($completedCount / $course->totalSubchapters * 100)
                     : 0;
 
                 return $course;

@@ -5,12 +5,13 @@ metadata:
   type: project
   tier: T0
   created: 2026-09-08 21:36
-  updated: 2026-09-09 07:10
+  updated: 2026-09-10 03:43
 ---
 
 # arti-lms — Memory Index
 
-- [ARTi Framework context](memories/arti-framework-context.md) — what the ebook/framework is and how it relates to this LMS
+- [ARTi Framework context](memories/arti-framework-context.md) — what the ebook/framework is (finalized 5-section/18-chapter outline), drafted in this repo's own resources/inbox/
+- [Subchapter hierarchy](memories/subchapter-hierarchy.md) — Section>Chapter>Subchapter content level, progress tracked per-subchapter; sidebar is now a `<details>` accordion
 - [Tech stack options](memories/tech-stack-options.md) — 3 candidate stacks; Option 3 (git-backed Markdown, server-rendered) + relative-path image workflow chosen
 - [Option 3 implementation plan](memories/option3-implementation-plan.md) — full build checklist + Laravel setup commands, not yet run
 - [Testing DB isolation](memories/testing-db-isolation.md) — phpunit.xml must point at arti_lms_testing, not the dev DB; RefreshDatabase wiped dev data once already
@@ -34,3 +35,5 @@ metadata:
 - 2026-09-09 12:00 — flagged redundant chromium-cli/playwright probe during mobile-sidebar-toggle debugging; hardened course-layout-responsive memory, added feedback memory on checking memory before env probes
 - 2026-09-09 07:04 — real-browser QA started (user-driven); fixed Vite IPv6/CORS dev-server config and a relative-Markdown-image-path 404, both logged in course-layout-responsive
 - 2026-09-09 07:10 — fixed-viewport shell (pinned topbar + sidebar header, independently scrollable content/nav, hidden scrollbars) added to course-layout-responsive; build-verified only
+- 2026-09-09 13:40 — finalized ebook outline (5 sections/18 chapters) into ebook-outline-v2.md; added Subchapter level to the LMS (migration+model+3 controllers+2 views+CSS+3 manifests), migrate:fresh + tinker-verified end to end; updated arti-framework-context, added subchapter-hierarchy
+- 2026-09-10 03:43 — sidebar accordion fix (chapter label clickable, visual chapter/subchapter nesting via `<details>`/CSS chevron), found via real-browser use + AskUserQuestion, tinker-verified; updated subchapter-hierarchy

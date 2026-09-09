@@ -15,11 +15,11 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->foreignUuid('user_id')->constrained()->cascadeOnDelete();
             $table->foreignUuid('course_id')->constrained()->cascadeOnDelete();
-            $table->string('chapter_slug');
+            $table->string('subchapter_slug');
             $table->timestamp('completed_at')->nullable();
             $table->timestamps();
 
-            $table->unique(['user_id', 'course_id', 'chapter_slug']);
+            $table->unique(['user_id', 'course_id', 'subchapter_slug']);
         });
     }
 

@@ -5,7 +5,7 @@ metadata:
   type: project
   tier: T0
   created: 2026-09-08 21:36
-  updated: 2026-09-09 07:04
+  updated: 2026-09-10 03:43
 ---
 
 - [x] Brainstorm and redesign the tech stack next session (see [[tech-stack-options]] for the two prior drafts)
@@ -64,6 +64,17 @@ metadata:
 - [ ] Add real course content beyond the single example-course/01-intro placeholder
 - [x] Sanity-check manifest.yaml schema + image workflow scale to more than one course/chapter (nested sections: schema now covers both existing manifests)
 
+### Ebook outline + Subchapter level (this session)
+
+- [x] Finalize ebook outline into `resources/inbox/ebook-outline-v2.md` (5 sections / 18 chapters, folds in Claude/Claude Code chapter + old Publication Loop part + BONUS entries)
+- [x] Add Subchapter level to Progress migration + model (`subchapter_slug` column/unique constraint)
+- [x] Update ContentController/ProgressController/DashboardController for subchapter-level progress
+- [x] 3-level sidebar in `content/show.blade.php` (`.tree-subgroup` for chapter labels) + CSS
+- [x] Update example-course/second-course/arti-framework manifests to the 3-level schema
+- [x] `migrate:fresh --seed` + tinker-verified end to end (dashboard %, sidebar checkmark, progress row)
+- [ ] Draft actual subchapter content for `arti-framework`'s 18 chapters (currently only ch.1's placeholder subchapter has a real content file)
+- [x] Sidebar chapter label clickable + visual chapter/subchapter nesting (accordion via `<details>`, tinker-verified) — found via real-browser use, see [[subchapter-hierarchy]]
+
 ### Course layout — responsive + grouped sidebar
 
 - [x] Nest manifest `chapters:` under `sections:`, add per-chapter `title` (both manifests); fix second-course's stale copy-pasted title/slug
@@ -115,3 +126,8 @@ metadata:
 - 2026-09-09 07:10 — checked off fixed-viewport shell (topbar + sidebar header pinned, content +
   sidebar nav independently scrollable, hidden scrollbars); expanded the open visual-QA item to
   cover it too
+- 2026-09-09 13:40 — finalized ebook outline + added Subchapter level end-to-end (migration, model,
+  controllers, views, CSS, manifests), migrate:fresh + tinker-verified; added new section above,
+  left drafting actual subchapter content as the one open item
+- 2026-09-10 03:43 — checked off the sidebar accordion fix (chapter-label click + visual nesting),
+  found via real-browser use and confirmed with the user via AskUserQuestion

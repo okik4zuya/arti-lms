@@ -5,143 +5,50 @@ metadata:
   type: project
   tier: T0
   created: 2026-09-08 21:36
-  updated: 2026-09-09 07:10
+  updated: 2026-09-10 03:43
 ---
 
 ## Current state
 
-**Fixed-viewport shell layout (this session)**: `.app-shell` now pins to `height: 100vh; overflow:
-hidden` (was `min-height: 100vh`, document-scrolled). Topbar (`flex-shrink: 0`) and sidebar header
-(`flex-shrink: 0`) stay fixed at the top of their columns; `.content` and `.sidebar__nav` scroll
-independently (`min-height: 0; overflow-y: auto`), with scrollbars hidden on both
-(`scrollbar-width: none` + `::-webkit-scrollbar{display:none}`). Applies to both
-`content/show.blade.php` and `dashboard.blade.php` (shared classes). `npm run build` clean; not
-browser-verified (same no-automation limitation as below). Full detail in
-[[course-layout-responsive]].
+**Sidebar accordion fix (this session)**: real-browser use of the subchapter sidebar (added last
+session) surfaced two bugs a screenshot showed: the chapter label wasn't clickable, and — since
+every chapter's lone placeholder subchapter currently shares its exact title — the two levels read
+as one flat duplicated list. User confirmed (AskUserQuestion) they want a real accordion, and that
+the blue subchapter links 404ing on the 17 undrafted chapters is expected, not in scope here. Fixed
+in `content/show.blade.php` (`.tree-subgroup` div → `<details class="tree-chapter">`/`<summary>`,
+`open` set when the chapter contains the active slug — no JS) + `app.css` (rotating chevron,
+`--space-5` left-indent on `.tree-item`). Tinker-verified against all 18 `arti-framework` chapters:
+only the active chapter's `<details>` renders `open`. Full detail in [[subchapter-hierarchy]].
 
-**Real-browser QA (prior session)**: the user opened `arti-lms.local` in their own browser (via
-the IDE) and reported two console errors, both fixed — Vite dev-server CORS/IPv6 binding
-(`vite.config.js`: `server.host: '127.0.0.1'`, `cors: true`, `hmr.host: 'localhost'` — requires
-restarting `npm run dev`) and a 404 on the example chapter's placeholder image (relative Markdown
-image paths were resolving against the wrong URL directory; fixed via a new
-`ContentController::resolveImageUrls()` that rewrites relative `<img src>` to the real
-`content.image` route). Both verified via tinker HTTP simulation only — not yet re-confirmed in
-the browser after the Vite restart. Full detail in [[course-layout-responsive]]. The
-drawer-specific visual QA items (animation, backdrop/Escape close, no horizontal scroll at
-~375/~768px) are still open — this was a prerequisite fix, not that QA itself.
+Test credentials: `test@example.com` / `password` (learner, `example-course` access only),
+`admin@example.com` / `password` (admin, panel at `/jamrud` not `/admin`); user id 5 has
+`CourseAccess` to `second-course` specifically. Known still-open items: real-browser visual QA of
+the course-layout-responsive drawer (animation, backdrop/Escape close, no horizontal scroll at
+~375/~768px — see [[course-layout-responsive]]), the Laragon vhost browser-verify (never confirmed
+end to end through `arti-lms.local`), Step 9 (Cloudflare R2 for video, not started).
 
-Steps 1-8 of [[option3-implementation-plan]] are done, plus §1-2 of the follow-on
-`option3-implementation-currently-finish-wobbly-swan` plan (logout UI, learner dashboard, progress
-tracking), plus the separate [[course-layout-responsive]] plan (grouped sidebar sections +
-off-canvas mobile drawer, this session). Not yet browser-verified through the real
-`arti-lms.local` vhost — still outstanding from three sessions ago; all verification so far is
-`artisan serve`/`artisan tinker` + curl/PowerShell/PHPUnit.
-
-**Course layout (this session)**: implemented `~/.claude/plans/refine-course-layout-kind-pascal.md`
-in full — manifest schema is now `sections: [{title, chapters: [{slug, title}]}]` (both
-manifests; `second-course`'s stale copy-pasted title/slug also fixed), `DashboardController`
-gained `flattenChapters()`, `content/show.blade.php` renders grouped `.tree-group` sidebar
-sections + a hamburger toggle + backdrop, `app.css` got a `@media (max-width: 900px)` off-canvas
-drawer block, `app.js` got guarded toggle/backdrop/Escape JS. Verified functionally via
-`artisan tinker` simulated HTTP requests (`app()->handle(Request::create(...))` after
-`Auth::loginUsingId()`) rather than a real browser — no `chromium-cli`/Playwright available in
-this environment. Full detail, including the manifest-cache-must-be-cleared gotcha hit during
-verification, in [[course-layout-responsive]]. **Real-browser visual QA (drawer animation,
-backdrop/Escape close, no horizontal scroll at ~375/~768px) is still open** — do this first if a
-browser-driving tool becomes available.
-
-**Step 8 (Filament admin, this session)**: `CourseResource` (`php artisan make:filament-resource
-Course --generate`, then added `unique` + helper text to the slug field) manages slug/title/
-published_at. `CourseResource\RelationManagers\AccessRelationManager` (relationship `access`) lists
-each course's `course_access` rows (learner name/email/granted_at) with two header actions: "Grant
-access" (select an existing learner, `granted_at` set on submit) and "Create learner" (name/email/
-generated temp password → creates a `role=learner` User + a `CourseAccess` row in one
-`->action()` closure, shows the temp password in a persistent success notification). Table row
-action relabeled "Revoke" (still `DeleteAction`). The admin panel's id/path is **`jamrud`**, not
-`admin` (`JamrudPanelProvider`, pre-existing) — the todo item referencing `/admin` was stale.
-`User::canAccessPanel()` gate (`role === 'admin'`) verified two ways: `tinker` (learner→false,
-admin→true) and a new `tests/Feature/FilamentPanelAccessTest.php` (admin `GET /jamrud` → 200,
-learner → 403), both passing under `php artisan test`.
-
-**Step 7 (progress tracking, this session)**: new `App\Http\Controllers\ProgressController@store`
-upserts `Progress` on `(user_id, course_id, chapter_slug)` (unique constraint already existed from
-step 4) and sets `completed_at`. Route `POST learn/{course}/{slug}/progress` (`progress.store`)
-added inside the existing `auth`+`course.access` group in `routes/web.php`.
-`ContentController@show` now loads the user's completed chapter slugs for the course and passes
-`completedSlugs`/`isCompleted` to the view. `resources/views/content/show.blade.php` renders a
-"Mark as complete" form (swaps to a static "Completed" indicator once done) below the chapter body,
-and the sidebar `tree-item` shows a `.tree-item__check--done` checkmark for completed chapters.
-Minor CSS added to `resources/css/app.css` (`.chapter-complete`, centered `.tree-item__check`
-glyph). Curl/PowerShell-verified end-to-end: chapter page shows the button pre-completion, POST to
-`/progress` redirects back showing "Completed" + sidebar check.
-
-Dashboard completion % (this session, closing step 7's earlier deferral): `DashboardController`
-now derives each course's chapter list from its `manifest.yaml`, counts the user's completed
-`Progress` rows restricted to slugs in that manifest, and sets `totalChapters`/`completedChapters`/
-`progressPercent` on the course before handing it to the view. `dashboard.blade.php` renders the
-existing (previously unused) `.progress`/`.progress__track`/`.progress__fill` design-system
-component inside each course card. Curl-verified: dashboard shows 100% for the example course
-(its one chapter was already marked complete from the step-7 test).
-
-**Learner dashboard + logout UI (prior session, §1 of the same plan)**: `content/show.blade.php`'s
-topbar has a `topbar--dark` logout form (POST /logout); `DashboardController@index` (queries
-`courseAccess()->with('course')`, resolves each course's first chapter slug from its
-`manifest.yaml`), `GET /dashboard` route (named, `auth`-gated), and
-`resources/views/dashboard.blade.php` (card-grid, reuses `.card`/`.card-grid`).
-`AuthController@store` redirects to `route('dashboard')` instead of `/`.
-
-Laravel scaffolded and building. Composer has Filament v3, `league/commonmark`,
-`spatie/yaml-front-matter` installed. Frontend: Tailwind AND Sass both dropped — styling is
-**pure CSS**, a token-based design system in `resources/css/app.css` (`.app-shell`, `.sidebar`,
-`.topbar`/`.topbar--dark`, `.tree-item`, `.card`/`.card-grid`, `.badge`, `.btn`, `.progress`, plus
-`.form-field`/`.form-label`/`.form-input`/`.form-error`/`.auth-content`/`.auth-card`), derived from
-the two `wdyt/screenshot-*.png` references.
-
-Tech stack is **decided: Option 3** (git-backed Markdown, parsed and rendered server-side into
-Blade — no Docsify/iframe, no Filament DB-authored content) plus a relative-path git image workflow
-(images committed next to each chapter's Markdown, served through the same auth-gated route; R2
-reserved for video only). Full rationale in [[tech-stack-options]].
-
-Database (step 4): `courses`, `course_access`, `progress` migrated on **MySQL** (`.env` switched
-from the Laravel-11-default sqlite — no pdo_sqlite driver on this PHP install). `users` gained
-`role` (default `learner`); `User` implements `FilamentUser::canAccessPanel()` gated on
-`role === 'admin'`.
-
-Content (step 5): `resources/content/example-course/manifest.yaml` (chapter order = list order) +
-`01-intro/index.md` + a real placeholder PNG — still the only course/chapter that exists.
-
-Content controller + routes (step 6): `EnsureCourseAccess` middleware (`course.access` alias),
-`Course::getRouteKeyName() → slug`, `ContentController@show`/`@image`,
-`learn/{course}/{slug}[/images/{file}]` routes, plus `AuthController` (create/store/destroy) +
-`login`/`logout` routes + `resources/views/auth/login.blade.php`.
-
-Known still-open items: the Laragon vhost `DocumentRoot` fix (user-applied) has never been
-browser-verified end to end; `npm run dev` needed `vite.config.js` pinned to `server.port: 5273`
-(Windows reserves TCP 5094-5193 on this machine).
-
-**Incident (this session, caught by user report "can't login to /jamrud")**: the first
-`FilamentPanelAccessTest` run used `RefreshDatabase` with no separate testing DB configured —
-`phpunit.xml` had `DB_CONNECTION`/`DB_DATABASE` commented out (sqlite was ruled out earlier,
-no pdo_sqlite driver), so tests ran `migrate:fresh` against the real dev `arti_lms` MySQL database
-and wiped all users/courses/course_access/progress rows. Fixed by creating a separate
-`arti_lms_testing` MySQL database and pointing `phpunit.xml`'s `DB_CONNECTION`/`DB_DATABASE` at it
-(both env lines were previously commented out — now `mysql` / `arti_lms_testing`). Re-ran
-`php artisan test`: passes, and dev DB user count stayed unchanged across the run, confirming
-isolation. Restored dev data by hand: `test@example.com`/`password` (learner), `admin@example.com`/
-`password` (admin), `example-course` Course row + CourseAccess grant for the learner — filesystem
-content (`resources/content/example-course/`) was never touched, only DB rows were lost. The
-`Progress` row for the previously-completed 01-intro chapter was NOT restored (cosmetic, re-click
-"mark complete" to redo).
-
-**Next session**: real-browser visual QA of the course-layout-responsive drawer (see above), or
-Step 9 (Cloudflare R2 for video), or the browser-verify-vhost item still open since three
-sessions ago. Test credentials: `test@example.com` / `password` (learner), `admin@example.com` /
-`password` (admin); user id 5 has `CourseAccess` to `second-course` specifically (the seeded
-`test@example.com` user only has `example-course` access).
+Tech stack: **Option 3** (git-backed Markdown, server-rendered Blade, no Docsify/Filament-authored
+content) + relative-path git image workflow, R2 reserved for video only — full rationale in
+[[tech-stack-options]]. Steps 1-8 of [[option3-implementation-plan]] plus its follow-on §1-2
+(logout UI, learner dashboard, progress tracking) are done. DB is MySQL (`arti_lms` dev /
+`arti_lms_testing` for PHPUnit — kept separate since an earlier `RefreshDatabase` run wiped dev data
+once, see [[testing-db-isolation]]).
 
 ## Archive
 
-(none yet)
+- 2026-09-08 to 2026-09-09 07:10 — Laravel scaffold, pure-CSS design system, DB schema (steps 1-4);
+  content dir + example-course (step 5); login/logout + content controller/routes (step 6); step 7
+  progress tracking (ProgressController, mark-complete UI, dashboard completion %); step 8 Filament
+  admin (CourseResource + AccessRelationManager, panel gate tests); course-layout-responsive plan
+  (grouped sidebar + off-canvas drawer + fixed-viewport shell); RefreshDatabase-wiped-dev-DB
+  incident and its fix. Full detail in [[option3-implementation-plan]], [[course-layout-responsive]],
+  [[testing-db-isolation]], and the change log below.
+- 2026-09-09 13:40 — Finalized ebook outline (5 sections/18 chapters) into `ebook-outline-v2.md`;
+  added the 3rd content level (Subchapter) end-to-end — migration/model/3 controllers renamed
+  `chapter_slug`→`subchapter_slug`, `DashboardController::flattenChapters()`→`flattenSubchapters()`
+  (3 levels), sidebar gained a `.tree-subgroup` chapter-label level, 3 manifests updated to the
+  nested schema. `migrate:fresh --seed` + tinker-verified end to end. Full detail in
+  [[subchapter-hierarchy]].
 
 ## Change log
 - 2026-09-08 — scaffolded, empty project
@@ -158,3 +65,5 @@ sessions ago. Test credentials: `test@example.com` / `password` (learner), `admi
 - 2026-09-09 01:20 — fixed RefreshDatabase wiping the real dev MySQL DB (no testing DB was configured in phpunit.xml); added arti_lms_testing DB + phpunit.xml env; restored dev users/course/access by hand
 - 2026-09-09 01:28 — implemented course-layout-responsive plan (grouped sidebar + off-canvas mobile drawer), functionally verified via artisan tinker (no browser tool available); real-browser visual QA left open
 - 2026-09-09 07:10 — fixed-viewport shell: topbar + sidebar header pinned, content/sidebar nav independently scrollable, scrollbars hidden on both; build-verified only
+- 2026-09-09 13:40 — finalized ebook outline (5 sections/18 chapters) into ebook-outline-v2.md; added Subchapter content level end-to-end (migration, model, controllers, views, CSS, manifests), migrate:fresh + tinker-verified; condensed this file's stacked Current-state entries into Archive per memory-rules convention
+- 2026-09-10 03:43 — sidebar accordion fix (chapter label clickable + visual nesting), tinker-verified; moved prior session's Current-state paragraph into Archive per the no-stacking rule

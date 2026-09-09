@@ -3,5 +3,8 @@ slug: second-course
 sections:
   - title: Getting Started
     chapters:
-      - slug: 01-intro
+      - slug: introduction
         title: Introduction
+        subchapters:
+          - slug: 01-intro
+            title: Introduction

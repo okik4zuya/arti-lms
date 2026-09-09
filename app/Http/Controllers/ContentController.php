@@ -30,7 +30,7 @@ class ContentController extends Controller
             ->progress()
             ->where('course_id', $course->id)
             ->whereNotNull('completed_at')
-            ->pluck('chapter_slug');
+            ->pluck('subchapter_slug');
 
         return view('content.show', [
             'course' => $course,

@@ -30,8 +30,8 @@
                     <div class="card-grid">
                         @foreach ($courses as $course)
                             <a
-                                href="{{ $course->firstChapterSlug
-                                    ? route('content.show', ['course' => $course, 'slug' => $course->firstChapterSlug])
+                                href="{{ $course->firstSubchapterSlug
+                                    ? route('content.show', ['course' => $course, 'slug' => $course->firstSubchapterSlug])
                                     : '#' }}"
                                 class="card"
                             >

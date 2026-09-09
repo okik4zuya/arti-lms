@@ -15,7 +15,7 @@ class Progress extends Model
     protected $fillable = [
         'user_id',
         'course_id',
-        'chapter_slug',
+        'subchapter_slug',
         'completed_at',
     ];
 
