@@ -1,6 +1,8 @@
 <!-- arti-claude-template: v1 (dev-project variant) -->
 # arti-lms — Project Instructions
 
+@~/.arti/CAPABILITIES.md
+
 ARTi general/dev project (category: Dev, registered in `~/.arti/memory/launcher-projects.json`).
 This project's `memory/` is the single source of truth — never read or write the default
 `~/.claude/projects/.../memory/` for it.

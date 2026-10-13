@@ -3,21 +3,53 @@ slug: arti-framework
 sections:
   - title: Pendahuluan
     chapters:
-      - slug: kenapa-ai-belum-memuaskan
-        title: "Kenapa AI Belum Memuaskan (Halusinasi & Memori)"
+      - slug: masalah
+        title: "Masalah"
         subchapters:
-          - slug: 01-intro
-            title: Pendahuluan
-      - slug: claude-dan-claude-code
-        title: Claude dan Claude Code
+          - slug: 01-2-masalah-utama
+            title: "2 Masalah Utama"
+          - slug: 02-solusi-parsial
+            title: Solusi Parsial
+          - slug: 03-halusinasi-meruntuhkan-kredibilitas-akademik
+            title: "Halusinasi = Meruntuhkan Kredibilitas Akademik"
+          - slug: 04-hilang-memori-tak-berarti
+            title: "Hilang Memori: Pekerjaan jadi Tak Berarti"
+      - slug: claude
+        title: Claude
         subchapters:
-          - slug: claude-dan-claude-code-01
-            title: Claude dan Claude Code
-      - slug: why-arti-framework
-        title: Why ARTi Framework
+          - slug: 05-taaruf
+            title: "Taaruf"
+          - slug: 06-claude-model-dengan-branding-logika
+            title: "Claude: Model dengan Branding Logika"
+          - slug: 07-masih-ada-yang-kurang
+            title: "Masih Ada yang Kurang"
+          - slug: 08-claude-code
+            title: "Claude Code"
+      - slug: arti-framework
+        title: ARTi Framework
         subchapters:
-          - slug: why-arti-framework-01
-            title: Why ARTi Framework
+          - slug: 09-solusi-dari-masalah-saya
+            title: "Solusi dari Masalah Saya Selama Ini (Mungkin Anda Juga)"
+          - slug: 10-3-filosofi
+            title: "3 Filosofi"
+          - slug: 11-menjadikan-pekerjaan-berarti
+            title: "Menjadikan Pekerjaan Berarti"
+          - slug: 12-arsitektur
+            title: "Arsitektur"
+          - slug: 13-sistem-memori
+            title: "Sistem Memori"
+          - slug: 14-sistem-referensi
+            title: "Sistem Referensi"
+          - slug: 15-scratchbook
+            title: "Scratchbook: File Sakti Anti Halusinasi"
+          - slug: 16-fitur-fitur-arti
+            title: "Fitur-fitur ARTi"
+          - slug: 17-perbandingan-arti-framework
+            title: "Perbandingan ARTi Framework dengan yang Lain"
+          - slug: 18-dan-lainnya
+            title: "dan Lainnya"
+          - slug: 19-cara-instalasi-arti-framework
+            title: "Cara Instalasi ARTi Framework"
   - title: Amati
     chapters:
       - slug: the-researcher-profile

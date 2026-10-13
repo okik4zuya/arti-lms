@@ -45,8 +45,8 @@ Tailwind) — see [[option3-implementation-plan]] step 3.
   Breeze/Fortify/Jetstream/Sanctum** (no self-registration/password-reset flow to scaffold).
 - Lets content be authored/edited entirely in a code editor + git, decoupled from logging into
   `/admin`, at the cost of building custom secure file-streaming + an iframe/progress bridge —
-  flagged as the highest-risk, most custom part of the whole stack (see [[stack-tradeoff-assessment]]
-  if that memory exists, else see plan discussion in this session).
+  flagged as the highest-risk, most custom part of the whole stack (moot — Option 3 was chosen
+  instead, see [[option3-implementation-plan]]).
 
 ## Option 3 — Git-backed Markdown, rendered server-side (flat-file CMS)
 

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Course;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use League\CommonMark\CommonMarkConverter;
+use League\CommonMark\GithubFlavoredMarkdownConverter;
 use Spatie\YamlFrontMatter\YamlFrontMatter;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
@@ -21,10 +21,19 @@ class ContentController extends Controller
 
         abort_unless($document->matter('published', false), 404);
 
-        $html = (new CommonMarkConverter())->convert($document->body())->getContent();
-        $html = $this->resolveImageUrls($html, $course, $slug);
-
         $manifest = $this->manifest($course->slug);
+
+        $body = $this->resolveWikiLinks($document->body(), $course, $manifest);
+
+        $converter = new GithubFlavoredMarkdownConverter([
+            'html_input' => 'allow',
+            'disallowed_raw_html' => [
+                'disallowed_tags' => ['title', 'textarea', 'xmp', 'iframe', 'noembed', 'noframes', 'script', 'plaintext'],
+            ],
+        ]);
+
+        $html = $converter->convert($body)->getContent();
+        $html = $this->resolveImageUrls($html, $course, $slug);
 
         $completedSlugs = $request->user()
             ->progress()
@@ -50,6 +59,33 @@ class ContentController extends Controller
         abort_unless(is_file($path) && ! str_contains($file, '..'), 404);
 
         return response()->file($path);
+    }
+
+    protected function resolveWikiLinks(string $body, Course $course, array $manifest): string
+    {
+        $subchapters = collect($manifest['sections'] ?? [])
+            ->flatMap(fn (array $section) => $section['chapters'] ?? [])
+            ->flatMap(fn (array $chapter) => $chapter['subchapters'] ?? []);
+
+        return preg_replace_callback(
+            '/\[\[([^\]]+)\]\]/',
+            function (array $matches) use ($course, $subchapters) {
+                $title = trim($matches[1]);
+
+                $target = $subchapters->first(
+                    fn (array $subchapter) => strcasecmp($subchapter['title'] ?? '', $title) === 0
+                );
+
+                if (! $target) {
+                    return $title;
+                }
+
+                $url = route('content.show', ['course' => $course, 'slug' => $target['slug']]);
+
+                return "[{$title}]({$url})";
+            },
+            $body
+        );
     }
 
     protected function resolveImageUrls(string $html, Course $course, string $slug): string

@@ -19,6 +19,7 @@
             </div>
             <nav class="sidebar__nav">
                 @foreach ($manifest['sections'] ?? [] as $section)
+                    @php $subchapterNumber = 0; @endphp
                     <div class="tree-group">{{ $section['title'] ?? '' }}</div>
                     @foreach ($section['chapters'] ?? [] as $chapter)
                         @php
@@ -27,14 +28,22 @@
                         <details class="tree-chapter" @if ($chapterIsActive) open @endif>
                             <summary class="tree-subgroup">{{ $chapter['title'] ?? '' }}</summary>
                             @foreach ($chapter['subchapters'] ?? [] as $subchapter)
+                                @php
+                                    $subchapterNumber++;
+                                    $subchapterIsDone = $completedSlugs->contains($subchapter['slug']);
+                                @endphp
                                 <a
                                     href="{{ route('content.show', ['course' => $course, 'slug' => $subchapter['slug']]) }}"
                                     class="tree-item @if ($subchapter['slug'] === $slug) tree-item--active @endif"
                                 >
+                                    <span class="tree-item__index @if ($subchapterIsDone) tree-item__index--done @endif">
+                                        @if ($subchapterIsDone)
+                                            &check;
+                                        @else
+                                            {{ $subchapterNumber }}
+                                        @endif
+                                    </span>
                                     <span>{{ $subchapter['title'] ?? $subchapter['slug'] }}</span>
-                                    @if ($completedSlugs->contains($subchapter['slug']))
-                                        <span class="tree-item__check tree-item__check--done">&check;</span>
-                                    @endif
                                 </a>
                             @endforeach
                         </details>

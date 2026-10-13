@@ -5,20 +5,33 @@ metadata:
   type: project
   tier: T0
   created: 2026-09-08 21:36
-  updated: 2026-09-10 03:43
+  updated: 2026-09-10 22:07
 ---
 
 ## Current state
 
-**Sidebar accordion fix (this session)**: real-browser use of the subchapter sidebar (added last
-session) surfaced two bugs a screenshot showed: the chapter label wasn't clickable, and — since
-every chapter's lone placeholder subchapter currently shares its exact title — the two levels read
-as one flat duplicated list. User confirmed (AskUserQuestion) they want a real accordion, and that
-the blue subchapter links 404ing on the 17 undrafted chapters is expected, not in scope here. Fixed
-in `content/show.blade.php` (`.tree-subgroup` div → `<details class="tree-chapter">`/`<summary>`,
-`open` set when the chapter contains the active slug — no JS) + `app.css` (rotating chevron,
-`--space-5` left-indent on `.tree-item`). Tinker-verified against all 18 `arti-framework` chapters:
-only the active chapter's `<details>` renders `open`. Full detail in [[subchapter-hierarchy]].
+**Chapter 3 (Why ARTi Framework) fully drafted this session** — all 8 subchapters written in one
+pass from `resources/inbox/abstraksi-konten-dan-outline.md`'s already-fleshed-out bullets (unlike
+chapter 2, no stubs needed filling from scratch). Covers: introducing the ARTi Framework name and
+its honest "still evolving" caveat, the 3-layer name philosophy (ART+i / Amati-Replikasi-Tambah
+Inovasi / arti-as-meaning), the spinner-parable callback, an architecture overview (first
+ASCII-art diagram in this project's content, Claude Code as engine + skills/folders as the map),
+then the three pillars in their own subchapters (Sistem Memori, Sistem Referensi, Scratchbook),
+closing with a "this is just the map" honesty note bridging to Chapter 4 (Amati). manifest.yaml's
+placeholder `why-arti-framework-01` slug replaced with 8 real slugs
+(`08-solusi-dari-masalah-saya` .. `15-dan-lainnya`). Detail in [[content-authoring-progress]].
+
+**Verification tooling changed**: `php artisan tinker <file>` stopped executing scripts in this
+environment this session — it now just echoes the source back without running it (silent, easy to
+miss). Switched to a standalone `.php` script that boots Laravel directly
+(`require bootstrap/app.php` + `$kernel->bootstrap()`) run with plain `php`, confirmed working for
+controller calls, `route()`, and DB queries. Documented in [[content-authoring-workflow]]'s
+Verification section — use this method going forward, not `artisan tinker`.
+
+Pendahuluan (chapter 1), Claude dan Claude Code (chapter 2, 4 of 6 outline sections), and Why ARTi
+Framework (chapter 3, all 8) are now drafted — see `todo-list.md`'s "Content authoring progress"
+section for the live per-chapter checklist. 14 of 18 chapters (Amati through BONUS) still fully
+undrafted, no inbox source material confirmed for them yet beyond structural titles.
 
 Test credentials: `test@example.com` / `password` (learner, `example-course` access only),
 `admin@example.com` / `password` (admin, panel at `/jamrud` not `/admin`); user id 5 has
@@ -36,6 +49,45 @@ once, see [[testing-db-isolation]]).
 
 ## Archive
 
+- 2026-09-10 21:27 — Two user-reported course-layout bugs fixed: sidebar subchapter numbering
+  restarting at each chapter (now a `$subchapterNumber` counter resetting once per section, see
+  [[subchapter-hierarchy]]), and Markdown tables / `[[Title]]`-style cross-reference links not
+  rendering (switched to `GithubFlavoredMarkdownConverter`, un-blocked `<style>` in
+  `disallowed_raw_html`, added `resolveWikiLinks()`, designed table CSS — see
+  [[content-authoring-workflow]]'s "Markdown rendering pipeline" section). Both traced to real gaps
+  hit by chapter 2's content, not pre-existing latent bugs. One known dangling ref left as an open
+  todo: `[[Solusinya]]` in `06-masih-ada-yang-kurang`. Verified via tinker against real chapter-2
+  files; no real-browser visual check that session.
+- 2026-09-10 19:27 — Pendahuluan chapter 1 fully drafted: all 3 subchapters exist, manifest-linked,
+  folder names renamed to match `manifest.yaml` slugs exactly (`01-2-masalah-utama`,
+  `02-solusi-parsial`, `03-hilang-memori-tak-berarti`). 3rd subchapter retells the
+  Rithah/pemintal-benang parable from `resources/inbox/pemintal-benang.md`, tied to the "AI has no
+  memory across sessions" theme; includes an image the user swapped in for the downloaded PD
+  placeholder. All three tinker-verified post-rename. New Wikimedia-Commons image-sourcing pattern
+  added to [[content-authoring-workflow]]. The orphaned `01-intro/` leftover was deleted by the user,
+  closing that item.
+- 2026-09-10 04:48 — Sidebar readability/visual-hierarchy redesign
+  (`~/.claude/plans/i-want-to-optimize-cozy-crystal.md`): section/chapter/subchapter given distinct
+  type scale (section shrunk + real divider, chapter promoted above subchapter size), subchapters
+  show a numbered blue circle badge (`$loop->iteration`, restarts per chapter) swapping to a green
+  checkmark on completion. Full detail in [[subchapter-hierarchy]]. Also produced a real
+  browser-tooling correction: this environment does have working headless Chrome/Edge binaries —
+  verified visually via `curl` login + a `<base href>` trick to screenshot the authenticated page
+  from a local file, recipe in [[course-layout-responsive]]. Fixed 2 dangling `[[link]]` refs found
+  in [[tech-stack-options]] and [[testing-db-isolation]] while updating memory afterward.
+- 2026-09-10 04:29 — Content authoring started: replaced the `01-intro` pipeline placeholder with
+  real material for chapter 1's two subchapters (`2-masalah-halusinasi-dan-memori`, `solusinya`),
+  drafted from `resources/inbox/` source outline in first-person conversational Bahasa Indonesia,
+  tinker-verified. Backfilled the approved per-subchapter readability `<style>` block (Atkinson
+  Hyperlegible font, 600px column, one-sentence-per-paragraph) onto `solusinya/index.md`, which
+  predated the pattern's approval. Full detail in [[content-authoring-workflow]].
+- 2026-09-10 03:43 — Sidebar accordion fix: real-browser use surfaced the chapter label wasn't
+  clickable and, since every chapter's lone placeholder subchapter shared its exact title, the two
+  levels read as one flat duplicated list. User confirmed (AskUserQuestion) a real accordion was
+  wanted. Fixed in `content/show.blade.php` (`.tree-subgroup` div → `<details class="tree-chapter">`
+  /`<summary>`, `open` set when the chapter contains the active slug — no JS) + `app.css` (rotating
+  chevron, left-indent). Tinker-verified against all 18 `arti-framework` chapters. Full detail in
+  [[subchapter-hierarchy]].
 - 2026-09-08 to 2026-09-09 07:10 — Laravel scaffold, pure-CSS design system, DB schema (steps 1-4);
   content dir + example-course (step 5); login/logout + content controller/routes (step 6); step 7
   progress tracking (ProgressController, mark-complete UI, dashboard completion %); step 8 Filament
@@ -67,3 +119,17 @@ once, see [[testing-db-isolation]]).
 - 2026-09-09 07:10 — fixed-viewport shell: topbar + sidebar header pinned, content/sidebar nav independently scrollable, scrollbars hidden on both; build-verified only
 - 2026-09-09 13:40 — finalized ebook outline (5 sections/18 chapters) into ebook-outline-v2.md; added Subchapter content level end-to-end (migration, model, controllers, views, CSS, manifests), migrate:fresh + tinker-verified; condensed this file's stacked Current-state entries into Archive per memory-rules convention
 - 2026-09-10 03:43 — sidebar accordion fix (chapter label clickable + visual nesting), tinker-verified; moved prior session's Current-state paragraph into Archive per the no-stacking rule
+- 2026-09-10 04:29 — content authoring underway: drafted chapter 1's two subchapters, added [[content-authoring-workflow]] memory, backfilled the approved readability style onto `solusinya`; moved sidebar-accordion paragraph into Archive per the no-stacking rule
+- 2026-09-10 04:48 — sidebar readability/visual-hierarchy pass (per-level type scale, dividers, numbered badges), verified via real headless-Chrome screenshot; corrected the stale "no browser automation" fact in [[course-layout-responsive]]; fixed 2 dangling memory refs; moved content-authoring paragraph into Archive per the no-stacking rule
+- 2026-09-10 19:19 — renamed 3 subchapter folders to match manifest.yaml slugs; drafted and
+  tinker-verified `03-hilang-memori-tak-berarti` (pemintal-benang parable) with a downloaded
+  public-domain placeholder image; Pendahuluan chapter 1 now fully drafted; added the
+  Wikimedia-Commons image-sourcing pattern to [[content-authoring-workflow]]; moved
+  sidebar-readability paragraph into Archive per the no-stacking rule
+- 2026-09-10 19:27 — user replaced the downloaded-placeholder image with their own
+  `pemintal-benang.png` (md reference updated to match) and dropped a second unreferenced image
+  (`3-spinners.PNG`) into the same folder; user also deleted the orphaned `01-intro/` leftover
+  flagged in the prior entry, closing that item
+- 2026-09-10 21:27 — fixed two user-reported course-layout bugs (sidebar numbering restart,
+  GFM table/wiki-link parsing gaps) surfaced by chapter 2's real content; added table CSS design;
+  moved the Pendahuluan-ch.1-drafted paragraph into Archive per the no-stacking rule

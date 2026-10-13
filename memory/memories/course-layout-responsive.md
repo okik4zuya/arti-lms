@@ -4,7 +4,7 @@ description: Responsive off-canvas sidebar + sections/chapters manifest grouping
 metadata:
   type: project
   created: 2026-09-09 01:28
-  updated: 2026-09-09 07:10
+  updated: 2026-09-10 04:48
 ---
 
 Implemented the full plan at `~/.claude/plans/refine-course-layout-kind-pascal.md` (course
@@ -33,12 +33,25 @@ toggled via a `.is-open` class; `.sidebar-backdrop` dims/dismisses it; `.sidebar
 `import './bootstrap'`) now has ~20 lines of vanilla open/close/backdrop-click/Escape-key
 handling, all three-element-guarded so it's a no-op on pages without the drawer markup.
 
-**No browser automation in this environment — confirmed twice now, stop re-checking.**
-No `chromium-cli`, no Playwright, no globally installed browser driver. Re-probing for it
-(`where chromium-cli`, `npm ls -g playwright`, etc.) wastes a turn and was flagged by the user
-the second time it happened (2026-09-09, mobile-sidebar-JS debugging session) — read this memory
-first instead. `arti-lms.local` is the real dev URL (Laragon vhost, see hosts file) and is
-`curl`-reachable for HTTP-level checks, but nothing renders JS/CSS visually from this session.
+**Correction (2026-09-10): the claim below is half-wrong — don't re-assert "no browser
+automation" as a blanket fact.** No `chromium-cli`/Playwright/browser-driver wrapper is
+installed, but real headless-Chrome and headless-Edge binaries ARE present on this Windows box
+(`/c/Program Files/Google/Chrome/Application/chrome.exe`, `.../Microsoft/Edge/.../msedge.exe`) and
+work fine invoked directly: `chrome.exe --headless=new --disable-gpu --no-sandbox --screenshot=<path>
+--window-size=W,H <url>`. Gotcha: that flag mode has no `--cookie`/session-injection option, so an
+auth-gated page can't be screenshotted by URL directly. Working recovery used this session: `curl`
+with a cookie jar to log in and fetch the already-rendered HTML as the real user, inject
+`<base href="http://127.0.0.1:PORT/">` right after `<head>` so relative asset URLs (CSS/JS/images)
+still resolve against the live server, save that to a local file, and screenshot the local
+`file://` path instead — no cookie needed since the DOM is already server-rendered with the
+authenticated content baked in. Read the PNG back with the Read tool to actually look at it.
+
+**Prior (now-superseded) claim, kept for context:** "No browser automation in this environment —
+confirmed twice." That was true only for the `chromium-cli`/Playwright wrapper layer, not for raw
+browser binaries — re-probing for the wrapper (`where chromium-cli`, `npm ls -g playwright`) is
+still a waste per [[feedback-check-memory-before-env-probes]], but don't let that block trying the
+raw-binary route above when a real screenshot is actually needed. `arti-lms.local` is the real dev
+URL (Laragon vhost, see hosts file) and is `curl`-reachable for HTTP-level checks.
 
 **Verification method — no browser available in this environment.**
 Instead: `npm run build` (Vite compiles clean), `php -l` on the
@@ -108,3 +121,8 @@ topbar stay visually fixed).
   drawer-specific visual QA still open
 - 2026-09-09 07:10 — fixed-viewport shell: topbar pinned top, sidebar header pinned top, content +
   sidebar nav independently scrollable with hidden scrollbars; build-verified only
+- 2026-09-10 04:48 — corrected the "no browser automation" claim: raw headless Chrome/Edge
+  binaries work fine here, only the `chromium-cli` wrapper is missing; documented the
+  curl-login + `<base href>` + local-file-screenshot technique that got a real authenticated
+  screenshot this session (used to verify [[subchapter-hierarchy]]'s readability pass). Drawer-
+  specific mobile QA is still untested — this only proves the desktop sidebar path works.

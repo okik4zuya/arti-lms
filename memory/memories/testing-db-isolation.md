@@ -15,7 +15,8 @@ currently `mysql` / `arti_lms_testing` (dev DB is `arti_lms`, same MySQL server,
 **Why:** `phpunit.xml` shipped with the DB env lines commented out, so the first
 `FilamentPanelAccessTest` run (`RefreshDatabase`) ran `migrate:fresh` against the real dev
 `arti_lms` database and silently wiped all users/courses/course_access/progress rows. Caught only
-because the user then couldn't log in. See [[status]] "Incident" entry for the full recovery.
+because the user then couldn't log in. Recovered by hand (users/course/course_access/progress
+rows re-created to match pre-wipe state) — see `todo-list.md`'s 2026-09-09 01:20 change-log line.
 
 **How to apply:** any time `phpunit.xml` is regenerated, reset, or a fresh clone is set up, verify
 the `DB_CONNECTION`/`DB_DATABASE` lines are present and non-commented before trusting any test run

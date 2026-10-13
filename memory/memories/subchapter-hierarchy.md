@@ -1,10 +1,10 @@
 ---
 name: subchapter-hierarchy
-description: Added 3rd content level (Section > Chapter > Subchapter); progress now tracked per-subchapter, chapters are pure grouping labels with no content file
+description: Added 3rd content level (Section > Chapter > Subchapter); progress now tracked per-subchapter, chapters are pure grouping labels with no content file; sidebar numbering runs continuously per-section (fixed a restart-per-chapter bug)
 metadata:
   type: project
   created: 2026-09-09 13:40
-  updated: 2026-09-10 03:43
+  updated: 2026-09-10 21:27
 ---
 
 Implemented `~/.claude/plans/read-resources-inbox-task-md-for-this-whimsical-balloon.md` Part 2, on
@@ -65,8 +65,41 @@ on undrafted chapters are expected, not a bug to fix here. Fix: `.tree-subgroup`
 visibly nest. Verified via tinker rendering `ContentController::show()` for `arti-framework`/
 `01-intro`: only chapter 0's `<details>` carries `open`, the other 17 don't.
 
+**2026-09-10 follow-up — readability/visual-hierarchy pass:** ran from a saved plan
+(`~/.claude/plans/i-want-to-optimize-cozy-crystal.md`), independent of content drafting. Problem:
+section/chapter/subchapter all rendered at nearly the same font size, so the tree still read flat
+even after the accordion fix above. Changes, all in `.tree-group`/`.tree-subgroup`/`.tree-item`
+(`resources/css/app.css`) + the subchapter `<a>` markup (`resources/views/content/show.blade.php`):
+section labels dropped to `--font-size-xs` with a real `border-top` divider + `--space-6` margin
+(skipped on `:first-child`); chapter labels bumped to `--font-size-base` (was tied with subchapter
+size) with the open-chevron recolored to `--color-primary`; subchapters gained a 20px filled-circle
+`.tree-item__index` badge showing `$loop->iteration` (numbering restarted per chapter — bug,
+fixed 2026-09-10 21:27, see follow-up below), swapping to
+`--done` (green fill + checkmark) via the existing `$completedSlugs` check — replaces the old
+`tree-item__check` chip for this spot in the markup only. **`tree-item__check`/`--done` CSS was
+deliberately kept, not deleted**, because `show.blade.php`'s separate "chapter marked complete"
+banner (outside the sidebar loop) still uses that class — the plan's "replace the rules" wording
+would have broken that if taken literally.
+
+**2026-09-10 follow-up — numbering-restart bug fixed:** real content (chapter 2, three subchapters
+after chapter 1's three) surfaced the bug flagged above as a real user-visible issue via screenshot:
+`$loop->iteration` is scoped to the inner `@foreach ($chapter['subchapters'])` loop, so it reset to
+1 at every chapter boundary instead of continuing — chapter 2's subchapters showed "1, 2, 3" again
+instead of "4, 5, 6". Fixed in `content/show.blade.php`: a `$subchapterNumber` counter is now
+initialized to 0 once per **section** (outer loop) and incremented inside the subchapter loop, so
+numbering runs continuously across all chapters within a section and only resets at the next
+section boundary — matching the section header's existing visual break. Not verified in a real
+browser this pass (no browser tool available this session either); logic was read-verified only.
+
 ## Change log
 - 2026-09-09 13:40 — Created. Subchapter level added end-to-end (migration, model, 3 controllers,
   2 views, CSS, 3 manifests), migrate:fresh + tinker-verified.
 - 2026-09-10 03:43 — Added sidebar accordion fix (`<details>`/`<summary>` + chevron CSS) for the two
   UX bugs found in real-browser use; tinker-verified only-active-chapter expands.
+- 2026-09-10 04:48 — Readability/visual-hierarchy pass (per-level type scale, section dividers,
+  numbered badges); real headless-Chrome screenshot verified (see [[course-layout-responsive]] for
+  the corrected browser-tooling fact this relied on).
+- 2026-09-10 21:27 — Fixed the numbering-restart bug the 04:48 entry had flagged but not yet hit in
+  practice: switched `$loop->iteration` to a per-section running counter so subchapter numbers
+  continue across chapters instead of resetting at each one. Found via user screenshot, read-verified
+  only (no browser tool available).

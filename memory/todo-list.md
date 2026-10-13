@@ -5,8 +5,67 @@ metadata:
   type: project
   tier: T0
   created: 2026-09-08 21:36
-  updated: 2026-09-10 03:43
+  updated: 2026-09-11 07:50
 ---
+
+### Content authoring progress (arti-framework, 18 chapters) — dedicated, most-active section
+
+Rules for drafting: see [[content-authoring-workflow]]. Narrative/status detail (why a chapter is
+blocked, style decisions made while drafting it, image notes): see [[content-authoring-progress]].
+One line per chapter here; sub-bullets are the subchapters actually in `manifest.yaml` for that
+chapter (not the full imagined scope).
+
+#### Pendahuluan
+- [x] 1. Kenapa AI Belum Memuaskan (Halusinasi & Memori)
+  - [x] 2 Masalah: Halusinasi dan Memori (folder renamed `01-2-masalah-utama`, matches manifest)
+  - [x] Solusinya (folder renamed `02-solusi-parsial`, matches manifest)
+  - [x] Halusinasi = Meruntuhkan Kredibilitas Akademik (`03-halusinasi-meruntuhkan-kredibilitas-akademik`, new, inserted 2026-09-11)
+  - [x] Hilang Memori: Pekerjaan jadi Tak Berarti (folder `04-hilang-memori-tak-berarti`, renumbered from `03-`; pemintal-benang parable from `resources/inbox/pemintal-benang.md`, image is the user's own)
+- [ ] 2. Claude dan Claude Code (source outline: Ch.2 in `abstraksi-konten-dan-outline.md`, several `##` stubs still empty there)
+  - [x] Taaruf (`05-taaruf`, renumbered from `04-`)
+  - [x] Claude: Model dengan Branding Logika (`06-claude-model-dengan-branding-logika`, renumbered from `05-`; includes research-model benchmark table)
+  - [x] Masih Ada yang Kurang (`07-masih-ada-yang-kurang`, renumbered from `06-`)
+  - [x] Claude Code (`08-claude-code`, renumbered from `07-`; includes Claude Code vs Claude AI vs NotebookLM vs LLM-chat-lain comparison table)
+  - [ ] Claude bisa pakai skill agar hasil lebih maksimal (outline stub, no bullets yet)
+- [x] 3. Why ARTi Framework (source outline: Ch.3 in `abstraksi-konten-dan-outline.md`, all 11 subchapters drafted)
+  - [x] Solusi dari Masalah Saya Selama Ini (Mungkin Anda Juga) (`09-solusi-dari-masalah-saya`, renumbered from `08-`)
+  - [x] 3 Filosofi (`10-3-filosofi`, renumbered from `09-`)
+  - [x] Menjadikan Pekerjaan Berarti (`11-menjadikan-pekerjaan-berarti`, renumbered from `10-`)
+  - [x] Arsitektur (`12-arsitektur`, renumbered from `11-`; includes ASCII-art architecture diagram)
+  - [x] Sistem Memori (`13-sistem-memori`, renumbered from `12-`)
+  - [x] Sistem Referensi (`14-sistem-referensi`, renumbered from `13-`)
+  - [x] Scratchbook: File Sakti Anti Halusinasi (`15-scratchbook`, renumbered from `14-`)
+  - [x] Fitur-fitur ARTi (`16-fitur-fitur-arti`, new)
+  - [x] Perbandingan ARTi Framework dengan yang Lain (`17-perbandingan-arti-framework`, new)
+  - [x] dan Lainnya (`18-dan-lainnya`, renumbered from `16-`)
+  - [x] Cara Instalasi ARTi Framework (`19-cara-instalasi-arti-framework`, new)
+- [x] Fix dangling `[[Solusinya]]` wiki-link ref in `07-masih-ada-yang-kurang/index.md` — changed to `[[Solusi Parsial]]`, its correct title (fixed 2026-09-11 while auditing all `[[...]]` links after the subchapter-3 insert)
+- [ ] Verify all renumbered folders render + manifest resolves once MySQL is running again (DB was down this session, `php artisan cache:clear` failed with a connection-refused error — manifest.yaml is cached 1hr, so the sidebar may still show pre-edit slugs until either the cache expires or clear succeeds)
+
+#### Amati
+- [ ] 4. The Researcher Profile
+- [ ] 5. Mapping the Gap, Not Guessing It
+- [ ] 6. Reading a Journal Tactically
+
+#### Replikasi
+- [ ] 7. Feasibility Before Ambition
+- [ ] 8. The Scratchbook Discipline
+
+#### Tambah Inovasi
+- [ ] 9. Scoring Novelty Honestly
+- [ ] 10. Building the Manuscript Blueprint
+- [ ] 11. Matching Voice and Technical Depth
+- [ ] 12. The Iteration Log and the Novelty Floor
+- [ ] 13. Cover Letters and the Submission Checklist
+- [ ] 14. Answering Reviewers Without Losing the Paper
+- [ ] 15. After Acceptance: Feeding the Next Amati
+
+#### BONUS
+- [ ] 16. Toolkit Quick Reference
+- [ ] 17. Panduan Instalasi
+- [ ] 18. Prompt Guide
+
+### App build / infra tasks
 
 - [x] Brainstorm and redesign the tech stack next session (see [[tech-stack-options]] for the two prior drafts)
 - [x] Get the design-system screenshot from the user (blocks phase 2 in either stack draft)
@@ -72,8 +131,9 @@ metadata:
 - [x] 3-level sidebar in `content/show.blade.php` (`.tree-subgroup` for chapter labels) + CSS
 - [x] Update example-course/second-course/arti-framework manifests to the 3-level schema
 - [x] `migrate:fresh --seed` + tinker-verified end to end (dashboard %, sidebar checkmark, progress row)
-- [ ] Draft actual subchapter content for `arti-framework`'s 18 chapters (currently only ch.1's placeholder subchapter has a real content file)
+- [ ] Draft actual subchapter content for `arti-framework`'s remaining 17 chapters (see "Content authoring progress" section at the top of this file for the live checklist; ch.1 done)
 - [x] Sidebar chapter label clickable + visual chapter/subchapter nesting (accordion via `<details>`, tinker-verified) — found via real-browser use, see [[subchapter-hierarchy]]
+- [x] Sidebar readability/visual-hierarchy pass: per-level type scale, section dividers, numbered/checkmark badges — real headless-Chrome-verified, see [[subchapter-hierarchy]]
 
 ### Course layout — responsive + grouped sidebar
 
@@ -84,7 +144,7 @@ metadata:
 - [x] `app.js` toggle/backdrop-click/Escape handling
 - [x] Fix two console errors found during user-driven real-browser QA: Vite IPv6/CORS dev-server binding, relative-Markdown-image-path 404
 - [x] Fixed-viewport shell: topbar + sidebar header pinned to top, content + sidebar nav independently scrollable, scrollbars hidden on both (build-verified only)
-- [ ] Real-browser visual QA (drawer animation, backdrop/Escape close, no horizontal scroll at ~375px/~768px, fixed-topbar + independent scroll behavior) — still open, console errors were a prerequisite fix not the QA itself (see [[course-layout-responsive]])
+- [ ] Real-browser visual QA of the mobile drawer specifically (animation, backdrop/Escape close, no horizontal scroll at ~375px/~768px) — still open; the desktop sidebar path now has a working screenshot technique (see [[course-layout-responsive]]), just not exercised at mobile width yet
 
 ### Dashboard polish (branding + hover effects)
 
@@ -92,9 +152,13 @@ metadata:
 - [x] Course card hover: removed underline, added fill-color effect ([[branding-login]] area, see app.css `.card:hover`)
 - [x] All `.btn`/`.btn--outline` hover effects made consistent app-wide (fill instead of opacity fade)
 - [x] Course-layout sidebar (`.tree-item`) hover: removed underline, added primary-tint fill effect
-- [ ] Real-browser visual QA of the above (build-verified only, no browser tool available)
+- [ ] Real-browser visual QA of the above (build-verified only; a headless-Chrome screenshot technique now exists, see [[course-layout-responsive]], just not applied to this specific item yet)
 
 ## Change log
+- 2026-09-11 07:50 — Drafted chapter 3's final 3 subchapters (Fitur-fitur ARTi, Perbandingan ARTi
+  Framework dengan yang Lain, Cara Instalasi ARTi Framework); renumbered `dan-lainnya` to make room;
+  chapter 3 (Why ARTi Framework) is now fully drafted, 11/11 subchapters. See
+  [[content-authoring-progress]] for detail.
 - 2026-09-08 — scaffolded, empty
 - 2026-09-08 23:20 — added redesign-brainstorm and open-item tasks
 - 2026-09-08 23:56 — checked off stack decision + design-system screenshot; Laravel scaffolding and
@@ -131,3 +195,48 @@ metadata:
   left drafting actual subchapter content as the one open item
 - 2026-09-10 03:43 — checked off the sidebar accordion fix (chapter-label click + visual nesting),
   found via real-browser use and confirmed with the user via AskUserQuestion
+- 2026-09-10 04:08 — drafted chapter 1's two subchapters (halusinasi/memori problem + solutions);
+  added dedicated "Content authoring progress" checklist (all 18 chapters) and
+  [[content-authoring-workflow]] memory since content writing is now the main ongoing work
+- 2026-09-10 04:29 — backfilled the approved readability `<style>` block onto `solusinya/index.md`,
+  noted inline on its checklist line
+- 2026-09-10 04:48 — checked off the sidebar readability/visual-hierarchy pass (type scale,
+  dividers, badges); refreshed the two stale "no browser tool available" QA-item caveats now that
+  a real headless-Chrome screenshot technique exists (see [[course-layout-responsive]])
+- 2026-09-10 19:19 — renamed the three Pendahuluan ch.1 subchapter folders to match
+  manifest.yaml slugs (`01-2-masalah-utama`, `02-solusi-parsial`, `03-hilang-memori-tak-berarti`);
+  drafted the 3rd subchapter from `resources/inbox/pemintal-benang.md`, downloaded a public-domain
+  placeholder image for it, tinker-verified all three render + image URL resolves; ch.1 of
+  Pendahuluan now fully done
+- 2026-09-10 19:40 — moved "Content authoring progress" to a dedicated section at the top of this
+  file per the user's request; split its narrative detail out into the new
+  [[content-authoring-progress]] memory (this file keeps checkboxes only, per the project's
+  no-narrative-in-todo-list rule)
+- 2026-09-10 20:10 — drafted chapter 2's first two subchapters (Taaruf, Claude: Model dengan
+  Branding Logika); added the 4 remaining chapter-2 outline stubs as open sub-items
+- 2026-09-10 — renumbered chapter 2's first two subchapters (`03-`→`04-taaruf`,
+  `04-`→`05-claude-model-dengan-branding-logika`), added a research-model benchmark table to the
+  latter, and drafted the new `06-masih-ada-yang-kurang` subchapter; manifest.yaml updated to
+  match; all three tinker-verified rendering (controller signature now takes a `Course` model, not
+  a slug string — verification snippet updated accordingly)
+- 2026-09-10 21:27 — Fixed two user-reported course-layout bugs (sidebar numbering restart, GFM
+  table/wiki-link parsing gaps) and added a table CSS design pass; added the dangling
+  `[[Solusinya]]` reference as a new open item above.
+- 2026-09-10 21:52 — Drafted `07-claude-code` (the chapter-2 finale, answering "masih ada yang
+  kurang"'s open question); manifest.yaml updated, tinker-verified. Chapter 2 now has one open
+  outline stub left ("Claude bisa pakai skill").
+- 2026-09-10 22:07 — Drafted all 8 subchapters of chapter 3 (Why ARTi Framework), replacing the
+  single `why-arti-framework-01` placeholder slug in manifest.yaml with 8 real slugs
+  (`08-solusi-dari-masalah-saya` through `15-dan-lainnya`); Arsitektur subchapter includes an
+  ASCII-art architecture diagram; verified all 8 render + wiki-links resolve via a standalone PHP
+  script (tinker's file-include mode just echoed source without executing — used direct
+  `require bootstrap/app.php` instead, see [[content-authoring-workflow]]).
+- 2026-09-11 — Inserted a new chapter-1 subchapter, "Halusinasi = Meruntuhkan Kredibilitas
+  Akademik" (`03-halusinasi-meruntuhkan-kredibilitas-akademik`), between Solusi Parsial and Hilang
+  Memori, per the outline (`abstraksi-konten-dan-outline.md` line 50) plus the "AI bar-bar" narasi
+  from `resources/inbox/260906_OK_narasi-ai-bar-bar-dan-analogi-alzheimer.md`. Renumbered every
+  downstream subchapter folder by +1 (`04-hilang-memori-tak-berarti` through `16-dan-lainnya`) to
+  keep the whole-book sequential numbering convention intact; updated manifest.yaml and the
+  `order` frontmatter field on the one subchapter whose in-chapter position actually changed
+  (hilang-memori: 3→4). Could not `cache:clear` or tinker-verify — MySQL wasn't running this
+  session (Laragon likely needs starting) — flagged as an open item above.
