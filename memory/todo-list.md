@@ -5,7 +5,7 @@ metadata:
   type: project
   tier: T0
   created: 2026-09-08 21:36
-  updated: 2026-09-11 07:50
+  updated: 2026-10-14 07:08
 ---
 
 ### Content authoring progress (arti-framework, 18 chapters) — dedicated, most-active section
@@ -65,6 +65,21 @@ chapter (not the full imagined scope).
 - [ ] 17. Panduan Instalasi
 - [ ] 18. Prompt Guide
 
+### ARTi App (see [[arti-app-architecture]])
+
+- [x] Phase 1: public routes on the main domain (landing, fitur, harga, unduh, kontak, privasi, syarat), flat-file articles + tag/feed/sitemap/robots, `Route::domain()` via `config('app.domains')`, shared `tokens.css`, `/app` + `/dashboard` 301
+- [x] Feature/unit tests for every new route (27 DB-free tests pass)
+- [x] Idempotent dev `DatabaseSeeder` (admin + learner, refuses production) with `DatabaseSeederTest`
+- [x] Start MySQL, run `php artisan test` — full suite green after phase 1 (2026-10-13)
+- [ ] Run `php artisan db:seed` on the dev DB (seeder verified on the testing DB only; admin@example.com / test@example.com, both `password`)
+- [ ] Browser-check an authenticated flow after phase 1 and the Filament 4 upgrade (login → `/app` → a `learn/*` page; `/jamrud` visual look under v4)
+- [x] Upgrade Filament 3 → 4 (v4.15.2, done 2026-10-14; resource + relation manager converted by hand, covered by `FilamentCourseResourceTest`)
+- [ ] Write the first real articles in `resources/articles/` (site shows the empty state now)
+- [ ] Set `APP_DOMAIN_MAIN`/`APP_DOMAIN_TOKO` and `SITE_CONTACT_EMAIL`/`SITE_CONTACT_WHATSAPP` in the prod `.env`
+- [ ] Decide real prices for `/harga`, legally review `/privasi` and `/syarat` drafts, publish the installer on `/unduh`
+- [ ] Toko module: `customers` table + `auth:customer` guard + append-only ledger on its own domain (after LMS content)
+- [ ] `/app/lisensi` and Filament license page against the licensing Worker (blocked until the Worker is deployed and Phase 0 is settled)
+
 ### App build / infra tasks
 
 - [x] Brainstorm and redesign the tech stack next session (see [[tech-stack-options]] for the two prior drafts)
@@ -119,7 +134,7 @@ chapter (not the full imagined scope).
 
 ### Content polish
 
-- [ ] Replace `welcome.blade.php` placeholder copy with real landing content (or confirm bare page is fine)
+- [x] Replace `welcome.blade.php` placeholder copy with real landing content (landing built in phase 1, `welcome.blade.php` deleted)
 - [ ] Add real course content beyond the single example-course/01-intro placeholder
 - [x] Sanity-check manifest.yaml schema + image workflow scale to more than one course/chapter (nested sections: schema now covers both existing manifests)
 

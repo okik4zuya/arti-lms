@@ -25,6 +25,7 @@ class JamrudPanelProvider extends PanelProvider
         return $panel
             ->default()
             ->id('jamrud')
+            ->domain(config('app.domains.main'))
             ->path('jamrud')
             ->login()
             ->colors([

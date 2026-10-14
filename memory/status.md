@@ -5,50 +5,36 @@ metadata:
   type: project
   tier: T0
   created: 2026-09-08 21:36
-  updated: 2026-09-10 22:07
+  updated: 2026-10-14 07:08
 ---
 
 ## Current state
 
-**Chapter 3 (Why ARTi Framework) fully drafted this session** — all 8 subchapters written in one
-pass from `resources/inbox/abstraksi-konten-dan-outline.md`'s already-fleshed-out bullets (unlike
-chapter 2, no stubs needed filling from scratch). Covers: introducing the ARTi Framework name and
-its honest "still evolving" caveat, the 3-layer name philosophy (ART+i / Amati-Replikasi-Tambah
-Inovasi / arti-as-meaning), the spinner-parable callback, an architecture overview (first
-ASCII-art diagram in this project's content, Claude Code as engine + skills/folders as the map),
-then the three pillars in their own subchapters (Sistem Memori, Sistem Referensi, Scratchbook),
-closing with a "this is just the map" honesty note bridging to Chapter 4 (Amati). manifest.yaml's
-placeholder `why-arti-framework-01` slug replaced with 8 real slugs
-(`08-solusi-dari-masalah-saya` .. `15-dan-lainnya`). Detail in [[content-authoring-progress]].
+**Filament 4 + ARTi App phase 1 + dev seeder done (2026-10-14).** Filament is v4.15.2 (converted by
+hand after composer could not fetch the upgrade tool's deps; details in [[arti-app-architecture]]).
+Phase 1 public routes (landing, flat-file articles, domain gating, shared `tokens.css`, `/app` with
+`/dashboard` 301) are built. `DatabaseSeeder` is now idempotent, refuses to run in production, and
+creates `admin@example.com` / `password` (admin, `/jamrud`) and `test@example.com` / `password`
+(learner with access to `example-course`); it has only been run against `arti_lms_testing` via
+`DatabaseSeederTest`, never against the dev DB, so run `php artisan db:seed` once on dev.
+**Full suite green: 49 tests** on `arti_lms_testing`. Vite dev port moved 5273 → 5600 (Windows
+reserved range 5204-5303).
 
-**Verification tooling changed**: `php artisan tinker <file>` stopped executing scripts in this
-environment this session — it now just echoes the source back without running it (silent, easy to
-miss). Switched to a standalone `.php` script that boots Laravel directly
-(`require bootstrap/app.php` + `$kernel->bootstrap()`) run with plain `php`, confirmed working for
-controller calls, `route()`, and DB queries. Documented in [[content-authoring-workflow]]'s
-Verification section — use this method going forward, not `artisan tinker`.
+Still not done: a real-browser look at login → `/app` → a `learn/*` page and at the v4 `/jamrud`
+panel (tests cover logic, not looks); `composer.json`/`composer.lock`, the phase-1 files and the
+memory edits are all uncommitted (no commit was requested). Nothing deployed, no Cloudflare or
+license key touched.
 
-Pendahuluan (chapter 1), Claude dan Claude Code (chapter 2, 4 of 6 outline sections), and Why ARTi
-Framework (chapter 3, all 8) are now drafted — see `todo-list.md`'s "Content authoring progress"
-section for the live per-chapter checklist. 14 of 18 chapters (Amati through BONUS) still fully
-undrafted, no inbox source material confirmed for them yet beyond structural titles.
-
-Test credentials: `test@example.com` / `password` (learner, `example-course` access only),
-`admin@example.com` / `password` (admin, panel at `/jamrud` not `/admin`); user id 5 has
-`CourseAccess` to `second-course` specifically. Known still-open items: real-browser visual QA of
-the course-layout-responsive drawer (animation, backdrop/Escape close, no horizontal scroll at
-~375/~768px — see [[course-layout-responsive]]), the Laragon vhost browser-verify (never confirmed
-end to end through `arti-lms.local`), Step 9 (Cloudflare R2 for video, not started).
-
-Tech stack: **Option 3** (git-backed Markdown, server-rendered Blade, no Docsify/Filament-authored
-content) + relative-path git image workflow, R2 reserved for video only — full rationale in
-[[tech-stack-options]]. Steps 1-8 of [[option3-implementation-plan]] plus its follow-on §1-2
-(logout UI, learner dashboard, progress tracking) are done. DB is MySQL (`arti_lms` dev /
-`arti_lms_testing` for PHPUnit — kept separate since an earlier `RefreshDatabase` run wiped dev data
-once, see [[testing-db-isolation]]).
+Next in order: seed dev DB + browser check, LMS/ebook content (14 of 18 chapters undrafted, see
+[[content-authoring-progress]]), first real articles in `resources/articles/`. Toko module and
+license UI after. Tech stack: [[tech-stack-options]]; DB is MySQL (`arti_lms` dev /
+`arti_lms_testing` for PHPUnit, [[testing-db-isolation]]).
 
 ## Archive
 
+- 2026-10-14 — Filament 3 → 4 upgrade done by hand (v4.15.2), `FilamentCourseResourceTest` added, phase-1 DB-backed tests green (46 tests).
+- 2026-10-13 — ARTi App phase 1 built (public routes, flat-file articles, domain gating, shared tokens, `/app`); see [[arti-app-architecture]].
+- 2026-09-11 — Chapter 3 (Why ARTi Framework) fully drafted, chapter 2 4 of 6 outline sections, chapter 1 done; verification switched from `artisan tinker <file>` (no longer executes) to a standalone PHP script booting Laravel directly ([[content-authoring-workflow]]). Still open then: mobile-drawer real-browser QA, Laragon vhost browser-verify, Step 9 (R2 video).
 - 2026-09-10 21:27 — Two user-reported course-layout bugs fixed: sidebar subchapter numbering
   restarting at each chapter (now a `$subchapterNumber` counter resetting once per section, see
   [[subchapter-hierarchy]]), and Markdown tables / `[[Title]]`-style cross-reference links not
@@ -133,3 +119,7 @@ once, see [[testing-db-isolation]]).
 - 2026-09-10 21:27 — fixed two user-reported course-layout bugs (sidebar numbering restart,
   GFM table/wiki-link parsing gaps) surfaced by chapter 2's real content; added table CSS design;
   moved the Pendahuluan-ch.1-drafted paragraph into Archive per the no-stacking rule
+- 2026-10-13 20:40 — ARTi App phase 1 built and verified except DB-backed tests (MySQL down); moved the chapter-3 paragraph into Archive per the no-stacking rule
+- 2026-10-14 06:24 — Filament 4 upgrade done and tested; phase-1 DB-backed tests confirmed green; moved the phase-1 paragraph into Archive per the no-stacking rule
+- 2026-10-14 06:44 — Vite port 5273 fell into a Windows reserved range (5204-5303, EACCES); moved to 5600 (free range 5558-5706). Check `netsh interface ipv4 show excludedportrange protocol=tcp` if it recurs.
+- 2026-10-14 07:08 — session end: seeder + Vite port recorded in Current state; Filament paragraph moved into Archive

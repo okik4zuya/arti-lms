@@ -56,6 +56,22 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Application Domains
+    |--------------------------------------------------------------------------
+    |
+    | One app serves several hosts. `main` carries the public site, auth, the
+    | learner app and the admin panel; `toko` is reserved for the shop. A null
+    | value means "answer on any host", which is what local dev and tests use.
+    |
+    */
+
+    'domains' => [
+        'main' => env('APP_DOMAIN_MAIN'),
+        'toko' => env('APP_DOMAIN_TOKO'),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Timezone
     |--------------------------------------------------------------------------
     |

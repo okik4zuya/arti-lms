@@ -5,7 +5,7 @@ metadata:
   type: project
   tier: T0
   created: 2026-09-08 21:36
-  updated: 2026-09-11 07:50
+  updated: 2026-10-14 07:08
 ---
 
 # arti-lms — Memory Index
@@ -20,9 +20,12 @@ metadata:
 - [Feedback: check memory before env probes](memories/feedback-check-memory-before-env-probes.md) — don't re-run `where`/`npm ls -g` discovery for facts memory already recorded (e.g. no browser tooling here)
 - [Content authoring workflow](memories/content-authoring-workflow.md) — rules for drafting arti-framework subchapters (voice, file/manifest mechanics, tinker verification) plus the markdown rendering pipeline (GFM tables, `[[Title]]` wiki-links, disallowed-raw-html config for per-subchapter `<style>`)
 - [Content authoring progress](memories/content-authoring-progress.md) — narrative status per chapter (why blocked, source used, decisions made); checklist itself lives in todo-list.md's top section
-- [ARTi App architecture](memories/arti-app-architecture.md) — 2026-10-13 design outcome: this repo grows into the ARTi App (landing, articles, toko modules, admin); licensing stays on its Cloudflare Worker, Laravel is only an API client; proposed routes and open decisions
+- [ARTi App architecture](memories/arti-app-architecture.md) — this repo grows into the ARTi App; licensing stays on its Cloudflare Worker; decisions answered 2026-10-13, phase-1 public routes built (suite green), risks and next steps
 
 ## Change log
+- 2026-10-14 07:08 — session end: seeder and Vite port added to arti-app-architecture; status/todo refreshed
+- 2026-10-14 06:24 — arti-app-architecture: Filament 4 upgrade recorded, DB-backed tests green
+- 2026-10-13 20:40 — arti-app-architecture now records phase-1 implementation; pointer reworded
 - 2026-10-13 20:03 — added arti-app-architecture pointer
 - 2026-09-11 07:50 — chapter 3 (Why ARTi Framework) fully drafted: added its last 3 subchapters
   (Fitur-fitur ARTi, Perbandingan ARTi Framework dengan yang Lain, Cara Instalasi ARTi Framework),

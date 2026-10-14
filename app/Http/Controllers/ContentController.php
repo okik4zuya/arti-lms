@@ -3,15 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Course;
+use App\Support\MarkdownRenderer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use League\CommonMark\GithubFlavoredMarkdownConverter;
 use Spatie\YamlFrontMatter\YamlFrontMatter;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class ContentController extends Controller
 {
-    public function show(Request $request, Course $course, string $slug)
+    public function show(Request $request, MarkdownRenderer $markdown, Course $course, string $slug)
     {
         $path = resource_path("content/{$course->slug}/{$slug}/index.md");
 
@@ -25,15 +25,10 @@ class ContentController extends Controller
 
         $body = $this->resolveWikiLinks($document->body(), $course, $manifest);
 
-        $converter = new GithubFlavoredMarkdownConverter([
-            'html_input' => 'allow',
-            'disallowed_raw_html' => [
-                'disallowed_tags' => ['title', 'textarea', 'xmp', 'iframe', 'noembed', 'noframes', 'script', 'plaintext'],
-            ],
-        ]);
-
-        $html = $converter->convert($body)->getContent();
-        $html = $this->resolveImageUrls($html, $course, $slug);
+        $html = $markdown->rewriteImages(
+            $markdown->toHtml($body),
+            fn (string $file) => route('content.image', ['course' => $course, 'slug' => $slug, 'file' => $file])
+        );
 
         $completedSlugs = $request->user()
             ->progress()
@@ -85,19 +80,6 @@ class ContentController extends Controller
                 return "[{$title}]({$url})";
             },
             $body
-        );
-    }
-
-    protected function resolveImageUrls(string $html, Course $course, string $slug): string
-    {
-        return preg_replace_callback(
-            '/<img\s+([^>]*?)src="(?!https?:\/\/|\/)(?:\.\/)?images\/([^"]+)"/i',
-            fn (array $matches) => sprintf(
-                '<img %ssrc="%s"',
-                $matches[1],
-                route('content.image', ['course' => $course, 'slug' => $slug, 'file' => $matches[2]])
-            ),
-            $html
         );
     }
 

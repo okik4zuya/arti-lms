@@ -3,10 +3,11 @@
 namespace App\Filament\Resources\CourseResource\RelationManagers;
 
 use App\Models\User;
+use Filament\Actions;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Hash;
@@ -18,10 +19,10 @@ class AccessRelationManager extends RelationManager
 
     protected static ?string $recordTitleAttribute = 'id';
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 Forms\Components\Select::make('user_id')
                     ->label('Learner')
                     ->options(fn () => User::query()->role('learner')->pluck('email', 'id'))
@@ -48,19 +49,19 @@ class AccessRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make('grantAccess')
+                Actions\CreateAction::make('grantAccess')
                     ->label('Grant access')
                     ->modalHeading('Grant access to an existing learner')
-                    ->mutateFormDataUsing(function (array $data): array {
+                    ->mutateDataUsing(function (array $data): array {
                         $data['granted_at'] = now();
 
                         return $data;
                     }),
-                Tables\Actions\Action::make('createLearner')
+                Actions\Action::make('createLearner')
                     ->label('Create learner')
                     ->icon('heroicon-o-user-plus')
                     ->modalHeading('Create a learner and grant access')
-                    ->form([
+                    ->schema([
                         Forms\Components\TextInput::make('name')
                             ->required()
                             ->maxLength(255),
@@ -98,13 +99,13 @@ class AccessRelationManager extends RelationManager
                             ->send();
                     }),
             ])
-            ->actions([
-                Tables\Actions\DeleteAction::make()
+            ->recordActions([
+                Actions\DeleteAction::make()
                     ->label('Revoke'),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make()
+            ->toolbarActions([
+                Actions\BulkActionGroup::make([
+                    Actions\DeleteBulkAction::make()
                         ->label('Revoke selected'),
                 ]),
             ]);

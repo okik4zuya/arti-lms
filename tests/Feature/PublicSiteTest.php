@@ -1,0 +1,102 @@
+<?php
+
+namespace Tests\Feature;
+
+use PHPUnit\Framework\Attributes\DataProvider;
+use Tests\TestCase;
+
+class PublicSiteTest extends TestCase
+{
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        config(['articles.path' => base_path('tests/Fixtures/articles')]);
+    }
+
+    public function test_landing_replaces_the_login_redirect(): void
+    {
+        $this->get('/')
+            ->assertOk()
+            ->assertSee('ARTi Framework')
+            ->assertSee('Masuk')
+            ->assertSee('Memori antar sesi');
+    }
+
+    #[DataProvider('staticPages')]
+    public function test_static_pages_render(string $path, string $heading): void
+    {
+        $this->get($path)
+            ->assertOk()
+            ->assertSee($heading)
+            ->assertSee('<link rel="canonical"', false);
+    }
+
+    public static function staticPages(): array
+    {
+        return [
+            'fitur' => ['/fitur', 'Apa yang ada di dalam ARTi.'],
+            'harga' => ['/harga', 'Lisensi tahunan, harga menyusul.'],
+            'unduh' => ['/unduh', 'Pemasang belum dirilis.'],
+            'kontak' => ['/kontak', 'Hubungi kami.'],
+            'privasi' => ['/privasi', 'Kebijakan privasi'],
+            'syarat' => ['/syarat', 'Syarat penggunaan'],
+        ];
+    }
+
+    public function test_contact_page_shows_configured_channels_only(): void
+    {
+        $this->get('/kontak')->assertSee('belum dibuka');
+
+        config(['site.contact_email' => 'halo@example.test']);
+
+        $this->get('/kontak')->assertSee('halo@example.test')->assertDontSee('belum dibuka');
+    }
+
+    public function test_pricing_page_states_no_prices(): void
+    {
+        $this->get('/harga')->assertDontSee('Rp');
+    }
+
+    public function test_robots_txt_is_served_by_the_app_and_points_to_the_sitemap(): void
+    {
+        $response = $this->get('/robots.txt')->assertOk();
+
+        $this->assertStringStartsWith('text/plain', $response->headers->get('Content-Type'));
+        $response->assertSee('Disallow: /jamrud')
+            ->assertSee('Sitemap: '.route('sitemap'));
+        $this->assertFileDoesNotExist(public_path('robots.txt'));
+    }
+
+    public function test_sitemap_lists_pages_published_articles_and_tags(): void
+    {
+        $response = $this->get('/sitemap.xml')->assertOk();
+
+        $this->assertStringStartsWith('application/xml', $response->headers->get('Content-Type'));
+        $xml = simplexml_load_string($response->getContent());
+        $this->assertNotFalse($xml);
+
+        $locs = collect($xml->xpath('//*[local-name()="loc"]'))->map(fn ($loc) => (string) $loc);
+
+        $this->assertTrue($locs->contains(route('home')), 'sitemap misses the landing page');
+
+        foreach (['/fitur', '/harga', '/unduh', '/artikel', '/kontak', '/privasi', '/syarat'] as $path) {
+            $this->assertTrue($locs->contains(url($path)), "sitemap misses {$path}");
+        }
+
+        $this->assertTrue($locs->contains(url('/artikel/memori-antar-sesi')));
+        $this->assertTrue($locs->contains(url('/artikel/tag/memori')));
+        $this->assertFalse($locs->contains(url('/artikel/belum-terbit')));
+        $this->assertFalse($locs->contains(url('/artikel/masa-depan')));
+    }
+
+    public function test_legacy_dashboard_url_redirects_permanently_to_app(): void
+    {
+        $this->get('/dashboard')->assertStatus(301)->assertRedirect('/app');
+    }
+
+    public function test_app_requires_authentication(): void
+    {
+        $this->get('/app')->assertRedirect('/login');
+    }
+}

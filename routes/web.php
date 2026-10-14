@@ -1,28 +1,63 @@
 <?php
 
+use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ContentController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProgressController;
+use App\Http\Controllers\SeoController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return redirect()->route(auth()->check() ? 'dashboard' : 'login');
-});
+/*
+| Main domain: public site, articles, auth, learner app. When APP_DOMAIN_MAIN is unset
+| (local dev, tests) the routes answer on any host.
+|
+| The shop (config('app.domains.toko')) gets its own routes and `customer` guard in a later
+| phase; nothing is registered for it yet.
+*/
+Route::group(array_filter(['domain' => config('app.domains.main')]), function () {
 
-Route::middleware('guest')->group(function () {
-    Route::get('login', [AuthController::class, 'create'])->name('login');
-    Route::post('login', [AuthController::class, 'store']);
-});
+    // ---- Public site --------------------------------------------------------
+    Route::get('/', [PageController::class, 'home'])->name('home');
+    Route::view('fitur', 'site.fitur')->name('fitur');
+    Route::view('harga', 'site.harga')->name('harga');
+    Route::view('unduh', 'site.unduh')->name('unduh');
+    Route::view('kontak', 'site.kontak')->name('kontak');
+    Route::view('privasi', 'site.privasi')->name('privasi');
+    Route::view('syarat', 'site.syarat')->name('syarat');
 
-Route::post('logout', [AuthController::class, 'destroy'])
-    ->middleware('auth')->name('logout');
+    // ---- Articles (flat-file Markdown) ----------------------------------------
+    // The tag route comes first: "tag" is also a valid {slug} shape.
+    Route::prefix('artikel')->group(function () {
+        Route::get('/', [ArticleController::class, 'index'])->name('articles.index');
+        Route::get('tag/{tag}', [ArticleController::class, 'tag'])->where('tag', '[a-z0-9-]+')->name('articles.tag');
+        Route::get('{slug}', [ArticleController::class, 'show'])->where('slug', '[a-z0-9-]+')->name('articles.show');
+        Route::get('{slug}/images/{file}', [ArticleController::class, 'image'])->where('slug', '[a-z0-9-]+')->name('articles.image');
+    });
 
-Route::get('dashboard', [DashboardController::class, 'index'])
-    ->middleware('auth')->name('dashboard');
+    Route::get('feed.xml', [ArticleController::class, 'feed'])->name('feed');
+    Route::get('sitemap.xml', [SeoController::class, 'sitemap'])->name('sitemap');
+    Route::get('robots.txt', [SeoController::class, 'robots'])->name('robots');
 
-Route::middleware(['auth', 'course.access'])->prefix('learn/{course}')->group(function () {
-    Route::get('{slug}', [ContentController::class, 'show'])->name('content.show');
-    Route::get('{slug}/images/{file}', [ContentController::class, 'image'])->name('content.image');
-    Route::post('{slug}/progress', [ProgressController::class, 'store'])->name('progress.store');
+    // ---- Auth -----------------------------------------------------------------
+    Route::middleware('guest')->group(function () {
+        Route::get('login', [AuthController::class, 'create'])->name('login');
+        Route::post('login', [AuthController::class, 'store']);
+    });
+
+    Route::post('logout', [AuthController::class, 'destroy'])
+        ->middleware('auth')->name('logout');
+
+    // ---- Learner app ------------------------------------------------------------
+    Route::get('app', [DashboardController::class, 'index'])
+        ->middleware('auth')->name('dashboard');
+
+    Route::redirect('dashboard', '/app', 301);
+
+    Route::middleware(['auth', 'course.access'])->prefix('learn/{course}')->group(function () {
+        Route::get('{slug}', [ContentController::class, 'show'])->name('content.show');
+        Route::get('{slug}/images/{file}', [ContentController::class, 'image'])->name('content.image');
+        Route::post('{slug}/progress', [ProgressController::class, 'store'])->name('progress.store');
+    });
 });
