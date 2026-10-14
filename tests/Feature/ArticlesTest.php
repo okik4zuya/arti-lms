@@ -95,7 +95,8 @@ class ArticlesTest extends TestCase
         config(['articles.path' => base_path('tests/Fixtures/no-articles')]);
 
         $this->get('/artikel')->assertOk()->assertSee('Belum ada artikel.');
-        $this->get('/')->assertOk()->assertSee('Belum ada artikel.');
+        // The landing page no longer lists recent articles; it only has to keep rendering.
+        $this->get('/')->assertOk();
 
         $xml = simplexml_load_string($this->get('/feed.xml')->getContent());
         $this->assertNotFalse($xml);

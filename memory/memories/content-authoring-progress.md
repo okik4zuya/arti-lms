@@ -100,8 +100,8 @@ Source outline: Chapter 2 ("Claude: Apakah Ini Jawabannya?") in
   iterasi / keamanan data / biaya pemakaian (biaya added as the "usulkan lainnya" 6th row the
   outline asked for). Closes by explicitly answering `06`'s open question (yes — no more manual
   copy-paste) and teeing up ARTi Framework as the next chapter, since a file-native tool alone
-  isn't yet a *system* for persistent, structured memory. Fixed the dangling `[[Solusinya]]`
-  wiki-link bug noted below by using the correct title `[[Solusi Parsial]]` instead (didn't touch
+  isn't yet a *system* for persistent, structured memory. Fixed the dangling `⟦Solusinya⟧`
+  wiki-link bug noted below by using the correct title `⟦Solusi Parsial⟧` instead (didn't touch
   `06`'s existing dangling ref, just avoided repeating the mistake here).
 - Remaining outline sections in this chapter are still empty `##` stubs, not yet expandable without
   more input from the user: "Claude bisa pakai skill agar hasil lebih maksimal".
@@ -193,7 +193,7 @@ Not started. No inbox source material confirmed yet beyond the finalized structu
   `why-arti-framework-01` placeholder); verified via a standalone PHP script since
   `tinker <file>` stopped working in this session (see [[content-authoring-workflow]]).
 - 2026-09-10 21:52 — Drafted `07-claude-code`, added to manifest.yaml, tinker-verified (title,
-  table, style block, and `[[Solusi Parsial]]` wiki-link all resolve correctly).
+  table, style block, and `⟦Solusi Parsial⟧` wiki-link all resolve correctly).
 - 2026-09-10 19:40 — Created (split out of the todo-list.md checklist, which now only tracks
   done/not-done) after the user asked for a dedicated progress memory + todo section, to be kept in
   sync on every content-authoring memory update going forward.

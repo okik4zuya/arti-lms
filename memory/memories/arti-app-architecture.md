@@ -29,6 +29,11 @@ Next.js/Astro-first suggestion made earlier. Builds on [[tech-stack-options]] (O
 - **Dashboard moves to `/app`**; `/dashboard` is a 301 to `/app`. Route name `dashboard` kept, so every `route('dashboard')` call is unchanged.
 - **Customer login: password first** (admin-created accounts), magic link later when the email provider is chosen.
 
+## Business decisions 2026-10-14 (override earlier notes where they conflict)
+- **Product = e-course (LMS) + ARTi Framework license in one package.** Price Rp199.000/year; Rp99.000 for the first 100 buyers; install requires internet; no trial; landing domain `arti.invait.id`. Details and the manual-issuing/fail-closed activation rules: `~/.arti/memory/memories/licensing-update-plan.md`.
+- **Sales flow:** admin sends the license key by WhatsApp; the framework calls the Cloudflare Worker to confirm the key is valid and unused, else install fails. The earlier Facebook-ads/WhatsApp/manual-payment note is therefore consistent; the Midtrans/Xendit webhook flow is deferred.
+- Consequence for this app: `/harga` becomes one package with one price (not five tiers); `/unduh` is for buyers; learner accounts stay admin-created (matches the manual flow). Landing work: [[landing-page-info]].
+
 ## Route map
 Domains are placeholders (`config('app.domains.main'|'toko')`), one app, `Route::domain()`.
 
@@ -73,6 +78,7 @@ Done: `filament/filament` v4.15.2. The `filament/upgrade` tool could not be inst
 3. Later: toko domain (`customers`, `auth:customer`, ledger), `/app/lisensi` + Filament license page against the Worker once deployed.
 
 ## Change log
+- 2026-10-14 21:59 — recorded bundle/price/manual-issuing decisions.
 - 2026-10-14 07:08 — recorded dev seeder accounts and the Vite port move.
 - 2026-10-14 06:24 — Filament 4 upgrade done (manual conversion, tested); phase-1 DB-backed tests confirmed green.
 - 2026-10-13 20:37 — answered the five open decisions (Filament 4 now, content first, Blade landing, /app + 301, password login first), built and verified phase 1 (public routes, flat-file articles, domain gating, shared tokens), recorded risks and the unverified DB-backed tests.

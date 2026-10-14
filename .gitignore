@@ -21,3 +21,9 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+
+# explainer video build artefacts (final mp4 lives in public/videos/landing)
+/resources/media-src/explainer/music.wav
+/resources/media-src/explainer/out/
+/resources/media-src/explainer/prev/
+/arti-dashboard.png

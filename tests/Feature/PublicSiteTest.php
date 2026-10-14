@@ -20,7 +20,8 @@ class PublicSiteTest extends TestCase
             ->assertOk()
             ->assertSee('ARTi Framework')
             ->assertSee('Masuk')
-            ->assertSee('Memori antar sesi');
+            ->assertSee('tidak lupa dan tidak mengarang')
+            ->assertSee('Memori per topik');
     }
 
     #[DataProvider('staticPages')]
@@ -36,7 +37,7 @@ class PublicSiteTest extends TestCase
     {
         return [
             'fitur' => ['/fitur', 'Apa yang ada di dalam ARTi.'],
-            'harga' => ['/harga', 'Lisensi tahunan, harga menyusul.'],
+            'harga' => ['/harga', 'Satu paket, lisensi tahunan.'],
             'unduh' => ['/unduh', 'Pemasang belum dirilis.'],
             'kontak' => ['/kontak', 'Hubungi kami.'],
             'privasi' => ['/privasi', 'Kebijakan privasi'],
@@ -53,9 +54,14 @@ class PublicSiteTest extends TestCase
         $this->get('/kontak')->assertSee('halo@example.test')->assertDontSee('belum dibuka');
     }
 
-    public function test_pricing_page_states_no_prices(): void
+    public function test_pricing_page_shows_the_launch_offer_and_no_tiers_or_trial(): void
     {
-        $this->get('/harga')->assertDontSee('Rp');
+        $this->get('/harga')
+            ->assertSee('Rp99.000')
+            ->assertSee('Rp199.000')
+            ->assertSee('Garansi 7 hari')
+            ->assertDontSee('Uji coba')
+            ->assertDontSee('Akademik');
     }
 
     public function test_robots_txt_is_served_by_the_app_and_points_to_the_sitemap(): void

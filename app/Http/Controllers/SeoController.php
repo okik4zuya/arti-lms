@@ -9,11 +9,14 @@ class SeoController extends Controller
     /** Public pages listed in the sitemap, by route name. */
     protected const PAGES = ['home', 'fitur', 'harga', 'unduh', 'articles.index', 'kontak', 'privasi', 'syarat'];
 
-    public function sitemap(ArticleRepository $articles)
+    public function sitemap(ArticleRepository $articles, FreeChapterController $free)
     {
         return response()
             ->view('site.sitemap', [
-                'pages' => array_map(fn (string $name) => route($name), self::PAGES),
+                'pages' => array_merge(
+                    array_map(fn (string $name) => route($name), self::PAGES),
+                    array_map(fn (array $item) => route('free.show', $item['slug']), $free->subchapters())
+                ),
                 'articles' => $articles->all(),
                 'tags' => $articles->tags(),
             ])

@@ -81,3 +81,8 @@ There is no `~/.arti/memory/progress-index.md` row for this project — that das
 paper projects (Category: Paper), not Dev-category ones.
 
 <!-- arti: local additions below — preserved on regeneration -->
+
+## YouTube research (yt-keyword-audit)
+- Audience: language `id`, region `ID`. Pass `--lang id --region ID` to `videos` and `find-channels`, `--lang id` to `suggest`.
+- Run: `"~/.arti/python/python.exe" -I` (never a bare `python`).
+- Record: keyword findings in `memory/memories/landing-page-keywords.md`; competitor audits in `G:\My Drive\YT Dosen Berarti\memory\memories\competitor-research.md`. Update these files, do not create new ones.

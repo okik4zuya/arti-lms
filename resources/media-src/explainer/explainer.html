@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8"><title>Explainer ARTi</title>
+<style>
+:root{--blue:#2563eb;--ink:#0f172a;--mut:#64748b;--line:#e2e8f0;--red:#dc2626}
+*{box-sizing:border-box;margin:0}
+html,body{width:1920px;height:1080px;overflow:hidden}
+body{font-family:"Segoe UI",system-ui,Arial,sans-serif;color:var(--ink);background:linear-gradient(135deg,#f8fafc,#e8effd);position:relative}
+.scene{position:absolute;inset:0;opacity:0}
+.center{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.big{font-size:140px;font-weight:800;line-height:1.12;letter-spacing:-3px}.b{color:var(--blue)}
+.cap{position:absolute;left:0;right:0;bottom:80px;text-align:center;font-size:56px;font-weight:700;opacity:0}
+.tag{position:absolute;top:40px;right:48px;font-size:30px;background:#fef3c7;color:#92400e;padding:8px 22px;border-radius:99px}
+.corner{position:absolute;top:44px;left:56px;height:64px;opacity:0}
+.bubble{background:#fff;border:3px solid #bfdbfe;border-radius:28px;padding:34px 44px;font-size:48px;text-align:left;width:1100px;line-height:1.35;box-shadow:0 20px 50px rgba(37,99,235,.15);opacity:0}
+.x{position:absolute;font-size:260px;font-weight:800;color:var(--red);line-height:1;opacity:0}
+.q{position:absolute;font-size:200px;font-weight:800;color:var(--mut);opacity:0;line-height:1}
+.row{display:flex;gap:90px;align-items:center}
+.sess{background:#fff;border:3px solid var(--line);border-radius:26px;padding:34px 40px;width:640px;height:380px;font-size:44px;box-shadow:0 20px 50px rgba(15,23,42,.1);text-align:left}
+.sess b{font-size:52px}
+.file{display:inline-block;background:#dbeafe;border-radius:12px;padding:8px 20px;margin:10px 10px 0 0;font-size:38px}
+.arrow{font-size:120px;color:var(--mut)}
+pre{font:56px/1.55 Consolas,"Cascadia Mono",monospace;text-align:left;background:#0f172a;color:#e2e8f0;padding:48px 64px;border-radius:28px;box-shadow:0 30px 70px rgba(15,23,42,.35)}
+.ln{opacity:0;display:block}
+.t1{color:#60a5fa}.t2{color:#4ade80}.t3{color:#fbbf24}
+svg text{font-family:"Segoe UI",Arial,sans-serif;font-weight:700}
+</style></head><body>
+
+<!-- 1 Hook -->
+<div class="scene center" id="s1"><div class="big" id="h1">AI-nya <span class="b">ngawur</span><br>dan <span class="b">lupa</span> terus?</div></div>
+<img class="corner" id="logo" src="../../../public/images/wordmark.png">
+
+<!-- 2 Ngawur -->
+<div class="scene center" id="s2"><span class="tag">ilustrasi konsep</span>
+ <div class="bubble" id="bub">Menurut Smith et al. (2021), <i>J. Adv. Mater.</i> 14(3), 221–230, hasilnya naik 40%.</div>
+ <div class="q" id="q" style="right:300px;top:260px">?</div>
+ <div class="x" id="x" style="right:240px;top:400px">✗</div>
+ <div class="cap" id="cap2">Kutipan terlihat meyakinkan. Tapi ada di jurnalnya?</div></div>
+
+<!-- 3 Lupa -->
+<div class="scene center" id="s3"><span class="tag">ilustrasi konsep</span>
+ <div class="row"><div class="sess" id="se1"><b>Sesi 1</b><br><span class="file" id="f1">referensi.pdf</span><span class="file" id="f2">draft.md</span><span class="file" id="f3">catatan.md</span></div>
+ <div class="arrow" id="arw">→</div>
+ <div class="sess" id="se2"><b>Sesi 2</b><br><i style="color:var(--mut)" id="empty">kosong…</i></div></div>
+ <div class="cap" id="cap3">Sesi baru, mulai dari nol.</div></div>
+
+<!-- 4 Solusi -->
+<div class="scene center" id="s4">
+ <pre><span class="ln" id="m0"><span class="t1">memory/</span></span><span class="ln" id="m1">├─ MEMORY.md</span><span class="ln" id="m2">├─ todo-list.md</span><span class="ln" id="m3">├─ status.md</span><span class="ln" id="m4">└─ memories/</span></pre>
+ <div class="cap" id="cap4">ARTi menyimpannya sebagai berkas.</div></div>
+
+<!-- 5 Bertanda sumber -->
+<div class="scene center" id="s5"><span class="tag">contoh format</span>
+ <pre style="font-size:50px"><span class="ln" id="k1">Hasil uji naik 12%   <span class="t2">[OWN]</span></span><span class="ln" id="k2">Metode ini umum dipakai   <span class="t1">[LIT: smith-2021]</span></span><span class="ln" id="k3">Mekanisme belum jelas   <span class="t3">[SOURCE NEEDED]</span></span></pre>
+ <div class="cap" id="cap5">Setiap klaim punya penanda asal.</div></div>
+
+<!-- 6 Alur -->
+<div class="scene center" id="s6">
+ <svg width="1500" height="788" viewBox="0 0 1200 630" style="margin-top:-60px">
+  <path id="stair" d="M70,600 V500 H390 V370 H730 V240 H1120 V135" fill="none" stroke="#475569" stroke-width="30" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/>
+  <g id="l1" opacity="0"><circle cx="123" cy="443" r="23" fill="#2563eb"/><text x="123" y="452" font-size="26" fill="#fff" text-anchor="middle">1</text><text x="159" y="456" font-size="38" fill="#2563eb">Amati</text></g>
+  <g id="l2" opacity="0"><circle cx="443" cy="313" r="23" fill="#2563eb"/><text x="443" y="322" font-size="26" fill="#fff" text-anchor="middle">2</text><text x="479" y="326" font-size="38" fill="#2563eb">Replikasi</text></g>
+  <g id="l3" opacity="0"><circle cx="783" cy="183" r="23" fill="#2563eb"/><text x="783" y="192" font-size="26" fill="#fff" text-anchor="middle">3</text><text x="819" y="196" font-size="38" fill="#2563eb">Tambah Inovasi</text></g>
+  <text id="l4" x="1020" y="88" font-size="38" fill="#475569" text-anchor="end" opacity="0">Submit</text>
+  <circle id="dot" cx="1120" cy="80" r="42" fill="#2563eb" opacity="0" style="transform-box:fill-box;transform-origin:center"/>
+ </svg>
+ <div class="cap" id="cap6">Amati. Replikasi. Tambah Inovasi.</div></div>
+
+<!-- 7 Penutup -->
+<div class="scene center" id="s7"><img id="wm" src="../../../public/images/wordmark.png" style="height:150px;margin-bottom:50px;opacity:0">
+ <div class="big" id="tg" style="font-size:96px;letter-spacing:-2px;opacity:0">Dari ide sampai publish,<br>bersama ARTi.</div>
+ <div id="url" style="font-size:64px;color:var(--blue);font-weight:700;margin-top:40px;opacity:0">arti.invait.id</div></div>
+
+<script>
+window.DURATION = 40;
+window.CUES = [];
+window.MUSIC = { bpm: 124, chord_seconds: 3.87, seed: 11,
+  chords: [[48,52,55,60],[43,50,55,59],[45,52,57,60],[41,48,53,57]] };
+const anims = [];
+const EASE = 'cubic-bezier(.2,.8,.2,1)';
+const $ = (id) => document.getElementById(id);
+function A(el, kf, start, dur, ease = EASE) {
+  const a = el.animate(kf, { delay: start * 1000, duration: Math.max(dur, .001) * 1000, fill: 'both', easing: ease });
+  a.pause(); anims.push(a); return a;
+}
+function show(el, a, b, fade = .4) {
+  const d = b - a, f = Math.min(.5, fade / d);
+  A(el, [{ opacity: 0 }, { opacity: 1, offset: f }, { opacity: 1, offset: 1 - f }, { opacity: 0 }], a, d, 'linear');
+}
+function fadeIn(el, a, d = .4) { A(el, [{ opacity: 0 }, { opacity: 1 }], a, d); }
+function rise(el, a, dist = 40, d = .6) {
+  A(el, [{ opacity: 0, transform: `translateY(${dist}px)` }, { opacity: 1, transform: 'translateY(0)' }], a, d);
+}
+function pop(el, a) {
+  A(el, [{ opacity: 0, transform: 'scale(.3)' }, { opacity: 1, transform: 'scale(1.15)', offset: .6 }, { opacity: 1, transform: 'scale(1)' }], a, .5);
+}
+const cue = (t, freq = 880, gain = .1) => window.CUES.push({ t: Math.round(t * 1000) / 1000, freq, gain });
+window.seek = (t) => anims.forEach((a) => { a.currentTime = t * 1000; });
+
+/* 1 Hook 0-4 */
+show($('s1'), 0, 4.4); rise($('h1'), .3, 50, .7); cue(.4, 660, .12);
+A($('logo'), [{opacity:0},{opacity:1,offset:.1},{opacity:1,offset:.9},{opacity:0}], 0.6, 3.5, 'linear');
+
+/* 2 Ngawur 4-9 */
+show($('s2'), 4, 9.3);
+rise($('bub'), 4.4, 40); cue(4.5, 700, .1);
+rise($('cap2'), 5.0, 30);
+A($('q'), [{opacity:0},{opacity:1,offset:.2},{opacity:1,offset:.7},{opacity:0}], 6.2, 1.4, 'linear'); cue(6.3, 520, .1);
+A($('x'), [{opacity:0,transform:'scale(2)'},{opacity:1,transform:'scale(1)'}], 7.6, .35); cue(7.6, 220, .14);
+
+/* 3 Lupa 9-14 */
+show($('s3'), 9, 14.3);
+rise($('se1'), 9.3, 40); rise($('se2'), 9.5, 40); fadeIn($('arw'), 9.6);
+[['f1',9.7],['f2',9.9],['f3',10.1]].forEach(([id,t]) => { fadeIn($(id), t, .25); cue(t, 760, .08); });
+A($('f1'), [{opacity:0},{opacity:1,offset:.05},{opacity:1,offset:.75},{opacity:0}], 9.7, 3.0, 'linear');
+A($('f2'), [{opacity:0},{opacity:1,offset:.05},{opacity:1,offset:.7},{opacity:0}], 9.9, 3.0, 'linear');
+A($('f3'), [{opacity:0},{opacity:1,offset:.05},{opacity:1,offset:.65},{opacity:0}], 10.1, 3.0, 'linear');
+A($('se1'), [{opacity:0,transform:'translateY(40px)'},{opacity:1,transform:'translateY(0)',offset:.1},{opacity:1,offset:.7},{opacity:.35}], 9.3, 4.4);
+rise($('cap3'), 11.0, 30); cue(12.2, 300, .1);
+
+/* 4 Solusi 14-20 */
+show($('s4'), 13.9, 20.3);
+rise($('cap4'), 14.4, 30);
+['m0','m1','m2','m3','m4'].forEach((id,i) => { const t = 14.8 + i*.55; fadeIn($(id), t, .3); cue(t, 600 + i*70, .08); });
+
+/* 5 Bertanda sumber 20-26 */
+show($('s5'), 19.9, 26.3);
+rise($('cap5'), 20.4, 30);
+['k1','k2','k3'].forEach((id,i) => { const t = 20.9 + i*1.3; rise($(id), t, 20, .45); cue(t+.1, 700 + i*120, .1); });
+
+/* 6 Alur 26-34 */
+show($('s6'), 25.9, 34.3);
+rise($('cap6'), 26.4, 30);
+A($('stair'), [{strokeDashoffset:1},{strokeDashoffset:0}], 26.8, 5.4, 'linear');
+[['l1',27.4],['l2',29.0],['l3',30.6],['l4',32.0]].forEach(([id,t],i) => { fadeIn($(id), t, .4); cue(t, 650 + i*110, .1); });
+pop($('dot'), 32.3); cue(32.4, 1046, .14);
+
+/* 7 Penutup 34-40 */
+A($('s7'), [{opacity:0},{opacity:1}], 34.0, .5);
+rise($('wm'), 34.4, 30);
+rise($('tg'), 35.0, 40, .7);
+rise($('url'), 36.3, 30); cue(36.4, 880, .12);
+</script>
+</body></html>

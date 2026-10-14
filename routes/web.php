@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\FreeChapterController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ContentController;
 use App\Http\Controllers\DashboardController;
@@ -26,6 +27,13 @@ Route::group(array_filter(['domain' => config('app.domains.main')]), function ()
     Route::view('kontak', 'site.kontak')->name('kontak');
     Route::view('privasi', 'site.privasi')->name('privasi');
     Route::view('syarat', 'site.syarat')->name('syarat');
+
+    // ---- Free chapter 1 (no account) -------------------------------------------
+    Route::prefix('baca')->group(function () {
+        Route::get('/', [FreeChapterController::class, 'start'])->name('free.start');
+        Route::get('{slug}', [FreeChapterController::class, 'show'])->where('slug', '[a-z0-9-]+')->name('free.show');
+        Route::get('{slug}/images/{file}', [FreeChapterController::class, 'image'])->where('slug', '[a-z0-9-]+')->name('free.image');
+    });
 
     // ---- Articles (flat-file Markdown) ----------------------------------------
     // The tag route comes first: "tag" is also a valid {slug} shape.

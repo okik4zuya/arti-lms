@@ -106,7 +106,7 @@ touched (still manual — each subchapter needs the same block pasted in, nothin
 
 `ContentController::show()` uses `League\CommonMark\GithubFlavoredMarkdownConverter` (not the plain
 `CommonMarkConverter` used before), with explicit config — needed because two real chapters
-(05-claude-model-dengan-branding-logika's benchmark table, and `[[Title]]`-style cross-references in
+(05-claude-model-dengan-branding-logika's benchmark table, and `⟦Title⟧`-style cross-references in
 05 and 06) surfaced two gaps:
 
 - **GFM pipe tables** (`| a | b |` syntax) need `GithubFlavoredMarkdownConverter`, not plain
@@ -119,23 +119,23 @@ touched (still manual — each subchapter needs the same block pasted in, nothin
   `'disallowed_raw_html' => ['disallowed_tags' => [...]]` with `style` removed from the list —
   `script`/`iframe`/etc. stay blocked. `'html_input' => 'allow'` is also set explicitly (matches the
   library default, but pinned so it doesn't silently drift on a future upgrade).
-- **`[[Title]]` wiki-link syntax** (used in 05 and 06 to cross-reference other subchapters by title,
-  mirroring this project's own `[[slug]]` memory-linking convention) is not standard Markdown at
+- **`⟦Title⟧` wiki-link syntax (written with two square brackets in the Markdown, shown here with ⟦ ⟧ so memory tooling does not treat it as a memory link)** (used in 05 and 06 to cross-reference other subchapters by title,
+  mirroring this project's own `⟦slug⟧` memory-linking convention) is not standard Markdown at
   all — CommonMark's link syntax is `[text](url)` only. Added
   `ContentController::resolveWikiLinks()`, run on the raw Markdown body *before* conversion: matches
-  `[[Title]]` case-insensitively against every subchapter title in the course manifest and rewrites
+  `⟦Title⟧` case-insensitively against every subchapter title in the course manifest and rewrites
   matches to a real `[Title](route)` link; an unresolved reference degrades to plain text (brackets
   stripped) rather than breaking rendering. **Known dangling ref**: `06-masih-ada-yang-kurang` has
-  `[[Solusinya]]`, which doesn't match any subchapter title exactly (nearest is "Solusi Parsial",
+  `⟦Solusinya⟧`, which doesn't match any subchapter title exactly (nearest is "Solusi Parsial",
   slug `02-solusi-parsial`) — renders as plain text "Solusinya" for now; fix the source text to
-  `[[Solusi Parsial]]` next time that file is touched, or ask the user which subchapter it meant.
+  `⟦Solusi Parsial⟧` next time that file is touched, or ask the user which subchapter it meant.
 - **GFM table CSS**: `resources/css/app.css`'s `.content table` block (rounded bordered container,
   horizontal-scroll-on-overflow for mobile, tinted header row, zebra-striped body rows, row hover,
   bold first column) styles *any* pipe table automatically — no per-subchapter `<style>` override
   needed for tables, unlike the per-subchapter readability pattern above.
 - Verified via a tinker script converting real chapter-2 Markdown files directly (not just
-  synthetic snippets): table renders as `<table>`, `[[Taaruf]]` resolves to a working
-  `<a href="…/04-taaruf">`, `[[Solusinya]]` degrades to plain text, and the `<style>` block in 05
+  synthetic snippets): table renders as `<table>`, `⟦Taaruf⟧` resolves to a working
+  `<a href="…/04-taaruf">`, `⟦Solusinya⟧` degrades to plain text, and the `<style>` block in 05
   survives unescaped. No real-browser visual check this pass (no browser tool available this
   session).
 
@@ -185,6 +185,6 @@ This file (content-authoring-workflow) stays for rules that don't change per-cha
 - 2026-09-10 21:27 — Added the Markdown rendering pipeline section: switched to
   `GithubFlavoredMarkdownConverter` for table support, fixed GFM's `DisallowedRawHtmlExtension`
   silently escaping `<style>` blocks (whitelisted `style` while keeping `script`/`iframe`/etc.
-  blocked), added `[[Title]]` wiki-link resolution (`ContentController::resolveWikiLinks()`), and
+  blocked), added `⟦Title⟧` wiki-link resolution (`ContentController::resolveWikiLinks()`), and
   designed table CSS in `app.css`. Corrected the now-stale claim in the Readability styling section
   above that credited plain `CommonMarkConverter`/library-default `html_input` for `<style>` passthrough.

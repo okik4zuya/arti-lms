@@ -12,6 +12,11 @@
     <meta property="og:title" content="@yield('title', 'ARTi')">
     <meta property="og:description" content="@yield('description', 'ARTi Framework: sistem kerja riset berbasis Claude Code dengan memori antar sesi dan rujukan yang bisa dilacak.')">
     <meta property="og:url" content="{{ $canonical ?? url()->current() }}">
+    <meta property="og:image" content="{{ asset('images/landing/og-image.png') }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:locale" content="id_ID">
+    <meta name="twitter:card" content="summary_large_image">
 
     <link rel="icon" href="{{ asset('favicon.ico') }}" sizes="any">
     <link rel="alternate" type="application/atom+xml" title="Artikel ARTi" href="{{ route('feed') }}">
@@ -28,22 +33,40 @@
             <a href="{{ route('home') }}" class="site-brand" aria-label="ARTi — beranda">
                 <img src="{{ asset('images/wordmark.png') }}" alt="ARTi" class="site-brand__logo">
             </a>
-            <nav class="site-nav" aria-label="Utama">
-                <a href="{{ route('fitur') }}" @if (request()->routeIs('fitur')) aria-current="page" @endif>Fitur</a>
-                <a href="{{ route('harga') }}" @if (request()->routeIs('harga')) aria-current="page" @endif>Harga</a>
-                <a href="{{ route('unduh') }}" @if (request()->routeIs('unduh')) aria-current="page" @endif>Unduh</a>
-                <a href="{{ route('articles.index') }}" @if (request()->routeIs('articles.*')) aria-current="page" @endif>Artikel</a>
-                <a href="{{ route('kontak') }}" @if (request()->routeIs('kontak')) aria-current="page" @endif>Kontak</a>
-                @auth
-                    <a href="{{ route('dashboard') }}" class="btn btn--outline">Buka aplikasi</a>
-                @else
-                    <a href="{{ route('login') }}" class="btn btn--outline">Masuk</a>
-                @endauth
-            </nav>
+
+            <div class="site-header__right">
+                <nav class="site-nav site-nav--desktop" aria-label="Utama">
+                    @include('layouts.partials.site-links')
+                </nav>
+
+                @yield('header_cta')
+
+                <span class="site-header__account">
+                    @auth
+                        <a href="{{ route('dashboard') }}" class="btn btn--outline">Buka aplikasi</a>
+                    @else
+                        <a href="{{ route('login') }}" class="btn btn--outline">Masuk</a>
+                    @endauth
+                </span>
+
+                <details class="nav-menu">
+                    <summary aria-label="Menu">
+                        <span class="nav-menu__icon" aria-hidden="true"></span>
+                    </summary>
+                    <nav class="nav-menu__panel" aria-label="Menu utama">
+                        @include('layouts.partials.site-links')
+                        @auth
+                            <a href="{{ route('dashboard') }}" class="nav-menu__account">Buka aplikasi</a>
+                        @else
+                            <a href="{{ route('login') }}" class="nav-menu__account">Masuk</a>
+                        @endauth
+                    </nav>
+                </details>
+            </div>
         </div>
     </header>
 
-    <main class="site-main">
+    <main class="site-main @yield('main_class')">
         @yield('content')
     </main>
 

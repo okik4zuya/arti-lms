@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Support\ArticleRepository;
+use App\Support\Offer;
 
 class PageController extends Controller
 {
-    public function home(ArticleRepository $articles)
+    public function home(Offer $offer)
     {
         return view('site.home', [
-            'latest' => $articles->all()->take(3),
+            'offer' => $offer,
+            'freeChapterUrl' => config('site.free_chapter_url') ?: route('free.start'),
         ]);
     }
 }

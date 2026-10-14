@@ -34,6 +34,7 @@
         <p class="section__intro">Skill adalah paket instruksi yang dipanggil Claude sesuai tahap pekerjaan.</p>
         <div class="grid">
             @foreach ([
+                ['ARTi-setup', 'Onboarding sekali di awal dan penyiapan folder serta memori untuk tiap proyek baru.'],
                 ['ARTi-idea', 'Menyusun gap map, menilai kebaruan, merancang eksperimen yang layak, dan memilih jurnal sebelum menulis.'],
                 ['ARTi-writing', 'Alur penulisan naskah dari profil jurnal sampai balasan reviewer dan tindak lanjut setelah diterima.'],
                 ['ARTi-ref', 'Menambah, memperbarui, dan memeriksa rujukan, termasuk deteksi DOI ganda dan ekstraksi teks lengkap.'],
@@ -56,7 +57,7 @@
         <div class="panel panel--muted">
             <h3>Ebook</h3>
             <p>Seluruh alur ini dijelaskan dalam ebook berbahasa Indonesia yang dibaca langsung di aplikasi.</p>
-            <a href="{{ route('harga') }}" class="btn btn--outline">Lihat paket</a>
+            <a href="{{ route('harga') }}" class="btn btn--outline">Lihat harga</a>
         </div>
     </section>
 </div>
