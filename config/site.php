@@ -56,6 +56,13 @@ return [
     'free_chapter_url' => env('SITE_FREE_CHAPTER_URL'),
     'demo_video_embed_url' => env('SITE_DEMO_VIDEO_EMBED_URL'),
     'artipdf_url' => 'https://github.com/okik4zuya/artipdf/releases/latest',
+    // Direct link to the installer on the public R2 bucket (cdn-arti.invait.id), built from the version
+    // below; ARTIPDF_DOWNLOAD_URL overrides it. With neither, /artipdf/unduh sends the visitor to the
+    // GitHub release page instead, so the page never has a dead button.
+    'artipdf_download_url' => env('ARTIPDF_DOWNLOAD_URL') ?: 'https://cdn-arti.invait.id/downloads/artipdf/ArtiPDFSetup-1.0.7.exe',
+    // SHA-256 of that exact file (the installer is not code-signed); ARTIPDF_SHA256 overrides it.
+    // On a new release change the version, this URL and this hash together after uploading the file.
+    'artipdf_sha256' => env('ARTIPDF_SHA256') ?: '337e15a23160c911c846e22d46269b6469baa7ad32331c5fac0a7cee66644f9b',
     // Shown on /artipdf; update with each release (the download link above always points to the latest one).
     'artipdf_version' => '1.0.7',
     'artipdf_size' => '63 MB',

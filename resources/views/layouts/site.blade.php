@@ -122,5 +122,6 @@
             @vite(['resources/js/contact-panel.js'])
         @endunless
     @endif
+    @stack('scripts')
 </body>
 </html>

@@ -65,6 +65,29 @@ class FreeChapterTest extends TestCase
             ->assertSee('Lihat harga');
     }
 
+    #[DataProvider('freeSlugs')]
+    public function test_every_free_page_has_the_email_sign_up_tagged_with_its_page_number(string $slug): void
+    {
+        $position = array_search($slug, array_column(app(\App\Http\Controllers\FreeChapterController::class)->subchapters(), 'slug')) + 1;
+
+        $this->get('/baca/'.$slug)
+            ->assertSee('data-subscribe-card', false)
+            ->assertSee('name="source" value="baca-'.$position.'"', false)
+            ->assertSee('action="'.route('subscribe.store').'"', false);
+    }
+
+    public function test_page_two_has_its_own_hook_and_the_last_page_keeps_both_the_sign_up_and_the_buy_button(): void
+    {
+        $this->get('/baca/02-solusi-parsial')
+            ->assertSee('Dua solusi, dua kelemahan baru')
+            ->assertSee('Tidak sekarang');
+
+        $this->get('/baca/04-hilang-memori-tak-berarti')
+            ->assertSee('Kabari saya bila ada kelanjutannya')
+            ->assertDontSee('Tidak sekarang')
+            ->assertSee('Beli lewat WhatsApp');
+    }
+
     public function test_free_pages_are_in_the_sitemap_and_the_landing_links_to_the_chapter(): void
     {
         $this->get('/sitemap.xml')->assertSee(url('/baca/01-2-masalah-utama'), false);

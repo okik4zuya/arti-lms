@@ -4,7 +4,7 @@ description: Agreed design for the next stage of /jamrud/license-issuances — a
 metadata:
   type: project
   created: 2026-10-15 13:43
-  updated: 2026-10-15 13:56
+  updated: 2026-10-15 16:59
 ---
 
 Decided with the researcher on 2026-10-15 after a brainstorm; **phase A is implemented (see "Phase A built"), B to D are not**. Builds on [[license-admin]] (what exists) and [[license-worker-setup]] (the Worker is deployed). Full plan in Indonesian with 9 ASCII wireframes: `~/.claude/plans/sebelum-lanjut-coba-analisis-majestic-swan.md` (read it before building; it is the detailed spec). The researcher will implement in a separate session.

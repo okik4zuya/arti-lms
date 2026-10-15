@@ -14,7 +14,7 @@
             <h1>Gabung, pisah, kompres, dan ubah PDF tanpa mengunggahnya ke mana pun.</h1>
             <p class="hero__lead">Aplikasi Windows gratis. Semua berjalan di komputer Anda: berkas tidak diunggah dan tidak perlu akun.</p>
             <div class="hero__actions">
-                <a href="{{ config('site.artipdf_url') }}" class="btn btn--primary btn--lg" rel="noopener">Unduh untuk Windows</a>
+                <a href="{{ route('artipdf.unduh') }}" class="btn btn--primary btn--lg" data-download @unless (config('site.artipdf_download_url')) target="_blank" rel="noopener" @endunless>Unduh untuk Windows</a>
                 <a href="#fitur" class="btn btn--outline btn--lg">Lihat fiturnya</a>
             </div>
             <p class="trust-line">Gratis &middot; Offline &middot; Tanpa akun &middot; Windows 10 dan 11 &middot; Versi {{ config('site.artipdf_version') }}, {{ config('site.artipdf_size') }}</p>
@@ -102,14 +102,15 @@
         <div class="container">
             <h2>Pasang dalam empat langkah.</h2>
             <ol class="steps-list">
-                <li>Unduh <code>ArtiPDFSetup-{{ config('site.artipdf_version') }}.exe</code> dari halaman rilis ({{ config('site.artipdf_size') }}).</li>
+                <li>Unduh <code>ArtiPDFSetup-{{ config('site.artipdf_version') }}.exe</code> ({{ config('site.artipdf_size') }}) lewat tombol di bawah.</li>
                 <li>Jalankan berkasnya. Bila Windows menampilkan layar biru &ldquo;Windows protected your PC&rdquo; (SmartScreen), klik <strong>More info</strong>, lalu <strong>Run anyway</strong>. Ini muncul karena installer belum bertanda tangan digital, bukan karena ada yang rusak.</li>
                 <li>Ikuti installer sampai selesai. Aplikasi muncul di Start Menu.</li>
                 <li>Buka ARTi PDF, seret PDF ke jendelanya, atau klik kanan sebuah PDF di Explorer.</li>
             </ol>
             <div class="hero__actions">
-                <a href="{{ config('site.artipdf_url') }}" class="btn btn--primary btn--lg" rel="noopener">Unduh untuk Windows</a>
+                <a href="{{ route('artipdf.unduh') }}" class="btn btn--primary btn--lg" data-download @unless (config('site.artipdf_download_url')) target="_blank" rel="noopener" @endunless>Unduh untuk Windows</a>
             </div>
+            <p class="muted">Atau ambil dari <a href="{{ config('site.artipdf_url') }}" rel="noopener">halaman rilis di GitHub</a>.@if (config('site.artipdf_sha256')) Untuk memastikan berkasnya utuh, SHA-256 installer: <code class="sha">{{ config('site.artipdf_sha256') }}</code>@endif</p>
         </div>
     </section>
 
@@ -156,4 +157,20 @@
     </section>
 
 </div>
+
+{{-- Thank-you dialog, opened by resources/js/subscribe.js when a download button is clicked. The download is a normal link and does not depend on it. --}}
+<dialog id="download-thanks" class="thanks-dialog" aria-labelledby="download-thanks-title">
+    <h2 id="download-thanks-title">Terima kasih, unduhan dimulai.</h2>
+    <ul class="thanks-dialog__tips">
+        <li>Jalankan <code>ArtiPDFSetup-{{ config('site.artipdf_version') }}.exe</code> setelah selesai diunduh.</li>
+        <li>Bila Windows menampilkan layar biru (SmartScreen), klik <strong>More info</strong>, lalu <strong>Run anyway</strong>.</li>
+    </ul>
+    <p class="thanks-dialog__offer">Mau dikabari saat ada versi baru?</p>
+    <x-subscribe-form source="artipdf" button="Kabari saya" prefix="dlg" />
+    <button type="button" class="btn btn--outline thanks-dialog__close" data-dialog-close>Tutup</button>
+</dialog>
 @endsection
+
+@push('scripts')
+    @vite(['resources/js/subscribe.js'])
+@endpush

@@ -33,6 +33,15 @@
             <li>Saat instalasi, ARTi memeriksa lisensi lewat internet ke server lisensi ARTi. Yang dikirim adalah kunci lisensi dan kode perangkat yang sudah diacak (hash), bukan data mentah komputer Anda.</li>
         </ul>
 
+        <h2>Daftar email (kabar dari ARTi)</h2>
+        <ul>
+            <li>Bila Anda mengisi formulir &ldquo;kabari saya&rdquo; (di halaman bab 1 gratis atau ARTi PDF), situs menyimpan alamat email Anda, dari halaman mana Anda mendaftar, dan waktu persetujuan serta konfirmasinya.</li>
+            <li>Kami mengirim email konfirmasi lebih dulu. Tanpa konfirmasi, tidak ada email lain yang dikirim.</li>
+            <li>Isinya kabar dari ARTi: tulisan baru, pembaruan alat gratis, dan penawaran ARTi. Email dikirim lewat layanan pengiriman email pihak ketiga yang kami pakai untuk itu.</li>
+            <li>Setiap email memuat tautan untuk berhenti berlangganan. Untuk menghapus alamat Anda sepenuhnya, hubungi kami lewat halaman <a href="{{ route('kontak') }}">kontak</a>.</li>
+            <li>Mengunduh ARTi PDF tidak mengharuskan Anda mendaftar. Situs hanya menambah satu hitungan unduhan per hari, tanpa mencatat siapa yang mengunduh.</li>
+        </ul>
+
         <h2>Naskah dan data riset Anda</h2>
         <ul>
             <li>ARTi berjalan di komputer Anda. Berkas proyek, memori, basis data rujukan, dan naskah tersimpan di sana, bukan di server ARTi.</li>

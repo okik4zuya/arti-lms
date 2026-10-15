@@ -4,7 +4,7 @@ description: Filament license page (/jamrud/license-issuances) — A+ architectu
 metadata:
   type: project
   created: 2026-10-15 11:30
-  updated: 2026-10-15 13:43
+  updated: 2026-10-15 16:59
 ---
 
 Built 2026-10-15 from the approved plan (`~/.claude/plans/mulai-mengembangkan-mekanisme-generasi-splendid-snail.md`). Builds on [[arti-app-architecture]]; the Worker side is `~/.arti/memory/memories/licensing-update-plan.md`.
@@ -27,11 +27,11 @@ Built 2026-10-15 from the approved plan (`~/.claude/plans/mulai-mengembangkan-me
 - **Update 2026-10-15 afternoon:** the Worker is now deployed (`https://lisensi-arti.invait.id/v1`, see [[license-worker-setup]]) and the researcher checked the Filament page locally against it ("Tes filament berhasil"): issue and key modal work. `wrangler dev` still never ran here (RAM), so `tests/manual/verify_license.php` (which needs a local Worker) was **not** run; the remaining scenarios (CLI rotation giving a stale key, lost-response recovery, unreachable Worker then retry, key absent from logs) are covered by `Http::fake` tests only.
 - Not run: the full PHPUnit suite after the latest change (PHP ran out of memory with ~900 MB free); `php artisan test --filter=License` passed (33 tests).
 
-## Uncommitted extra built this session (to be reworked)
-The learner login block in the WhatsApp message: `{account}` placeholder in `config/site.php` (`account_template`, `account_existing_template`), `LicenseMessage::account()`, a nullable encrypted `account_password` column (migration `2026_10_15_130000_add_account_password_to_license_issuances_table`, **Pending on dev**) set by `ListLicenseIssuances::attachLearner`. It works and is tested, but the stored password never expires and learners have no change-password flow, so [[license-admin-roadmap]] replaces it (phase D: no stored password, "Reset password akun").
+## Learner account block (reworked in phase D)
+The `{account}` placeholder in the WhatsApp template carries the learner login. The password is never stored: `LicenseMessage::for($license, $password)` gets it only from the key modal opened right after issuing or resetting; see [[license-admin-roadmap]].
 
 ## Prerequisites before using it in production
-- **MFA on `/jamrud` not done**: Filament 4 app authentication needs `bacon/bacon-qr-code` (not installed), `HasAppAuthentication` on `User`, two nullable columns and `->multiFactorAuthentication(...)` on the panel. Needs a `composer require`, which the researcher runs (composer had trouble before).
+- **MFA on `/jamrud` is coded but off** (`ADMIN_MFA_REQUIRED`, default false): switch it on and enrol an authenticator before production use.
 - Daily MySQL backup off the VPS, a backup of `APP_KEY` (without it the key column is unreadable), a nightly encrypted export of `license_issuances`, one restore drill.
 - Run `php artisan migrate` (dev and production), set the three `LICENSE_*` vars. Worker still undeployed; Phase 0 (EULA, Worker domain, email sender, gateway) open.
 
@@ -41,9 +41,10 @@ The step-by-step for the next session (local verification, then Cloudflare deplo
 Gateway → `POST /webhooks/pembayaran` in **Laravel** (not the Worker: the email carries an account) → `orders` row → queued `FulfillOrder` = `CreateLearner` + `IssueLicense` + mailable. Needed first: (1) Phase 0 choices; (2) Laravel the only email sender, so the Worker's `resend` must stop emailing (`silent` flag, other repo); (3) Worker `extend` takes a month delta and is not idempotent: it must accept `order_ref` before automatic renewals; (4) atomic count for the first-100 price and amount check against the webhook; (5) password by one-time set-password link rather than plain text; (6) `orders:reconcile` for payments made while Laravel was down.
 
 ## Next
-The agreed next stage (roles admin/support, payment proof, tier removed from the UI, compact issue modal, more row actions) is specified in [[license-admin-roadmap]].
+Phases A to D of [[license-admin-roadmap]] are built (roles, payment proof, Worker actions, password reset). Payment proofs live on R2 ([[r2-storage]]). Open: browser check, a real round against the Worker, production setup, MFA switch-on.
 
 ## Change log
+- 2026-10-15 16:59 — retired the stale "uncommitted extra" and "next" sections after phases A to D.
 - 2026-10-15 13:43 — Worker deployed, page checked against it; recorded the account-password extra and pointed to the roadmap.
 - 2026-10-15 11:30 — created after building stage 1.
 - 2026-10-15 11:57 — linked the Worker setup runbook; verification script moved to tests/manual.

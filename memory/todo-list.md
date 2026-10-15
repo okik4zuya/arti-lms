@@ -5,7 +5,7 @@ metadata:
   type: project
   tier: T0
   created: 2026-09-08 21:36
-  updated: 2026-10-15 13:43
+  updated: 2026-10-15 16:59
 ---
 
 ### Landing page (arti.invait.id), see [[landing-page-concept]]
@@ -50,6 +50,19 @@ metadata:
 - [ ] Look at `/scipeek` in a real browser (video playback, phone) and decide the copy
 - [x] ARTi PDF v1.0.7 released; `/artipdf` built (tests green, images and layout still to look at in the real dev site)
 - [ ] Decide whether the "Summarize with AI" right-click (needs the ARTi dashboard) should ship in the public installer
+
+### List building, see [[list-building]]
+
+- [x] Subscribers table, double opt-in sign-up, confirmation mail, unsubscribe, privacy section, tests
+- [x] ARTi PDF download route (counted, 302 to R2 or GitHub) and thank-you dialog with sign-up
+- [x] Sign-up card on every free-chapter page (`baca-1..4`)
+- [x] ARTi PDF 1.0.7 installer uploaded to the public `arti` bucket; URL and SHA-256 are the config defaults (checked against the CDN ETag)
+- [x] Tests re-run green after the queue change (MySQL restored: `lib` folder and port 3306 exclusion fixed, see [[list-building]])
+- [ ] Connect SMTP (Brevo/Resend), start Redis and `php artisan queue:work`, send one real confirmation and click it; in production also `php artisan migrate`, `npm run build` and a queue worker (supervisor/cron)
+- [x] Browser-checked the dialog and cards at 375 and 1100 px, plus confirm/unsubscribe through the Redis worker (2026-10-15); bucket-sharing throttle bug found and fixed [[list-building]]
+- [ ] Look at `/artipdf` and a `/baca` page once on a real phone, and do one real download of the installer from the CDN
+- [ ] Rotate the R2 `arti-private` token (key id and secret prefix were shown in a tool result)
+- [ ] Next phase: Filament subscribers resource, email series and scheduler, mark buyers (`buyer_at`)
 
 ### Landing finalisation (next session), prompt in [[landing-finalisation-prompt]]
 
@@ -146,17 +159,15 @@ chapter (not the full imagined scope).
 - [x] `R2_BUCKET` switched to `arti-private`, connection test passed 2026-10-15 [[r2-storage]]
 - [ ] Delete the old test proof object from the public `arti` bucket (`license-proofs/8HAL2SOt...jpg`) and re-attach or ignore the two dev rows whose proofs are not in `arti-private` [[r2-storage]]
 - [ ] Payment proofs on Cloudflare R2 (code ready and connection tested 2026-10-15; default stays `local`): researcher creates a private bucket and an API token limited to it, runs `composer require league/flysystem-aws-s3-v3 "^3.0"`, sets `PROOFS_DISK=r2`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_BUCKET`, `R2_ENDPOINT` (`https://<account>.r2.cloudflarestorage.com`) in the production `.env`; move any existing files from `storage/app/private/license-proofs/` into the bucket under the same keys; R2 then also covers backup of proofs [[license-admin-roadmap]]
-- [ ] Migration `2026_10_15_140000_add_payment_proof_...` is Pending on dev and production (researcher runs `migrate`; decide about the `account_password` one first since `migrate` runs both)
+- [x] All license migrations (plus the MFA columns and the `account_password` drop) applied on dev 2026-10-15; production still needs `php artisan migrate`
 - [x] License admin phase C built 2026-10-15: `LicenseApi` extend/revoke/deactivate, Release device, Extend, Rotate key, Revoke/Undo, Delete pending, Tandai ditinjau [[license-admin-roadmap]]
-- [ ] Migration `2026_10_15_150000_add_review_note_...` also Pending on dev and production; `migrate` would run all three pending ones (account_password, payment proof, review note)
-- [ ] Browser-check phase B and C actions on the dev site once the pending migrations are run; then one real round against the Worker with a test license (extend, release, rotate, revoke, undo), revoked afterwards
+- [ ] Browser-check phases A to D on the dev site (needs free RAM; the reset-password key modal fix was only test-verified); then one real round against the Worker with a test license (extend, release, rotate, revoke, undo), revoked afterwards
 - [ ] Add a sentence to `/syarat`: revoking stops renewals and new activations but not machines already activated [[license-admin-roadmap]]
 - [x] License admin phase D built 2026-10-15: Reset account password, `account_password` dropped, template fixed [[license-admin-roadmap]]
-- [ ] Pending migrations on dev: `..._160000_add_app_authentication_to_users_table` and `..._170000_drop_account_password_...` (run `php artisan migrate`); production needs all six license migrations
 - [ ] `composer require bacon/bacon-qr-code:^3.1` to replace the `*` constraint in composer.json (researcher runs it)
 - [ ] MFA postponed by the researcher: set `ADMIN_MFA_REQUIRED=true` in the production `.env` before the panel (especially extend, revoke, rotate) is used there; set up the authenticator and save the recovery codes first [[license-admin-roadmap]]
 - [ ] Worker repo (needs the researcher's OK): `resend` without email, `extend` idempotent via `order_ref`; `arti_admin.py` should show the HTTP code on a non-JSON error body
-- [ ] MFA on `/jamrud` before the key reveal goes to production: `composer require bacon/bacon-qr-code` (researcher runs it), `HasAppAuthentication` on `User`, two columns, panel `->multiFactorAuthentication()`
+- [x] MFA code built (authenticator app and recovery codes), switched off by decision; turning it on is the `ADMIN_MFA_REQUIRED` item above
 - [ ] Backups for the license record: daily MySQL off the VPS, back up `APP_KEY`, nightly encrypted export of `license_issuances`, one restore drill
 - [ ] Automatic purchases (gateway webhook in Laravel, `FulfillOrder`, one email sender, idempotent Worker `extend`, atomic first-100 count, set-password link): prerequisites in [[license-admin]]
 - [ ] Add one sentence to `/privasi`: buyer email and name are kept at both the licensing Worker and the app ([[legal-review-notes]])
@@ -164,3 +175,4 @@ chapter (not the full imagined scope).
     // ... 180 lines omitted
   from `resources/inbox/260906_OK_narasi-ai-bar-bar-dan-analogi-alzheimer.md`. Renumbered every
 // ... 179 more lines (total: 272)
+- [ ] Learner change-password page (`/app/password`: current, new, confirm; link on the dashboard; one sentence in the WhatsApp template); proposed 2026-10-15, researcher has not answered

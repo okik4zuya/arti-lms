@@ -7,9 +7,11 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ContentController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DownloadController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProgressController;
 use App\Http\Controllers\SeoController;
+use App\Http\Controllers\SubscriptionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,6 +28,12 @@ Route::group(array_filter(['domain' => config('app.domains.main')]), function ()
     Route::view('fitur', 'site.fitur')->name('fitur');
     Route::view('scipeek', 'site.scipeek')->name('scipeek');
     Route::view('artipdf', 'site.artipdf')->name('artipdf');
+    Route::get('artipdf/unduh', [DownloadController::class, 'artipdf'])->middleware('throttle:download')->name('artipdf.unduh');
+
+    // ---- Mailing list (double opt-in; the links in the email are signed) -------------
+    Route::post('daftar', [SubscriptionController::class, 'store'])->middleware('throttle:subscribe')->name('subscribe.store');
+    Route::get('daftar/konfirmasi/{subscriber}', [SubscriptionController::class, 'confirm'])->middleware('signed')->name('subscribe.confirm');
+    Route::get('berhenti/{subscriber}', [SubscriptionController::class, 'unsubscribe'])->middleware('signed')->name('subscribe.unsubscribe');
     // Pricing lives in the landing page's #harga section; the downloads page is gone (tools are in the LMS).
     Route::redirect('harga', '/#harga', 301);
     Route::redirect('unduh', '/', 301);

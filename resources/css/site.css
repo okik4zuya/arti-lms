@@ -613,3 +613,24 @@ a:focus-visible, button:focus-visible, summary:focus-visible, .btn:focus-visible
     .wa-panel[open] { animation: wa-sheet .22s ease-out; }
 }
 @keyframes wa-sheet { from { transform: translateY(24px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+/* ---- Mailing-list sign-up ------------------------------------------------------------------ */
+/* .form-field sets display:grid, which would otherwise beat the hidden attribute the script sets after a sign-up. */
+form[data-subscribe] [hidden] { display: none !important; }
+.subscribe__trap { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.subscribe__consent { font-size: var(--font-size-sm); margin: 0; }
+.subscribe__status { margin: 0; padding: var(--space-3); border-radius: var(--radius-md); background: var(--color-primary-light); font-weight: 600; }
+.subscribe-card { margin-top: var(--space-6); display: grid; gap: var(--space-3); }
+.subscribe-card h3, .subscribe-card p { margin: 0; }
+.subscribe-card[hidden] { display: none; }
+.btn--link { justify-self: start; padding: 0; border: 0; background: none; color: var(--color-text-muted); font: inherit; font-size: var(--font-size-sm); text-decoration: underline; cursor: pointer; }
+
+/* ---- ARTi PDF download dialog -------------------------------------------------------------- */
+.thanks-dialog { width: min(440px, calc(100vw - 2 * var(--space-4))); max-height: 90dvh; overflow: auto; margin: auto; padding: var(--space-5); border: 1px solid var(--color-border); border-radius: var(--radius-lg); background: var(--color-surface); color: var(--color-text); box-shadow: var(--shadow-md); }
+.thanks-dialog:not([open]) { display: none; }
+.thanks-dialog::backdrop { background: rgba(0, 0, 0, .45); }
+.thanks-dialog h2 { margin: 0 0 var(--space-2); font-size: var(--font-size-lg, 1.25rem); }
+.thanks-dialog__tips { margin: 0 0 var(--space-4); padding-left: var(--space-5); }
+.thanks-dialog__offer { margin: 0 0 var(--space-3); font-weight: 600; }
+.thanks-dialog__close { margin-top: var(--space-3); }
+.sha { word-break: break-all; font-size: var(--font-size-sm); }

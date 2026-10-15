@@ -4,7 +4,7 @@ description: Cloudflare R2 buckets (arti public, arti-member, arti-private), whi
 metadata:
   type: reference
   created: 2026-10-15 15:17
-  updated: 2026-10-15 15:17
+  updated: 2026-10-15 16:59
 ---
 
 Context: payment proofs of [[license-admin-roadmap]] moved to Cloudflare R2 on 2026-10-15; the installer hosting decision lives in the same roadmap.
