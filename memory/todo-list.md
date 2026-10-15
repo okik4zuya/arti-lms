@@ -5,7 +5,7 @@ metadata:
   type: project
   tier: T0
   created: 2026-09-08 21:36
-  updated: 2026-10-14 23:58
+  updated: 2026-10-15 09:30
 ---
 
 ### Landing page (arti.invait.id), see [[landing-page-concept]]
@@ -17,7 +17,19 @@ metadata:
 - [ ] Media: real hero screenshot (VS Code + Claude Code)
 - [ ] Media: author photo / "Tentang penulis" section (undecided)
 - [ ] Media: lift the staircase in `ad-story` (bottom ~250 px is Facebook UI); optimize the Rithah image use if reused elsewhere
-- [ ] Check the new sections (icons, example cards, free chapter pages, explainer video, dashboard image) at true 375px via an iframe
+- [ ] Check at 375px the sections not yet checked (free chapter pages `/baca`, explainer video, dashboard image, icons); the solution, memory pair, ARTi PDF card and `/fitur` were checked
+- [x] Rewrite `/fitur` per the agreed concept (stages, all tools grouped, honest "what ARTi does not do"); animated `model-skill-alat.mp4` placed there [[landing-page-concept]]
+- [ ] Review the Indonesian example commands and the new copy on `/fitur`, and confirm the autoplay loop in a real browser
+- [x] Top menu: Fitur, Harga (to `/#harga`), Baca bab 1 gratis, Kontak; `/harga` and `/unduh` removed with 301 redirects
+- [x] ARTi PDF card in the free section (Windows only), screenshot and MIT licence prepared in the artipdf repo
+- [ ] In the artipdf repo: commit and push `LICENSE`, `THIRD-PARTY-NOTICES.md`, screenshots and readme; release v1.0.7 so the landing's screenshot matches the download; delete `C:/arti-demo`
+- [x] Page speed pass (self-hosted fonts, small logo and favicon, content-visibility with anchor safeguard, caching rules) [[page-speed]]
+- [ ] Confirm gzip/brotli and cache headers on the real production host (local Apache lacks the modules), and test on a real phone
+- [x] Redis wired for local dev: cache, session, queue (Predis, DBs 10/11) [[redis-setup]]
+- [ ] Redis for production (own instance or keep database drivers), and check `/jamrud` and LMS login under Redis sessions
+- [ ] `composer audit`: 4 advisories on laravel/framework 11.x; plan an upgrade
+- [ ] Decide whether to hide `/artikel`, its sitemap entry and the footer "Umpan artikel" until the first article exists
+- [x] Model + skill + tool illustration: 3 variants built, variant 1 placed in the Solution section with HTML legend and test
 - [ ] Fill `SITE_CONTACT_WHATSAPP`, `SITE_LAUNCH_SOLD`, `APP_DOMAIN_MAIN=arti.invait.id` in the prod `.env`
 - [ ] Remove or disable the unused trial path (`/trial`, `arti-license trial`, `trial` tier) in the licensing Worker before deploy (see `~/.arti` licensing plan)
 - [ ] Legal review of `/syarat` and `/privasi` including the 7-day refund line; fix README "nine skills" to ten
@@ -25,6 +37,18 @@ metadata:
 - [ ] Decide: name "ARTi Workflow" vs "ARTi Framework" outside the ebook; offline grace after activation
 - [x] Landing, `/harga`, `/fitur`, mobile header, free chapter 1 (`/baca`), icons, example cards, OG image, 600px column, tests
 - [x] 40 s explainer (storyboard approved, rendered, lazy `<video>` in the demo section) and the dashboard screenshot with the manuscript pane pixelated, in the licence card
+
+### Landing finalisation (next session), prompt in [[landing-finalisation-prompt]]
+
+- [x] Commit the large uncommitted set in logical groups (landing and /fitur, media, menu and redirects, speed, Redis and Predis, tests, memory); nothing from the last sessions is committed
+- [x] Audit every landing-related page for copy, consistency and facts: `/`, `/fitur`, `/kontak`, `/privasi`, `/syarat`, `/baca` pages, `/artikel`, header, footer, 404
+- [x] Per-page SEO: unique title and description, canonical, OG image, sitemap and robots, `lang`; then accessibility and keyboard checks
+- [x] Sync `landing-page-copy` to the final Blade copy, and retire or update stale notes in `landing-page-info`
+- [ ] Real-browser checks that were only emulated: autoplay loop on `/fitur`, anchors, phone widths, speed on a real phone (375, 768, 1100 px were checked with puppeteer)
+- [ ] Legal review of `/syarat` and `/privasi` using [[legal-review-notes]]; confirm the licensing Worker sends only the key and a hashed machine code
+- [ ] Decide whether to hide `/artikel` and the footer feed link (recommended: hide until the first article; empty index is already noindex)
+- [ ] Decide the app name: the learner app still says "ARTi LMS", the site "ARTi Framework"
+- [ ] artipdf repo (not touched): push LICENSE, notices and screenshots, release v1.0.7, delete `C:/arti-demo`
 
 ### Content authoring progress (arti-framework, 18 chapters) — dedicated, most-active section
 

@@ -4,15 +4,15 @@ description: Draft v1 of the ARTi landing page copy in Indonesian, section by se
 metadata:
   type: project
   created: 2026-10-14 23:05
-  updated: 2026-10-14 23:05
+  updated: 2026-10-15 09:09
 ---
 
-Draft v1, not published. Outline and rules: [[landing-page-concept]]. Facts: [[landing-page-info]]. Pain wording: [[landing-page-keywords]]. Voice: "saya/Anda", short sentences, honest passages, no hype. Placeholders in `[kurung siku]` must be filled before building. Section "Catatan cek fakta" at the bottom lists claims to verify.
+Synced to the Blade views on 2026-10-15 (finalisation session). **The Blade views stay the source of truth**; this file is a readable mirror, and later edits go to the views first. Outline and rules: [[landing-page-concept]]. Facts: [[landing-page-info]]. Pain wording: [[landing-page-keywords]]. Voice: "saya/Anda", short sentences, honest passages (`Jujur:`), no hype; the site says "ARTi" rather than "kami". Sections 4, 4b, 6, 7, 9 and 13 below changed since draft v1; the fact-check list at the bottom is updated.
 
 ---
 
 ## 0. Top bar
-Logo ARTi · Fitur · Harga · Baca bab 1 gratis · **[Beli lewat WhatsApp]**
+Logo ARTi · Fitur · Harga (`/#harga`) · Baca bab 1 gratis · Kontak · **[Beli lewat WhatsApp]** ("Beli" on phones) · Masuk. A skip link ("Lewati ke isi") comes first.
 
 ## 1. Hero
 **Eyebrow:** ARTi Framework
@@ -51,13 +51,22 @@ Itu baru soal kredibilitas. Soal tenaga, ada cerita lama tentang Rithah yang mem
 ## 4. Solusi
 **Judul:** Bukan alat baru. Cara kerja di atas Claude Code.
 
-ARTi memberi Claude Code tiga hal yang selama ini kurang.
+Claude sudah pintar. Yang belum ia punya adalah cara kerja riset dan perkakas untuk mengerjakannya.
+
+[Image `model-skill-alat.webp`, then the legend: **Pengetahuan dasar** (Claude sudah tahu banyak hal, tapi belum tentu tahu cara meneliti dengan benar) · **Skill** (lembar cara kerja: langkah riset yang sudah tersusun, dari gap sampai balasan reviewer) · **Alat** (perkakas: cari literatur, ubah PDF, siapkan naskah dan gambar).]
+
+Itu yang ARTi beri. Di atasnya ada tiga fondasi yang menjaga kerjanya tetap benar dan tidak lupa.
 
 **Memori per topik.** Keputusan dan konteks proyek tersimpan sebagai berkas kecil per topik, dengan indeks. Sesi berikutnya melanjutkan, bukan mengulang.
 
 **Referensi asli dan bisa dilacak.** Satu basis data rujukan per proyek. Setiap kutipan menunjuk ke sumber yang benar-benar ada, dan teks lengkap PDF diubah ke Markdown agar bisa dicari.
 
 **Scratchbook.** Tempat menimbun temuan dan kutipan per bagian naskah, dengan penanda asal setiap klaim. Klaim tanpa sumber tidak boleh masuk naskah.
+
+## 4b. Seperti apa wujudnya? (`#wujud`)
+Bukan kotak hitam. Semuanya berkas biasa di komputer Anda.
+
+[Image `memori-duo.webp`: Tanpa memori (tiap sesi mulai dari nol) / Dengan memori (sesi berikutnya melanjutkan).] "Map itu, wujud aslinya seperti ini:" then the real `memory/` tree of a paper project, and a scratchbook sample with invented content labelled "contoh format".
 
 ## 5. Cara kerja
 **Judul:** Amati, Replikasi, Tambah Inovasi.
@@ -77,14 +86,12 @@ ARTi memberi Claude Code tiga hal yang selama ini kurang.
 ## 6. Demo
 **Judul:** Lihat caranya bekerja.
 
-[Video 1-2 menit: ARTi dipakai pada satu tugas nyata. Belum direkam.]
-
-*Teks bawah video:* Rekaman layar, tanpa dipercantik. [isi setelah rekaman]
+40 s explainer (`arti-explainer.mp4`, lazy, poster) with the note "Ringkasan 40 detik, ilustrasi konsep. Demo layar sebenarnya ada di bawah." Below it a "Segera" badge: "Video demo 1-2 menit, rekaman layar apa adanya, sedang disiapkan." (until `SITE_DEMO_VIDEO_EMBED_URL` is set).
 
 ## 7. Isi paket
 **Judul:** Satu paket: e-course dan lisensi.
 
-**E-course ARTi Framework.** Dibaca langsung di aplikasi, berbahasa Indonesia, ditulis dari pengalaman memakai ARTi untuk naskah sendiri. Bagian Pendahuluan sudah bisa dibaca. Bagian Amati, Replikasi, dan Tambah Inovasi sedang ditulis, dan bab baru yang terbit selama masa langganan Anda ikut Anda dapat. [konfirmasi]
+**E-course ARTi Framework.** Dibaca langsung di aplikasi, berbahasa Indonesia, ditulis dari pengalaman memakai ARTi untuk naskah sendiri. Bagian Pendahuluan sudah bisa dibaca. Bagian Amati, Replikasi, dan Tambah Inovasi sedang ditulis, dan bab baru yang terbit selama masa langganan Anda ikut Anda dapat.
 
 **Lisensi ARTi Framework**, satu tahun. 10 skill, dashboard lokal, dan alat pendukung.
 
@@ -92,13 +99,11 @@ ARTi memberi Claude Code tiga hal yang selama ini kurang.
 - **Amati:** *ARTi-idea* memetakan gap dan menilai kebaruan. *ARTi-jfinder* mencari dan membandingkan jurnal. *ARTi-crosscite* memeriksa apakah dua kelompok makalah pernah saling mengutip.
 - **Replikasi:** *ARTi-scratchbook* menampung bahan bertanda sumber. *ARTi-ref* mengelola rujukan dan teks lengkap.
 - **Tambah Inovasi:** *ARTi-writing* menuntun dari profil jurnal, kerangka, draf, sampai balasan reviewer. *ARTi-figure* membuat diagram, tabel, dan grafik. *ARTi-annotate* menyelesaikan komentar yang Anda tulis di naskah.
-- **Persiapan:** *ARTi-setup* menyiapkan profil Anda dan folder tiap proyek.
+- **Persiapan dan review:** *ARTi-setup* menyiapkan profil Anda dan folder tiap proyek. *ARTi-SLR* menemani tinjauan pustaka berpola PRISMA, dari pertanyaan riset, penyaringan dengan alasan yang tercatat, sampai sintesis.
 
-**Mau menulis review sistematis?** *ARTi-SLR* menemani tinjauan pustaka berpola PRISMA, dari pertanyaan riset, penyaringan dengan alasan yang tercatat, sampai sintesis.
+Screenshots: the e-course (Sistem Memori page) and the dashboard (manuscript pane blurred, captioned). **Di balik layar:** PDF jadi Markdown yang bisa dicari, ekspor ke Word dan PDF, pencarian literatur lewat OpenAlex, Semantic Scholar, dan Google Scholar.
 
-**Di balik layar:** PDF jadi Markdown yang bisa dicari · ekspor ke Word dan PDF · pencarian literatur lewat OpenAlex, Semantic Scholar, dan Google Scholar · dashboard lokal untuk semua proyek. Berjalan di komputer Anda.
-
-[Lihat semua skill dan alat →] (`/fitur`)
+[Lihat semua skill dan alat →] (`/fitur`: stages, 10 skills with example commands, all real tools grouped, dashboard, "Yang tidak dilakukan ARTi", honest e-course status)
 
 ## 8. Perbandingan
 **Judul:** Apa bedanya dengan Claude Code polos atau alat lain?
@@ -126,14 +131,18 @@ Dibanding alat lain:
 
 **Baca bab 1 e-course.** Cerita kenapa AI belum memuaskan untuk menulis artikel ilmiah, dan apa yang saya lakukan. [Baca bab 1 →]
 
+**Tonton di YouTube.** Tutorial dan demo langsung di layar di channel Dosen BerARTi, dari mencari gap sampai menyiapkan naskah. [Buka channel Dosen BerARTi]
+
 **Pasang ARTi SciPeek.** Ekstensi Chrome gratis. Menampilkan kuartil, SJR, dan H-index jurnal langsung di Scopus, ScienceDirect, dan Google Scholar. Berjalan offline, tanpa pelacakan. [Pasang dari Chrome Web Store →]
+
+**Pakai ARTi PDF.** Aplikasi Windows gratis untuk PDF. Gabung, pisah, kompres, atur halaman, ubah PDF ke Markdown, dan Markdown ke PDF. Berjalan offline: tanpa unggah, tanpa akun. **Jujur:** ubah PDF ke Markdown di sini hanya mengambil teks, tabel dan persamaan tidak dipertahankan. Installer belum bertanda tangan, jadi Windows bisa menampilkan peringatan. [Unduh untuk Windows]
 
 ## 10. Syarat yang perlu Anda tahu
 **Judul:** Jujur soal syaratnya.
 
-- Butuh **Claude Code** dan akun Claude berbayar [cek syarat terbaru] , dibayar terpisah dari ARTi.
+- Butuh **Claude Code** dan langganan Claude berbayar, dibayar terpisah dari ARTi.
 - Butuh **VS Code**.
-- Saat ini **Windows saja**. Mac belum diuji, Linux belum didukung.
+- Saat ini **Windows saja**.
 - **Perlu internet saat instalasi** untuk memeriksa lisensi. Kalau lisensi tidak valid atau sudah dipakai di perangkat lain, instalasi berhenti.
 - **E-course belum lengkap.** Bagian Pendahuluan sudah ada, sisanya sedang ditulis.
 - ARTi **tidak menjamin** naskah diterima, dan tidak menjanjikan hasil otomatis. Anda tetap yang berpikir dan memeriksa.
@@ -146,11 +155,11 @@ Tersisa **[N] dari 100**.
 
 Setelah 100 pembeli, harganya Rp199.000 per tahun, sekitar Rp16.600 per bulan. Perpanjangan juga mengikuti harga normal, kecuali sedang ada promo.
 
-**Kenapa murah sekarang?** E-course masih ditulis. Anda membeli lebih awal dengan harga lebih rendah, dan bab baru ikut Anda dapat selama masa langganan. [konfirmasi]
+**Kenapa murah sekarang?** E-course masih ditulis. Anda membeli lebih awal dengan harga lebih rendah, dan bab baru ikut Anda dapat selama masa langganan.
 
-**Yang Anda dapat:** e-course ARTi Framework · lisensi ARTi Framework satu tahun · pembaruan selama masa langganan · ARTi SciPeek (gratis untuk semua).
+**Yang Anda dapat:** e-course ARTi Framework · lisensi ARTi Framework satu tahun · pembaruan selama masa langganan.
 
-**Garansi 7 hari.** Tidak puas, uang kembali penuh dalam 7 hari sejak pembelian, tanpa perlu alasan. Kalau instalasi gagal karena sisi kami, uang kembali kapan pun selama masa langganan.
+**Garansi 7 hari.** Tidak puas, uang kembali penuh dalam 7 hari sejak pembelian, tanpa perlu alasan. Kalau instalasi gagal karena sisi ARTi, uang kembali kapan pun selama masa langganan.
 
 **Cara membeli:** tekan tombol, kirim pesan WhatsApp, lakukan pembayaran, lalu kunci lisensi dan akses e-course dikirim oleh admin.
 
@@ -173,42 +182,36 @@ Berkas dan basis data ARTi ada di komputer Anda. Tidak ada server ARTi yang meny
 ARTi bergantung pada Claude Code. Kalau aturan atau harganya berubah, ARTi harus menyesuaikan, dan itu risiko yang nyata. Karena itu garansi 7 hari ada.
 
 **Apa yang terjadi setelah satu tahun?**
-Lisensi berakhir. Data Anda tetap milik Anda. Yang berhenti adalah pembaruan. Perpanjangan mengikuti harga normal, kecuali ada promo. [konfirmasi perilaku saat lisensi habis: alat tetap jalan?]
+Anda mendapat peringatan dan masa tenggang sebelum lisensi berakhir. Setelah berakhir, skill dan berkas Anda pada dasarnya tetap bisa dipakai lewat VS Code, tetapi dashboard ARTi tidak bisa dibuka sampai lisensi diperpanjang. Data Anda tetap milik Anda. Perpanjangan mengikuti harga normal, kecuali ada promo.
 
 **Berapa total biayanya?**
 Rp99.000 (perintis) atau Rp199.000 per tahun untuk ARTi, ditambah langganan Claude Anda sendiri.
 
-**Cara minta refund?**
+**Bagaimana cara minta uang kembali?**
 Kirim pesan ke WhatsApp admin dalam 7 hari sejak pembelian. Kunci dicabut dan uang dikembalikan.
 
 ## 13. Penutup
-**Judul:** Mulai dari satu langkah.
-
 > **Dari ide sampai publish, bersama ARTi.**
 
-[Beli lewat WhatsApp]  ·  [Baca bab 1 gratis]
+[Beli lewat WhatsApp]  ·  [Coba gratis dulu] (anchor `#coba-gratis`)
 
 *ARTi tidak berafiliasi dengan Anthropic. Claude dan Claude Code adalah produk Anthropic.*
 
-Footer: Privasi · Syarat · Kontak · Artikel · Unduh
+Footer: Kontak · Privasi · Syarat · Umpan artikel (the last one still shown; see todo about hiding it).
 
 ---
 
 ## SEO
-- **Title:** ARTi Framework — Framework Riset untuk Claude Code, dari Ide sampai Submit
+- **Title (as rendered):** Framework Riset untuk Claude Code, dari Ide sampai Submit — ARTi Framework (every page: `<title> — ARTi Framework`)
 - **Meta description:** Framework riset berbahasa Indonesia untuk Claude Code: memori antar sesi, referensi asli yang bisa dilacak, dan alur dari gap sampai submit. Termasuk e-course.
 - Kata kunci untuk H2/FAQ: referensi asli, novelty penelitian, research gap ai, systematic literature review prisma, claude code indonesia, jurnal predator.
 
-## Catatan cek fakta (sebelum publish)
-- "10 skill": README masih menulis "nine skills"; perbaiki dulu.
-- Syarat akun Claude untuk Claude Code (berbayar atau API): cek halaman resmi saat publish.
-- Jumlah bab yang tersedia: Pendahuluan ada 3 bab, tapi bab 2 masih punya satu subbab kosong ("Claude bisa pakai skill"). Teks sengaja menyebut "bagian Pendahuluan sudah bisa dibaca".
-- "Bab baru ikut didapat selama masa langganan" belum diputuskan resmi. Konfirmasi.
-- Apa yang terjadi saat lisensi habis (alat tetap jalan atau tidak): belum diputuskan.
-- Pernyataan keamanan data mengikuti bab 3 ebook; cek ulang bila fitur chat atau dashboard memanggil layanan lain.
-- Kuota "tersisa N dari 100" harus dihitung dari lisensi yang sungguh diterbitkan; jangan dibulatkan.
-- Tidak ada klaim "pertama", studi kasus, atau testimoni di draf ini.
-- Syarat dan privasi perlu ditinjau hukum, termasuk butir garansi.
+## Catatan cek fakta (updated 2026-10-15)
+- Checked against the Blade views: prices Rp199.000 / Rp99.000 (first 100 buyers, one batch), refund 7 days from purchase date, 10 skills (all named), Windows only (no macOS anywhere, a test enforces it), e-course incomplete, no "pertama" claim, no countdown, no testimonial.
+- Still open: README "nine skills" fix in ~/.arti; Claude plan requirement wording at publish time; "tersisa N dari 100" needs the real issued count in SITE_LAUNCH_SOLD; offline grace after activation; chapter 2 still has one empty subchapter.
+- Data-safety wording follows ebook ch. 3; recheck if the dashboard or chat starts calling other services.
+- `/syarat` and `/privasi` now restate the offer, refund, Anthropic data flow and cookies, but still need legal review: see [[legal-review-notes]].
 
 ## Change log
+- 2026-10-15 09:25 — synced to the Blade views (menu, sections 4/4b/6/7/9/10/11/12/13, SEO, fact-check list).
 - 2026-10-14 23:05 — draft v1 written from outline v2.

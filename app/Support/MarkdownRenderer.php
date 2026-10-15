@@ -19,7 +19,16 @@ class MarkdownRenderer
             ],
         ]);
 
-        return $converter->convert($markdown)->getContent();
+        return $converter->convert($this->withoutRemoteFontImports($markdown))->getContent();
+    }
+
+    /**
+     * Chapters carry a per-document <style> that once imported Atkinson Hyperlegible from Google Fonts.
+     * The font is self-hosted now (tokens.css), so the import only leaked every reader's IP to Google.
+     */
+    protected function withoutRemoteFontImports(string $markdown): string
+    {
+        return preg_replace('/^[ \t]*@import\s+url\([\'"]?https?:\/\/fonts\.(?:googleapis|bunny)[^)]*\)\s*;[ \t]*\R?/mi', '', $markdown);
     }
 
     /**

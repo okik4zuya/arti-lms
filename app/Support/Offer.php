@@ -64,15 +64,29 @@ class Offer
         return 'Rp'.number_format($amount, 0, ',', '.');
     }
 
-    /** WhatsApp link with a pre-filled message, or the contact page while no number is configured. */
-    public function buyUrl(): string
+    /** The WhatsApp number in international digits (a leading 0 becomes 62), or null when none is set. */
+    public static function whatsappNumber(): ?string
     {
         $number = preg_replace('/\D+/', '', (string) config('site.contact_whatsapp'));
 
         if ($number === '') {
-            return route('kontak');
+            return null;
         }
 
-        return 'https://wa.me/'.$number.'?text='.rawurlencode((string) config('site.offer.whatsapp_message'));
+        return str_starts_with($number, '0') ? '62'.substr($number, 1) : $number;
+    }
+
+    /** wa.me link for a message, or null while no number is configured. */
+    public static function whatsappUrl(string $message): ?string
+    {
+        $number = static::whatsappNumber();
+
+        return $number ? 'https://wa.me/'.$number.'?text='.rawurlencode($message) : null;
+    }
+
+    /** WhatsApp link with a pre-filled message, or the contact page while no number is configured. */
+    public function buyUrl(): string
+    {
+        return static::whatsappUrl((string) config('site.offer.whatsapp_message')) ?? route('kontak');
     }
 }

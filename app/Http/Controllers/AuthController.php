@@ -19,11 +19,15 @@ class AuthController extends Controller
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required', 'string'],
+        ], [
+            'email.required' => 'Isi alamat email Anda.',
+            'email.email' => 'Alamat email tidak valid.',
+            'password.required' => 'Isi kata sandi Anda.',
         ]);
 
         if (! Auth::attempt($credentials, $request->boolean('remember'))) {
             throw ValidationException::withMessages([
-                'email' => 'These credentials do not match our records.',
+                'email' => 'Email atau kata sandi salah.',
             ]);
         }
 

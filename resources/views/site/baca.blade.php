@@ -3,7 +3,7 @@
 @inject('offer', 'App\Support\Offer')
 
 @section('title', $title.' — Bab 1 gratis')
-@section('description', 'Bab 1 e-course ARTi Framework: kenapa AI belum memuaskan untuk menulis artikel ilmiah. Bisa dibaca tanpa akun.')
+@section('description', "Bab 1 e-course ARTi Framework, bagian {$position} dari {$total}: {$title}. Kenapa AI belum memuaskan untuk menulis artikel ilmiah. Bisa dibaca tanpa akun.")
 
 @section('content')
 <div class="container container--narrow">
@@ -30,7 +30,7 @@
             <p>Bab-bab berikutnya, kerangka kerja ARTi, dan alat-alatnya ada di paket e-course dan lisensi.</p>
             <p>
                 <a href="{{ $offer->buyUrl() }}" class="btn btn--primary">Beli lewat WhatsApp</a>
-                <a href="{{ route('harga') }}" class="btn btn--outline">Lihat harga</a>
+                <a href="{{ route('home') }}#harga" class="btn btn--outline">Lihat harga</a>
             </p>
         </div>
     @endunless

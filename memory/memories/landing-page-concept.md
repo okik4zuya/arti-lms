@@ -4,10 +4,10 @@ description: Agreed concept and build record for the ARTi landing page (position
 metadata:
   type: project
   created: 2026-10-14 22:11
-  updated: 2026-10-14 23:58
+  updated: 2026-10-15 09:28
 ---
 
-Concept from the 2026-10-14 brainstorm. Facts and decisions it rests on: [[landing-page-info]]. Not built; current `site/home.blade.php` is still the phase-1 skeleton ([[arti-app-architecture]]). Page language: Indonesian, voice "saya/Anda", short sentences, honest "Jujur: ..." passages (see [[content-authoring-workflow]]).
+Concept from the 2026-10-14 brainstorm. Facts and decisions it rests on: [[landing-page-info]]. Built and committed (see Build status and the finalisation section below). Page language: Indonesian, voice "saya/Anda", short sentences, honest "Jujur: ..." passages (see [[content-authoring-workflow]]).
 
 ## Positioning
 - Product: e-course (LMS) + ARTi Framework license, one package. Audience: dosen first, then S2/S3.
@@ -85,7 +85,7 @@ Concept from the 2026-10-14 brainstorm. Facts and decisions it rests on: [[landi
 
 ## Added 2026-10-14 (late)
 - **Icons:** Blade component `<x-glyph name="...">` (`resources/views/components/glyph.blade.php`; `x-icon` clashes with Filament's blade-icons) with 11 own line icons, used on pain cards, the three foundations, the three steps and the package cards.
-- **Example cards** ("Seperti apa wujudnya?"): the real `memory/` folder tree of this project, and a scratchbook sample whose content is invented and labelled "contoh format".
+- **Example cards** ("Seperti apa wujudnya?"): the real `memory/` folder tree of a paper project (topic files `journal-target.md`, `introduction-plan.md`, `data-gaps.md` from the CO2 Photoreduction project; changed 2026-10-15 from this repo's own dev topics to paper-relevant ones), and a scratchbook sample whose content is invented and labelled "contoh format".
 - **Free chapter 1:** public `/baca` (redirects to the first subchapter), `/baca/{slug}`, `/baca/{slug}/images/{file}` via `FreeChapterController`; the free set is the first chapter of the first manifest section (4 subchapters), other slugs 404, wiki-links (double square brackets) to locked pages become plain text, the last page shows the buy CTA, pages are in the sitemap. The landing "Baca bab 1 gratis" button points to it (`SITE_FREE_CHAPTER_URL` can still override).
 - **Ads:** `ad-landscape` 1200x628 and `ad-story` 1080x1920 rendered next to the square one (story: keep the bottom ~250 px clear of Facebook UI; the staircase sits low and may need lifting).
 - **E-course screenshot:** real capture of the "Sistem Memori" page logged in as the dev learner (`test@example.com`, which already had access to `arti-framework`; the seeder was not run), WebP 76 KB, in the e-course card.- 40 s explainer: approved, rendered and placed in "Lihat caranya bekerja"; see [[landing-explainer-storyboard]].
@@ -96,10 +96,43 @@ Concept from the 2026-10-14 brainstorm. Facts and decisions it rests on: [[landi
 - **Dashboard screenshot:** `images/landing/dashboard.webp` (63 KB) in the licence card of "Isi paket". It is the researcher's real SnO2 SLR project (Workspace with Files, References and manuscript panes). The manuscript pane (text and chart) is pixelated and greyed out because it is unpublished, and the caption says so. Project name, file counts and the references pane (published papers only) are left visible. Fine AI does not appear in it, so no claim about it was made. The unredacted original `arti-dashboard.png` in the repo root is gitignored but should be moved or deleted by the researcher.
 - Tests: 75 pass plus one test each for the video and the dashboard image (13 landing tests green after the last change).
 
+## Model + skill + tool analogy (2026-10-15, researcher's concept)
+- **Concept:** an AI model with basic knowledge (cloud over its head) is given a skill (a sheet) and a tool (a cangkul), like teaching a person a craft and handing them a hoe. Shown in the landing's Solution section (4), before the three foundations; the three foundations then read as what keeps the work correct and not forgotten. Deeper version belongs on `/fitur` (the sheet unfolds into the 10 skills, the hoe into the tool groups).
+- **Placed:** variant 1 (single scene) in section 4: `images/landing/model-skill-alat.webp`, labels (Pengetahuan dasar, Skill, Alat) as an HTML `.legend` under the image, never inside it, so they stay readable at 375px. Verified at 1100px and 375px, no horizontal scroll; `LandingPageTest` has a test for it.
+- **Built, not placed:** variant 2 "before" panel `images/landing/model-saja.webp` (puzzled model, empty hands, question marks, withered sprouts; pair it with variant 1 as the "after" if a before/after is wanted) and variant 3 `videos/landing/model-skill-alat.mp4` (10 s silent loop, 306 KB: puzzled, then skill arrives, then hoe, then sprouts grow; poster = variant 1). Both meant for `/fitur` or a later swap.
+- **Sources:** `resources/media-src/landing/model-skill-alat.html`, `model-saja.html`, `model-skill-alat-anim.html` (timeline page, 1200x800); render stills with `stills.mjs`, video with `render.mjs --width 1200 --height 800 --fps 30 --duration 10`; WebP via the vendored Python PIL.
+- **Design choices:** slate figure with a blue brand dot, blue only for what ARTi adds (skill header, hoe blade); skill on the viewer's left, tool on the right; no Anthropic/Claude logo (the "not affiliated" line). Memory is deliberately not in the picture; the foundations text covers it.
+- **Memory pair (2026-10-15, researcher's decision):** the cloud means basic knowledge, never memory (memory is external files; a cloud-as-memory would imply ARTi fixes the model's head). Memory gets its own image, no skill or tool: one compact 1200x520 image `images/landing/memori-duo.webp`, left half "tanpa" (chat bubble with an empty reply, last session's bubbles fading, reset arrow, puzzled), right half "dengan" (holds a folder, past context flows into the chat, reply filled and ticked, sprouts = work that accumulates). The first version was two separate 1200x800 images stacked; the researcher asked for one side-by-side image. Source `resources/media-src/landing/memori-duo.html` (generated by a throwaway script, edit the HTML directly; canvas colour matches `--color-bg` so rounded corners blend). **Placed** in section 4b ("Seperti apa wujudnya?"), above the memory-folder example, in a `.pair` with two HTML captions ("Tanpa memori" / "Dengan memori") side by side under it, then the line "Map itu, wujud aslinya seperti ini:". Checked at 1100px and 375px, no horizontal scroll; `LandingPageTest` covers it (15 pass).
+- **Tool list for `/fitur`** (decided to show all real tools, grouped by task, hide stubs): see the grouping proposed 2026-10-15 (literature, writing, figures, project and memory, connector); leave out `arti-table` (stub), `scopus-ris-batch-export` (no code), `scite` (unused), `arti-license`, `_shared`.
+
+## `/fitur` built (2026-10-15)
+- `site/fitur.blade.php`, same 600px landing layout as `/`: hero with in-page nav; analogy block with the looping `model-skill-alat.mp4` (autoplay unless prefers-reduced-motion, poster = the still) and the Pengetahuan dasar / Skill / Alat legend; three foundations as Masalah / Cara kerja / Hasil; 10 skills grouped by stage (Persiapan dan ide, Replikasi dan menulis, Tinjauan sistematis, Rujukan dan revisi), each an accordion with an example command and its result; all real tools in grouped accordions plus the OpenAlex connector labelled "didukung, bukan bagian paket"; dashboard screenshot; "Yang tidak dilakukan ARTi"; honest e-course status; closing CTA.
+- **Example commands are Indonesian paraphrases of the real prompts in `~/.arti/prompt-templates.md`** (that file is English), with a note saying so. Not hidden anywhere: if a command's wording is changed, keep it faithful to what the skill actually does.
+- **Hidden on purpose:** `arti-table` (stub), `scopus-ris-batch-export` (brief, no code), `scite` (unused), `arti-license`, `_shared`. `FeaturePageTest` asserts these never appear and that all 10 skills and 13 tools do.
+- Home 4b section got `id="wujud"`, linked from `/fitur`. CSS added: `.page-nav`, `.facts`, `.skills` accordion chevron, `.prompt`, `.tool-group`, `.tools`. Verified at 1100px and 375px, no horizontal scroll. Full suite: no failures (deprecation notices are the old PDO constant).
+- **Not verified:** the video actually autoplaying in a real browser (headless showed a frame; reduced-motion guard untested), and `/fitur` at desktop beyond the top and layout checks.
+
+## Top menu simplified (2026-10-15, researcher's decision)
+- Menu is now **Fitur, Harga, Baca bab 1 gratis, Kontak** (`layouts/partials/site-links.blade.php`). "Harga" links to `/#harga` (the landing's offer section). The `/harga` page and its view are deleted (its content, how to buy, guarantee, licence and expiry notes, was already on the landing); `/harga` 301-redirects to `/#harga`. The `/unduh` page is deleted (tools and downloads live in the LMS) and 301-redirects to `/`. Both dropped from the sitemap.
+- "Artikel" left the menu; articles come in a later phase. The `/artikel` routes, feed, and sitemap entry are still there (empty list shows "Belum ada artikel."), and the footer still has "Umpan artikel". Open choice: hide those too until the first article exists.
+- **Anchor offset:** the sticky header hid headings on in-page jumps (`/#harga`, `/fitur#skill`), so `html { scroll-padding-top: calc(var(--topbar-height) + var(--space-2)) }` in `site.css` applies to every anchor site-wide. Checked at 1100px wide with 600 and 900px tall viewports (section lands 64px from the top, just under the 57px header) and at 375px. A 380px-tall headless viewport overshot by 82px; treated as a headless artefact, not re-checked in a real browser.
+- Other links to `/harga` (fitur closing, free-chapter last page) now point to `/#harga`; privacy text lists "beranda, fitur, bab gratis". Tests: redirect test, menu test; suite passes.
+
+## ARTi PDF card in "Kenalan dulu" (2026-10-15)
+- Card in `#coba-gratis` (order, set 2026-10-15: Baca bab 1, Tonton di YouTube, SciPeek, ARTi PDF): "Pakai ARTi PDF" with the Page Editor screenshot (`images/landing/artipdf-editor.webp`, 36 KB, from `C:/python_tools/artipdf/assets/screenshots/`), button "Unduh untuk Windows" to `config('site.artipdf_url')` = `https://github.com/okik4zuya/artipdf/releases/latest`. **Windows only** by the researcher's decision (macOS is not mentioned; the release page itself still lists a macOS dmg). Copy is honest: free, offline, no upload, no account; PDF to Markdown only extracts text (tables and equations not kept); installer unsigned so Windows may warn. It does not claim open source or a licence, because the MIT `LICENSE` in the artipdf repo is not pushed yet ([[artipdf-landing-facts]]).
+- The card's screenshot is of v1.0.7 while the public latest release is v1.0.6 (same tabs; 1.0.7 adds the Compress right-click). `/fitur` now says the internal `arti-pdf` tool differs from the ARTi PDF app. `LandingPageTest` covers the card (no "macOS" text on the landing).
+
+## Finalisation pass (2026-10-15)
+- Committed the whole backlog in 6 groups, then fixed: chapters imported Google Fonts (self-hosted Atkinson Hyperlegible now, import stripped in `MarkdownRenderer`); Mac mention removed from the requirements list; "kami" replaced by "ARTi"; unique per-chapter descriptions; login page and all error pages in Indonesian (`resources/views/errors/`, standalone layout, no @auth); skip link, focus ring, reduced motion, muted-text contrast 4.46 to 5.4:1; empty `/artikel` is noindex and out of the sitemap; `/privasi` and `/syarat` restate the real offer and data flows ([[legal-review-notes]]). `PublicPageQualityTest` guards one h1, unique title/description, canonical, lang, skip link, no macOS, no third-party font.
+- Checked at 375, 768 and 1100 px (puppeteer + Edge, nothing overflows horizontally, skip link works). Only emulated: autoplay on `/fitur`, anchors, a real phone.
+
 ## Next steps
 Record the real demo and its poster; real hero screenshot; decide the author section; check the new sections at true 375px; fill the prod `.env` values. Checklist in `todo-list.md`.
 
 ## Change log
+- 2026-10-15 09:28 — finalisation pass recorded.
+- 2026-10-15 08:10 — ARTi PDF card added to the free section (Windows only).
+- 2026-10-15 06:44 — model + skill + tool illustration (3 variants) built, variant 1 placed in Solution; copy of section 4 changed (see [[landing-page-copy]]).
 - 2026-10-14 23:58 — explainer video and dashboard screenshot placed; stale "nothing built" and next-steps text refreshed.
 - 2026-10-14 23:30 — landing, /harga and /fitur built in Blade with Offer config and tests; build status recorded.
 - 2026-10-14 22:50 — guarantee decided: 7 days from purchase date.

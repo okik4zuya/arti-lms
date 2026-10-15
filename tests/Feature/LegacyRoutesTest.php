@@ -19,7 +19,7 @@ class LegacyRoutesTest extends TestCase
 
     public function test_login_page_renders_for_guests(): void
     {
-        $this->get('/login')->assertOk()->assertSee('Log in');
+        $this->get('/login')->assertOk()->assertSee('Masuk');
     }
 
     public function test_login_redirects_to_the_dashboard_route(): void

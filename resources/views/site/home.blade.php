@@ -86,7 +86,17 @@
     <section class="landing-section">
         <div class="container">
             <h2>Bukan alat baru. Cara kerja di atas Claude Code.</h2>
-            <p class="section__intro">ARTi memberi Claude Code tiga hal yang selama ini kurang.</p>
+            <p class="section__intro">Claude sudah pintar. Yang belum ia punya adalah cara kerja riset dan perkakas untuk mengerjakannya.</p>
+            <figure class="figure figure--model">
+                <img src="{{ asset('images/landing/model-skill-alat.webp') }}" width="1200" height="800" loading="lazy"
+                     alt="Ilustrasi model AI dengan awan pengetahuan di atas kepalanya, memegang lembar skill di satu tangan dan cangkul di tangan lain, dengan tunas tumbuh di tanah">
+            </figure>
+            <ul class="legend">
+                <li class="legend__item"><strong>Pengetahuan dasar</strong><span>Claude sudah tahu banyak hal, tapi belum tentu tahu cara meneliti dengan benar.</span></li>
+                <li class="legend__item"><strong>Skill</strong><span>Lembar cara kerja: langkah riset yang sudah tersusun, dari gap sampai balasan reviewer.</span></li>
+                <li class="legend__item"><strong>Alat</strong><span>Perkakas untuk mengerjakannya: cari literatur, ubah PDF, siapkan naskah dan gambar.</span></li>
+            </ul>
+            <p>Itu yang ARTi beri. Di atasnya ada tiga fondasi yang menjaga kerjanya tetap benar dan tidak lupa.</p>
             <div class="grid grid--3">
                 <div class="panel">
                     <span class="icon-wrap"><x-glyph name="folder" /></span>
@@ -108,10 +118,20 @@
     </section>
 
     {{-- 4b. Contoh wujudnya --}}
-    <section class="landing-section">
+    <section class="landing-section" id="wujud">
         <div class="container">
             <h2>Seperti apa wujudnya?</h2>
             <p class="section__intro">Bukan kotak hitam. Semuanya berkas biasa di komputer Anda.</p>
+
+            <figure class="pair">
+                <img src="{{ asset('images/landing/memori-duo.webp') }}" width="1200" height="520" loading="lazy"
+                     alt="Perbandingan dua model AI. Kiri, tanpa memori: model bingung, balasan obrolan kosong, percakapan lama memudar dan ada panah mulai ulang. Kanan, dengan memori: model memegang map, isinya mengalir ke obrolan yang balasannya terisi, dan tunas tumbuh">
+                <figcaption class="pair__caps">
+                    <span><strong>Tanpa memori</strong>Tiap sesi mulai dari nol. Yang kemarin hilang.</span>
+                    <span class="pair__with"><strong>Dengan memori</strong>Sesi berikutnya melanjutkan, bukan mengulang.</span>
+                </figcaption>
+            </figure>
+            <p>Map itu, wujud aslinya seperti ini:</p>
 
             <figure class="example">
                 <figcaption class="example__title"><x-glyph name="folder" class="icon--inline" /> Folder memori satu proyek</figcaption>
@@ -120,10 +140,11 @@
  ├─ todo-list.md     daftar tugas
  ├─ status.md        kondisi terkini
  └─ memories/
-     ├─ arsitektur-aplikasi.md
-     ├─ konsep-landing-page.md
+     ├─ journal-target.md
+     ├─ introduction-plan.md
+     ├─ data-gaps.md
      └─ ...</code></pre>
-                <p class="example__note">Struktur asli dari salah satu proyek ARTi. Satu berkas, satu topik.</p>
+                <p class="example__note">Struktur asli dari salah satu proyek paper ARTi. Satu berkas, satu topik.</p>
             </figure>
 
             <figure class="example">
@@ -253,7 +274,7 @@
             <p class="section__intro">ARTi tidak bersaing dengan Claude Code. ARTi berjalan di atasnya. Jadi perbandingan yang jujur: Claude Code polos, atau Claude Code yang sudah dipasangi ARTi.</p>
             <div class="table-wrap">
                 <table class="compare">
-                    <thead><tr><th></th><th>Claude Code polos</th><th>Dengan ARTi</th></tr></thead>
+                    <thead><tr><th><span class="sr-only">Aspek</span></th><th>Claude Code polos</th><th>Dengan ARTi</th></tr></thead>
                     <tbody>
                         <tr><th scope="row">Memori antar sesi</th><td>Bisa, tapi strukturnya terserah Anda</td><td>File per topik + indeks, aturan baca dan tulis sudah baku</td></tr>
                         <tr><th scope="row">Anti-ngawur</th><td>Tergantung disiplin Anda</td><td>Wajib bertanda sumber, scratchbook sebagai gerbang</td></tr>
@@ -264,7 +285,7 @@
             <p class="section__intro">Dibanding alat lain:</p>
             <div class="table-wrap">
                 <table class="compare">
-                    <thead><tr><th></th><th>ARTi</th><th>Claude AI (bawaan)</th><th>NotebookLM</th><th>ChatGPT, Gemini, dll.</th></tr></thead>
+                    <thead><tr><th><span class="sr-only">Aspek</span></th><th>ARTi</th><th>Claude AI (bawaan)</th><th>NotebookLM</th><th>ChatGPT, Gemini, dll.</th></tr></thead>
                     <tbody>
                         <tr><th scope="row">Memori</th><td>Per topik, tidak bercampur</td><td>Ada, tapi topik bisa bercampur</td><td>Bukan fiturnya</td><td>Bervariasi</td></tr>
                         <tr><th scope="row">Menulis dan mengedit berkas naskah</th><td>Langsung</td><td>Tidak, harus disalin</td><td>Tidak</td><td>Umumnya tidak</td></tr>
@@ -291,6 +312,13 @@
                     @endif
                 </div>
                 <div class="panel">
+                    <img src="{{ asset('images/landing/youtube-channel.webp') }}" width="1200" height="675" loading="lazy" class="panel__img"
+                         alt="Channel YouTube Dosen BerARTi: Dari ide sampai publish, bersama ARTi">
+                    <h3>Tonton di YouTube</h3>
+                    <p>Tutorial dan demo langsung di layar di channel Dosen BerARTi, dari mencari gap sampai menyiapkan naskah.</p>
+                    <a href="{{ config('site.youtube_url') }}" class="btn btn--outline" rel="noopener">Buka channel Dosen BerARTi</a>
+                </div>
+                <div class="panel">
                     <img src="{{ asset('images/landing/scipeek-scopus.webp') }}" width="1200" height="750" loading="lazy" class="panel__img"
                          alt="ARTi SciPeek menampilkan kuartil, SJR, dan H-index di samping nama jurnal pada hasil pencarian Scopus">
                     <h3>Pasang ARTi SciPeek</h3>
@@ -298,11 +326,12 @@
                     <a href="{{ config('site.scipeek_url') }}" class="btn btn--outline" rel="noopener">Pasang dari Chrome Web Store</a>
                 </div>
                 <div class="panel">
-                    <img src="{{ asset('images/landing/youtube-channel.webp') }}" width="1200" height="675" loading="lazy" class="panel__img"
-                         alt="Channel YouTube Dosen BerARTi: Dari ide sampai publish, bersama ARTi">
-                    <h3>Tonton di YouTube</h3>
-                    <p>Tutorial dan demo langsung di layar di channel Dosen BerARTi, dari mencari gap sampai menyiapkan naskah.</p>
-                    <a href="{{ config('site.youtube_url') }}" class="btn btn--outline" rel="noopener">Buka channel Dosen BerARTi</a>
+                    <img src="{{ asset('images/landing/artipdf-editor.webp') }}" width="778" height="688" loading="lazy" class="panel__img"
+                         alt="Aplikasi ARTi PDF di Windows, tab Page Editor menampilkan thumbnail halaman dari tiga berkas PDF yang bisa diurutkan, diputar, dan dihapus">
+                    <h3>Pakai ARTi PDF</h3>
+                    <p>Aplikasi Windows gratis untuk PDF. Gabung, pisah, kompres, atur halaman, ubah PDF ke Markdown, dan Markdown ke PDF. Berjalan offline: tanpa unggah, tanpa akun.</p>
+                    <p class="muted"><strong>Jujur:</strong> ubah PDF ke Markdown di sini hanya mengambil teks, tabel dan persamaan tidak dipertahankan. Installer belum bertanda tangan, jadi Windows bisa menampilkan peringatan.</p>
+                    <a href="{{ config('site.artipdf_url') }}" class="btn btn--outline" rel="noopener">Unduh untuk Windows</a>
                 </div>
             </div>
         </div>
@@ -315,7 +344,7 @@
             <ul class="checklist">
                 <li>Butuh <strong>Claude Code</strong> dan langganan Claude berbayar, dibayar terpisah dari ARTi.</li>
                 <li>Butuh <strong>VS Code</strong>.</li>
-                <li>Saat ini <strong>Windows saja</strong>. Mac belum diuji, Linux belum didukung.</li>
+                <li>Saat ini <strong>Windows saja</strong>.</li>
                 <li><strong>Perlu internet saat instalasi</strong> untuk memeriksa lisensi. Kalau lisensi tidak valid atau sudah dipakai di perangkat lain, instalasi berhenti.</li>
                 <li><strong>E-course belum lengkap.</strong> Bagian Pendahuluan sudah ada, sisanya sedang ditulis.</li>
                 <li>ARTi <strong>tidak menjamin</strong> naskah diterima dan tidak menjanjikan hasil otomatis. Anda tetap yang berpikir dan memeriksa.</li>
@@ -358,7 +387,7 @@
 
                 <p><strong>Yang Anda dapat:</strong> e-course ARTi Framework &middot; lisensi ARTi Framework satu tahun &middot; pembaruan selama masa langganan.</p>
 
-                <p><strong>Garansi {{ $offer->guaranteeDays() }} hari.</strong> Tidak puas, uang kembali penuh dalam {{ $offer->guaranteeDays() }} hari sejak pembelian, tanpa perlu alasan. Kalau instalasi gagal karena sisi kami, uang kembali kapan pun selama masa langganan.</p>
+                <p><strong>Garansi {{ $offer->guaranteeDays() }} hari.</strong> Tidak puas, uang kembali penuh dalam {{ $offer->guaranteeDays() }} hari sejak pembelian, tanpa perlu alasan. Kalau instalasi gagal karena sisi ARTi, uang kembali kapan pun selama masa langganan.</p>
 
                 <p><strong>Cara membeli:</strong> tekan tombol, kirim pesan WhatsApp, lakukan pembayaran, lalu kunci lisensi dan akses e-course dikirim oleh admin.</p>
 

@@ -7,14 +7,19 @@ use App\Support\ArticleRepository;
 class SeoController extends Controller
 {
     /** Public pages listed in the sitemap, by route name. */
-    protected const PAGES = ['home', 'fitur', 'harga', 'unduh', 'articles.index', 'kontak', 'privasi', 'syarat'];
+    protected const PAGES = ['home', 'fitur', 'articles.index', 'kontak', 'privasi', 'syarat'];
 
     public function sitemap(ArticleRepository $articles, FreeChapterController $free)
     {
+        // The article index is noindex while it has nothing to list, so it stays out of the sitemap too.
+        $pages = $articles->all()->isEmpty()
+            ? array_values(array_diff(self::PAGES, ['articles.index']))
+            : self::PAGES;
+
         return response()
             ->view('site.sitemap', [
                 'pages' => array_merge(
-                    array_map(fn (string $name) => route($name), self::PAGES),
+                    array_map(fn (string $name) => route($name), $pages),
                     array_map(fn (array $item) => route('free.show', $item['slug']), $free->subchapters())
                 ),
                 'articles' => $articles->all(),

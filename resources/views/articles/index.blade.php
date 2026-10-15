@@ -3,6 +3,12 @@
 @section('title', isset($tag) ? "Artikel bertanda {$tag}" : 'Artikel')
 @section('description', isset($tag) ? "Artikel ARTi dengan tanda {$tag}." : 'Catatan dan tulisan dari proses membangun ARTi Framework.')
 
+@if ($articles->isEmpty())
+    @push('head')
+        <meta name="robots" content="noindex">
+    @endpush
+@endif
+
 @section('content')
 <div class="container container--narrow">
     <section class="hero">

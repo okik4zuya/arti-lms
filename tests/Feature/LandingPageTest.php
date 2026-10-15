@@ -41,7 +41,7 @@ class LandingPageTest extends TestCase
     {
         config(['site.contact_whatsapp' => '081234567890']);
 
-        $this->get('/')->assertSee('https://wa.me/081234567890?text=', false);
+        $this->get('/')->assertSee('https://wa.me/6281234567890?text=', false);
     }
 
     public function test_demo_shows_a_soon_badge_until_a_video_is_set_and_the_chapter_link_can_be_overridden(): void
@@ -74,6 +74,39 @@ class LandingPageTest extends TestCase
         $this->get('/')->assertSee('images/landing/dashboard.webp', false);
 
         $this->assertFileExists(public_path('images/landing/dashboard.webp'));
+    }
+
+    public function test_solution_section_shows_the_model_skill_tool_illustration_with_html_labels(): void
+    {
+        $this->get('/')
+            ->assertSee('images/landing/model-skill-alat.webp', false)
+            ->assertSee('Pengetahuan dasar')
+            ->assertSee('Lembar cara kerja');
+
+        $this->assertFileExists(public_path('images/landing/model-skill-alat.webp'));
+    }
+
+    public function test_examples_section_compares_without_and_with_memory(): void
+    {
+        $this->get('/')
+            ->assertSee('images/landing/memori-duo.webp', false)
+            ->assertSee('Tanpa memori')
+            ->assertSee('Dengan memori');
+
+        $this->assertFileExists(public_path('images/landing/memori-duo.webp'));
+    }
+
+    public function test_free_section_offers_the_artipdf_windows_app_with_honest_caveats(): void
+    {
+        $this->get('/')
+            ->assertSee('images/landing/artipdf-editor.webp', false)
+            ->assertSee('https://github.com/okik4zuya/artipdf/releases/latest', false)
+            ->assertSee('Unduh untuk Windows')
+            ->assertSee('tabel dan persamaan tidak dipertahankan')
+            ->assertSee('belum bertanda tangan')
+            ->assertDontSee('macOS');
+
+        $this->assertFileExists(public_path('images/landing/artipdf-editor.webp'));
     }
 
     public function test_free_section_links_to_the_youtube_channel(): void

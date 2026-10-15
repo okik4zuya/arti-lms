@@ -20,6 +20,7 @@ return [
         'launch_sold' => env('SITE_LAUNCH_SOLD'),
         'guarantee_days' => 7,
         'whatsapp_message' => 'Halo, saya ingin membeli ARTi paket perintis.',
+        'chat_message' => 'Halo, saya ingin bertanya tentang ARTi.',
     ],
 
     /*
@@ -27,6 +28,7 @@ return [
     */
     'free_chapter_url' => env('SITE_FREE_CHAPTER_URL'),
     'demo_video_embed_url' => env('SITE_DEMO_VIDEO_EMBED_URL'),
+    'artipdf_url' => 'https://github.com/okik4zuya/artipdf/releases/latest',
     'youtube_url' => 'https://www.youtube.com/@dosenberarti',
     'scipeek_url' => 'https://chromewebstore.google.com/detail/arti-scipeek-%E2%80%94-journal-qu/dhbbdhnepmodmcheapjhcaolpcmpoanj',
 

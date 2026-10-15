@@ -4,10 +4,10 @@ description: Information gathered 2026-10-14 for the ARTi landing page (assets, 
 metadata:
   type: project
   created: 2026-10-14 21:50
-  updated: 2026-10-14 21:50
+  updated: 2026-10-15 09:27
 ---
 
-Discussion-only session; nothing built. Current public site is the honest phase-1 skeleton (see [[arti-app-architecture]]); this file is the input for the real landing page.
+**Historical (2026-10-14 discussion input).** The landing, /fitur and the legal pages are built now ([[landing-page-concept]], [[landing-page-copy]], [[legal-review-notes]]). Still valid: the decisions below. Stale: the status facts and gaps marked superseded.
 
 ## Where the facts live (read these, do not copy them here)
 - Feature source: `~/.arti/memory/memories/landing-page-feature-inventory.md` (**stale**, dated 2026-09-06: lacks ARTi-SLR, jfinder, crosscite, annotate, compose, search MCP, dashboard features, licensing, SciPeek).
@@ -17,9 +17,9 @@ Discussion-only session; nothing built. Current public site is the honest phase-
 - Channel and audience: `G:\My Drive\YT Dosen Berarti\memory` (`channel-strategy`, `competitor-research`, `keyword-research`).
 - SciPeek: `C:\python_tools\arti_jfinder\ARTi Journal Finder\extension` (store assets, GIF, video, screenshots).
 
-## Status facts (2026-10-14)
+## Status facts (2026-10-14, superseded where noted)
 - **ARTi SciPeek is published on the Chrome Web Store**: https://chromewebstore.google.com/detail/arti-scipeek-%E2%80%94-journal-qu/dhbbdhnepmodmcheapjhcaolpcmpoanj (free, offline, MIT code). It is the one product that can have a live CTA today.
-- Framework installer exists (NSIS, Windows only; Mac untested, Linux broken) but was never run on a clean machine; license not deployed, so no purchase CTA yet.
+- Framework installer exists (NSIS, Windows only; Mac untested, Linux broken) but was never run on a clean machine; license not deployed, so no purchase CTA yet. *(Superseded: the landing sells via WhatsApp.)*
 - Ebook: 3 of 18 chapters drafted (Pendahuluan); Amati/Replikasi/Tambah Inovasi/BONUS empty. Landing must not promise a finished ebook.
 - Users also need a paid Claude plan plus Claude Code and VS Code; landing should say so.
 
@@ -39,11 +39,12 @@ Paper Metnum ECE (10 sessions to full Introduction+Methods, 43 tracked sources),
 
 ## Remaining gaps
 - Name "ARTi Workflow" vs "ARTi Framework" still open outside the ebook.
-- Landing must state that Claude (paid plan), Claude Code and VS Code are needed, Windows only, internet needed to install, and that e-course chapters beyond Pendahuluan are still being written.
-- Refund policy and EULA are undecided; do not imply either on the page.
+- (Done on the landing.) Landing must state that Claude (paid plan), Claude Code and VS Code are needed, Windows only, internet needed to install, and that e-course chapters beyond Pendahuluan are still being written.
+- ~~Refund policy undecided~~ Decided 2026-10-14: 7 days from purchase date ([[landing-page-concept]]). EULA still unpublished.
 - Whether an already-activated install may run offline afterwards (grace period) is still unconfirmed.
 
 ## Change log
+- 2026-10-15 09:27 — marked superseded items after the finalisation session.
 - 2026-10-14 22:11 — concept moved to [[landing-page-concept]].
 - 2026-10-14 22:10 — confirmed domain, Rp99.000 for the first 100 buyers, internet-required install, trial removed, ebook ch. 3 revision deferred.
 - 2026-10-14 21:59 — recorded the researcher's answers to the six decisions (bundle, WhatsApp issuing with fail-closed activation, price, domain).

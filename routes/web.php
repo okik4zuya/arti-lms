@@ -3,6 +3,7 @@
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\FreeChapterController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ContentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PageController;
@@ -22,9 +23,11 @@ Route::group(array_filter(['domain' => config('app.domains.main')]), function ()
     // ---- Public site --------------------------------------------------------
     Route::get('/', [PageController::class, 'home'])->name('home');
     Route::view('fitur', 'site.fitur')->name('fitur');
-    Route::view('harga', 'site.harga')->name('harga');
-    Route::view('unduh', 'site.unduh')->name('unduh');
-    Route::view('kontak', 'site.kontak')->name('kontak');
+    // Pricing lives in the landing page's #harga section; the downloads page is gone (tools are in the LMS).
+    Route::redirect('harga', '/#harga', 301);
+    Route::redirect('unduh', '/', 301);
+    Route::get('kontak', [ContactController::class, 'show'])->name('kontak');
+    Route::post('kontak', [ContactController::class, 'send'])->middleware('throttle:10,1')->name('kontak.send');
     Route::view('privasi', 'site.privasi')->name('privasi');
     Route::view('syarat', 'site.syarat')->name('syarat');
 

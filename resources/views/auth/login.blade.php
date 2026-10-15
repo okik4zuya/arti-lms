@@ -1,14 +1,13 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="id">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Log in — ARTi LMS</title>
+    <title>Masuk — ARTi LMS</title>
+    <meta name="robots" content="noindex">
 
     <link rel="icon" href="{{ asset('favicon.ico') }}" sizes="any">
 
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700&display=swap" rel="stylesheet" />
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -20,7 +19,7 @@
         </div>
         <div class="card auth-card">
             <div class="card__body">
-                <h1>Log in</h1>
+                <h1>Masuk</h1>
 
                 <form method="POST" action="{{ route('login') }}" class="stack">
                     @csrf
@@ -43,7 +42,7 @@
                     </div>
 
                     <div class="form-field">
-                        <label for="password" class="form-label">Password</label>
+                        <label for="password" class="form-label">Kata sandi</label>
                         <input
                             id="password"
                             type="password"
@@ -60,11 +59,11 @@
                     <div class="form-field form-field--checkbox">
                         <label for="remember" class="form-label">
                             <input id="remember" type="checkbox" name="remember">
-                            Remember me
+                            Ingat saya
                         </label>
                     </div>
 
-                    <button type="submit" class="btn btn--primary btn--block">Log in</button>
+                    <button type="submit" class="btn btn--primary btn--block">Masuk</button>
                 </form>
             </div>
         </div>

@@ -37,9 +37,7 @@ class PublicSiteTest extends TestCase
     {
         return [
             'fitur' => ['/fitur', 'Apa yang ada di dalam ARTi.'],
-            'harga' => ['/harga', 'Satu paket, lisensi tahunan.'],
-            'unduh' => ['/unduh', 'Pemasang belum dirilis.'],
-            'kontak' => ['/kontak', 'Hubungi kami.'],
+            'kontak' => ['/kontak', 'Hubungi ARTi.'],
             'privasi' => ['/privasi', 'Kebijakan privasi'],
             'syarat' => ['/syarat', 'Syarat penggunaan'],
         ];
@@ -54,14 +52,22 @@ class PublicSiteTest extends TestCase
         $this->get('/kontak')->assertSee('halo@example.test')->assertDontSee('belum dibuka');
     }
 
-    public function test_pricing_page_shows_the_launch_offer_and_no_tiers_or_trial(): void
+    public function test_old_pricing_and_download_urls_redirect_permanently(): void
     {
-        $this->get('/harga')
-            ->assertSee('Rp99.000')
-            ->assertSee('Rp199.000')
-            ->assertSee('Garansi 7 hari')
-            ->assertDontSee('Uji coba')
-            ->assertDontSee('Akademik');
+        $this->get('/harga')->assertStatus(301)->assertRedirect('/#harga');
+        $this->get('/unduh')->assertStatus(301)->assertRedirect('/');
+    }
+
+    public function test_top_menu_has_fitur_harga_free_chapter_and_contact_only(): void
+    {
+        $html = $this->get('/fitur')->assertOk()->getContent();
+
+        $this->assertStringContainsString('Baca bab 1 gratis', $html);
+        $this->assertStringContainsString(url('/').'#harga', $html);
+        $this->assertStringContainsString(route('free.start'), $html);
+        $this->assertStringNotContainsString('>Unduh<', $html);
+        $this->assertStringNotContainsString('>Artikel<', $html);
+        $this->assertStringNotContainsString(route('articles.index').'"', $html);
     }
 
     public function test_robots_txt_is_served_by_the_app_and_points_to_the_sitemap(): void
@@ -86,7 +92,7 @@ class PublicSiteTest extends TestCase
 
         $this->assertTrue($locs->contains(route('home')), 'sitemap misses the landing page');
 
-        foreach (['/fitur', '/harga', '/unduh', '/artikel', '/kontak', '/privasi', '/syarat'] as $path) {
+        foreach (['/fitur', '/artikel', '/kontak', '/privasi', '/syarat'] as $path) {
             $this->assertTrue($locs->contains(url($path)), "sitemap misses {$path}");
         }
 

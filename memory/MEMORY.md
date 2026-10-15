@@ -5,7 +5,7 @@ metadata:
   type: project
   tier: T0
   created: 2026-09-08 21:36
-  updated: 2026-10-14 23:58
+  updated: 2026-10-15 09:30
 ---
 
 # arti-lms — Memory Index
@@ -25,4 +25,9 @@ metadata:
 - [Landing page concept](memories/landing-page-concept.md) — positioning, copy formula, outline, offer rules and the build record, including media placed (explainer, dashboard, e-course screenshots)
 - [Landing page keywords](memories/landing-page-keywords.md) — YouTube keyword run on pain wording; pain words have little demand, so the page must teach the problem
 - [Landing page copy](memories/landing-page-copy.md) — draft v1 of the Indonesian copy, section by section, with a fact-check list
+- [ARTi PDF app facts](memories/artipdf-landing-facts.md) — standalone PDF GUI for the free section: release state (v1.0.6 public, 1.0.7 unreleased), features, unsigned installer, claims to avoid
+- [Landing finalisation prompt](memories/landing-finalisation-prompt.md) — the ready-to-paste prompt for the next session (finalise every landing-related page)
+- [Redis setup](memories/redis-setup.md) — local Redis (Laragon, Predis, DBs 10/11, own prefix) for cache/session/queue, how it was checked, production still open
+- [Page speed](memories/page-speed.md) — what was measured and optimised on the public site, the `public/hot` measuring pitfall, results, and what is still unverified
+- [Legal review notes](memories/legal-review-notes.md) — what /syarat, /privasi, /kontak say, what needs a lawyer, proposed wording (not live)
 - [Landing explainer storyboard](memories/landing-explainer-storyboard.md) — the 40 s explainer: 7 scenes, build and render recipe, installed on the landing page

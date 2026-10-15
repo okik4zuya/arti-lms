@@ -1,3 +1,12 @@
+/* Figtree (SIL OFL 1.1, public/fonts/figtree/OFL.txt), self-hosted: no third-party font request blocks rendering. */
+@font-face { font-family: "Figtree"; font-style: normal; font-weight: 400; font-display: swap; src: url("/fonts/figtree/figtree-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "Figtree"; font-style: normal; font-weight: 600; font-display: swap; src: url("/fonts/figtree/figtree-latin-600-normal.woff2") format("woff2"); }
+@font-face { font-family: "Figtree"; font-style: normal; font-weight: 700; font-display: swap; src: url("/fonts/figtree/figtree-latin-700-normal.woff2") format("woff2"); }
+
+/* Atkinson Hyperlegible (SIL OFL 1.1, public/fonts/atkinson/OFL.txt): the e-course reading font, self-hosted so a chapter never calls Google Fonts. */
+@font-face { font-family: "Atkinson Hyperlegible"; font-style: normal; font-weight: 400; font-display: swap; src: url("/fonts/atkinson/atkinson-hyperlegible-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "Atkinson Hyperlegible"; font-style: normal; font-weight: 700; font-display: swap; src: url("/fonts/atkinson/atkinson-hyperlegible-latin-700-normal.woff2") format("woff2"); }
+
 /* ==========================================================================
    ARTi design tokens — the one shared source (LMS, public site, and later the shop).
    Pure CSS custom properties, no preprocessor. Import this file; do not copy values.
@@ -22,7 +31,7 @@
     --color-surface-dark: #1c1c1e;
     --color-border: #e3e6ea;
     --color-text: #1f2328;
-    --color-text-muted: #6b7280;
+    --color-text-muted: #5b6472;
     --color-text-inverse: #ffffff;
 
     /* Typography */
