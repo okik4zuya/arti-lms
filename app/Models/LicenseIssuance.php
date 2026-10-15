@@ -29,7 +29,7 @@ class LicenseIssuance extends Model
 
     protected $fillable = [
         'order_ref', 'source', 'email', 'name', 'tier', 'seats', 'months', 'amount_idr',
-        'buyer_whatsapp', 'user_id', 'issued_by', 'notes',
+        'buyer_whatsapp', 'user_id', 'issued_by', 'notes', 'payment_ref', 'payment_proof_path',
     ];
 
     /** The key must never leave the server through toArray()/JSON. */
@@ -44,6 +44,7 @@ class LicenseIssuance extends Model
             'expires_at' => 'datetime',
             'updates_until' => 'datetime',
             'wa_sent_at' => 'datetime',
+            'payment_verified_at' => 'datetime',
             'last_synced_at' => 'datetime',
         ];
     }
@@ -58,6 +59,11 @@ class LicenseIssuance extends Model
         return $this->belongsTo(User::class, 'issued_by');
     }
 
+    public function verifier(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'payment_verified_by');
+    }
+
     public function events(): HasMany
     {
         return $this->hasMany(LicenseIssuanceEvent::class);
@@ -67,6 +73,29 @@ class LicenseIssuance extends Model
     public function scopeSold(Builder $query): Builder
     {
         return $query->where('status', '!=', self::PENDING);
+    }
+
+    /**
+     * The "Perlu ditinjau" queue: manual licenses whose payment an admin has not verified, plus rows with a
+     * review note (free license, compensation or unpaid extension) until an admin marks them reviewed.
+     */
+    public function scopeNeedsReview(Builder $query): Builder
+    {
+        return $query->where('status', '!=', self::PENDING)->where(function (Builder $q) {
+            $q->where(fn (Builder $unpaid) => $unpaid->where('source', 'manual')->whereNull('payment_verified_at'))
+                ->orWhereNotNull('review_note');
+        });
+    }
+
+    /** verified | waiting (a reference or proof exists, no admin check yet) | missing | none (pending row). */
+    public function paymentState(): string
+    {
+        return match (true) {
+            $this->payment_verified_at !== null => 'verified',
+            $this->isPending() => 'none',
+            filled($this->payment_ref) || filled($this->payment_proof_path) => 'waiting',
+            default => 'missing',
+        };
     }
 
     public function isPending(): bool

@@ -8,7 +8,6 @@ final class IssueRequest
     public function __construct(
         public readonly string $email,
         public readonly ?string $name,
-        public readonly string $tier,
         public readonly int $months,
         public readonly string $orderRef,
         public readonly ?int $seats = null,
@@ -18,5 +17,7 @@ final class IssueRequest
         public readonly ?string $notes = null,
         public readonly ?string $userId = null,
         public readonly ?string $issuedBy = null,
+        public readonly ?string $paymentRef = null,
+        public readonly ?string $paymentProofPath = null,
     ) {}
 }

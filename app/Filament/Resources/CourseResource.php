@@ -19,6 +19,11 @@ class CourseResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()?->can('course.manage') ?? false;
+    }
+
     public static function form(Schema $schema): Schema
     {
         return $schema

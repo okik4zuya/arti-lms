@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use Filament\Auth\MultiFactor\App\AppAuthentication;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -28,6 +29,13 @@ class JamrudPanelProvider extends PanelProvider
             ->domain(config('app.domains.main'))
             ->path('jamrud')
             ->login()
+            ->profile()
+            // Authenticator-app MFA (TOTP) with recovery codes. Required for everyone who can enter the panel
+            // (admin and support); ADMIN_MFA_REQUIRED=false turns the requirement off for local development.
+            ->multiFactorAuthentication(
+                [AppAuthentication::make()->recoverable()],
+                isRequired: fn () => (bool) config('site.admin.mfa_required'),
+            )
             ->colors([
                 'primary' => Color::Amber,
             ])

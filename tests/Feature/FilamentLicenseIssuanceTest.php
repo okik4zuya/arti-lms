@@ -6,10 +6,14 @@ use App\Filament\Resources\LicenseIssuanceResource\Pages\ListLicenseIssuances;
 use App\Models\Course;
 use App\Models\LicenseIssuance;
 use App\Models\User;
+use App\Support\LicenseMessage;
 use Filament\Actions\Testing\TestAction;
 use Filament\Facades\Filament;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Support\LicenseHistory;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Schema;
 use Livewire\Livewire;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
@@ -52,7 +56,7 @@ class FilamentLicenseIssuanceTest extends TestCase
     private function issueData(array $over = []): array
     {
         return $over + [
-            'email' => 'new@example.test', 'name' => 'New Buyer', 'tier' => 'individual', 'months' => 12,
+            'email' => 'new@example.test', 'name' => 'New Buyer', 'months' => 12, 'seats' => 1,
             'amount_idr' => 99000, 'order_ref' => 'WA-NEW', 'buyer_whatsapp' => '081200000000',
         ];
     }
@@ -80,7 +84,7 @@ class FilamentLicenseIssuanceTest extends TestCase
     {
         $this->row();
 
-        $this->get('/jamrud/license-issuances')->assertOk()->assertDontSee(self::KEY)->assertSee('Tersimpan');
+        $this->get('/jamrud/license-issuances')->assertOk()->assertDontSee(self::KEY);
     }
 
     public function test_admin_can_issue_a_license(): void
@@ -105,14 +109,182 @@ class FilamentLicenseIssuanceTest extends TestCase
 
         Livewire::test(ListLicenseIssuances::class)
             ->callAction('issue', $this->issueData([
-                'create_learner' => true, 'courses' => [$course->id], 'password' => 'temp-pass-123',
+                'create_learner' => true, 'courses' => [$course->id],
             ]))
-            ->assertHasNoFormErrors();
+            ->assertHasNoFormErrors()
+            ->assertNotified('Akun learner dibuat');
 
         $learner = User::where('email', 'new@example.test')->firstOrFail();
         $this->assertTrue($learner->hasRole('learner'));
         $this->assertDatabaseHas('course_access', ['user_id' => $learner->id, 'course_id' => $course->id]);
         $this->assertSame($learner->id, LicenseIssuance::where('order_ref', 'WA-NEW')->value('user_id'));
+
+        $this->assertNotEmpty($learner->password);
+    }
+
+    public function test_the_key_modal_message_carries_the_password_only_when_it_is_passed_in(): void
+    {
+        $learner = User::factory()->create(['email' => 'new@example.test']);
+        $row = $this->row(['user_id' => $learner->id]);
+
+        $with = Livewire::test(ListLicenseIssuances::class)
+            ->mountAction(TestAction::make('sendKey')->table($row)->arguments(['account_password' => 'pw-Abc-123456']));
+
+        $this->assertStringContainsString('Password sementara: pw-Abc-123456', $with->instance()->mountedActions[0]['data']['message']);
+
+        $without = Livewire::test(ListLicenseIssuances::class)->mountAction(TestAction::make('sendKey')->table($row));
+
+        $this->assertStringNotContainsString('pw-Abc-123456', $without->instance()->mountedActions[0]['data']['message']);
+        $this->assertStringNotContainsString('Password sementara', $without->instance()->mountedActions[0]['data']['message']);
+    }
+
+    public function test_the_account_password_is_not_stored_anywhere(): void
+    {
+        $this->assertFalse(Schema::hasColumn('license_issuances', 'account_password'));
+
+        $this->workerIssues();
+        Livewire::test(ListLicenseIssuances::class)->callAction('issue', $this->issueData(['create_learner' => true]));
+
+        $row = LicenseIssuance::where('order_ref', 'WA-NEW')->firstOrFail();
+
+        foreach (['license_issuances', 'license_issuance_events'] as $table) {
+            $this->assertStringNotContainsString('password', strtolower(json_encode(\DB::table($table)->get())), $table);
+        }
+
+        $this->assertStringNotContainsString('Password sementara', LicenseMessage::for($row));
+    }
+
+    public function test_the_message_carries_the_login_when_a_password_was_just_set(): void
+    {
+        $learner = User::factory()->create(['email' => 'new@example.test']);
+        $row = $this->row(['user_id' => $learner->id]);
+
+        $message = LicenseMessage::for($row, 'temp-pass-123');
+
+        $this->assertStringContainsString('Email: new@example.test', $message);
+        $this->assertStringContainsString('Password sementara: temp-pass-123', $message);
+        $this->assertStringContainsString(route('login'), $message);
+        $this->assertStringNotContainsString('Segera ganti password', $message);
+        $this->assertStringNotContainsString('{', $message);
+
+        // Opened later without the argument, the same row carries no password.
+        $later = LicenseMessage::for($row->fresh());
+        $this->assertStringNotContainsString('temp-pass-123', $later);
+        $this->assertStringNotContainsString('Password sementara', $later);
+    }
+
+    public function test_the_message_gives_only_the_email_for_an_existing_account_and_nothing_without_one(): void
+    {
+        $learner = User::factory()->create(['email' => 'old@example.test']);
+
+        $existing = LicenseMessage::for($this->row(['user_id' => $learner->id]));
+        $this->assertStringContainsString('old@example.test', $existing);
+        $this->assertStringNotContainsString('Password sementara', $existing);
+
+        $none = LicenseMessage::for($this->row(['order_ref' => 'WA-2', 'key_id' => 'k2']));
+        $this->assertStringNotContainsString('Akun belajar', $none);
+        $this->assertStringNotContainsString('{', $none);
+    }
+
+    public function test_the_course_picker_appears_as_soon_as_the_learner_toggle_is_on(): void
+    {
+        $component = Livewire::test(ListLicenseIssuances::class)->mountAction('issue');
+
+        $component->assertSchemaComponentHidden('courses', 'mountedActionSchema0');
+
+        $component->fillForm(['create_learner' => true], 'mountedActionSchema0')
+            ->assertSchemaComponentVisible('courses', 'mountedActionSchema0');
+    }
+
+    public function test_the_issue_call_to_the_worker_carries_no_tier(): void
+    {
+        $this->workerIssues();
+
+        Livewire::test(ListLicenseIssuances::class)->callAction('issue', $this->issueData());
+
+        Http::assertSent(fn ($request) => str_ends_with($request->url(), '/admin/issue')
+            && ! array_key_exists('tier', $request->data())
+            && $request->data()['seats'] === 1);
+    }
+
+    public function test_the_message_has_no_tier_placeholder_or_word(): void
+    {
+        $message = LicenseMessage::for($this->row());
+
+        $this->assertStringNotContainsString('individual', $message);
+        $this->assertStringNotContainsString('{', $message);
+        $this->assertStringContainsString('(1 perangkat, berlaku sampai', $message);
+    }
+
+    public function test_edit_contact_changes_the_contact_fields_but_not_the_email_and_logs_it(): void
+    {
+        $row = $this->row();
+
+        Livewire::test(ListLicenseIssuances::class)
+            ->callAction(TestAction::make('editContact')->table($row), ['name' => 'Renamed', 'buyer_whatsapp' => '0899', 'notes' => 'n', 'email' => 'x@y.test'])
+            ->assertHasNoFormErrors();
+
+        $fresh = $row->fresh();
+        $this->assertSame('Renamed', $fresh->name);
+        $this->assertSame('0899', $fresh->buyer_whatsapp);
+        $this->assertSame('buyer@example.test', $fresh->email);
+        $this->assertDatabaseHas('license_issuance_events', ['license_issuance_id' => $row->id, 'event' => 'contact_edited', 'user_id' => $this->admin->id]);
+    }
+
+    public function test_history_merges_worker_and_local_events_and_shows_who_issued(): void
+    {
+        $row = $this->row(['issued_by' => $this->admin->id]);
+        $row->logEvent('key_revealed', $this->admin->id);
+        Http::fake(['worker.test/*' => Http::response([
+            'license' => ['status' => 'active'],
+            'activations' => [['machine_hash' => '3fa9aaaaaaaaaaaaaaaac21e', 'first_seen' => '2026-10-02T10:00:00Z', 'last_seen' => '2026-10-14T10:00:00Z', 'deactivated' => 0]],
+            'events' => [['at' => '2026-10-02T10:00:00Z', 'event' => 'activated', 'detail' => 'ok']],
+        ])]);
+
+        $html = view('filament.license-history', LicenseHistory::for($row))->render();
+
+        $this->assertStringContainsString('3fa9...c21e', $html);
+        $this->assertStringContainsString('activated', $html);
+        $this->assertStringContainsString('key_revealed', $html);
+        $this->assertStringContainsString($this->admin->name, $html);
+        $this->assertStringNotContainsString(self::KEY, $html);
+    }
+
+    public function test_history_still_renders_when_the_worker_is_unreachable(): void
+    {
+        $row = $this->row();
+        $row->logEvent('key_revealed', $this->admin->id);
+        Http::fake(['worker.test/*' => Http::response(null, 500)]);
+
+        $html = view('filament.license-history', LicenseHistory::for($row))->render();
+
+        $this->assertStringContainsString('Data Worker tidak bisa diambil', $html);
+        $this->assertStringContainsString('key_revealed', $html);
+    }
+
+    public function test_quick_filters_narrow_the_table(): void
+    {
+        $soon = $this->row(['order_ref' => 'A', 'key_id' => 'ka', 'email' => 'soon@example.test', 'expires_at' => now()->addDays(10)]);
+        $later = $this->row(['order_ref' => 'B', 'key_id' => 'kb', 'email' => 'later@example.test']);
+        $stale = $this->row(['order_ref' => 'C', 'key_id' => 'kc', 'email' => 'stale@example.test', 'key_stale' => true]);
+        $failed = $this->row(['order_ref' => 'D', 'key_id' => 'kd', 'email' => 'failed@example.test', 'sync_error' => 'boom']);
+        $sent = $this->row(['order_ref' => 'E', 'key_id' => 'ke', 'email' => 'sent@example.test', 'wa_sent_at' => now()]);
+
+        Livewire::test(ListLicenseIssuances::class)
+            ->filterTable('expiring')->assertCanSeeTableRecords([$soon])->assertCanNotSeeTableRecords([$later, $stale, $failed])
+            ->removeTableFilters()
+            ->filterTable('stale_key')->assertCanSeeTableRecords([$stale])->assertCanNotSeeTableRecords([$soon, $later])
+            ->removeTableFilters()
+            ->filterTable('sync_failed')->assertCanSeeTableRecords([$failed])->assertCanNotSeeTableRecords([$soon, $later])
+            ->removeTableFilters()
+            ->filterTable('wa_unsent')->assertCanSeeTableRecords([$later])->assertCanNotSeeTableRecords([$sent]);
+    }
+
+    public function test_the_table_shows_who_issued_the_license(): void
+    {
+        $this->row(['issued_by' => $this->admin->id]);
+
+        Livewire::test(ListLicenseIssuances::class)->assertSee($this->admin->name);
     }
 
     public function test_an_unreachable_worker_keeps_a_pending_row_and_can_be_retried_from_the_table(): void

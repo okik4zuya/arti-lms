@@ -22,6 +22,11 @@ class SiteSettings extends Page
 
     public ?array $data = [];
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()?->can('site.manage') ?? false;
+    }
+
     public function mount(): void
     {
         $values = SiteSetting::values();

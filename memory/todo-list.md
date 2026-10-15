@@ -5,7 +5,7 @@ metadata:
   type: project
   tier: T0
   created: 2026-09-08 21:36
-  updated: 2026-10-15 11:57
+  updated: 2026-10-15 13:43
 ---
 
 ### Landing page (arti.invait.id), see [[landing-page-concept]]
@@ -130,11 +130,33 @@ chapter (not the full imagined scope).
 - [ ] Browser-check an authenticated flow after phase 1 and the Filament 4 upgrade (login → `/app` → a `learn/*` page; `/jamrud` visual look under v4)
 - [x] Upgrade Filament 3 → 4 (v4.15.2, done 2026-10-14; resource + relation manager converted by hand, covered by `FilamentCourseResourceTest`)
 - [x] Filament license page stage 1: issue, encrypted key, WhatsApp message, sync, tests (Http::fake, suite 140 green) [[license-admin]]
-- [ ] NEXT SESSION: follow [[license-worker-setup]] step 0: start `wrangler dev` with enough free RAM, run `php tests/manual/verify_license.php`, then look at `/jamrud/license-issuances` in a browser
-- [ ] Deploy the licensing Worker to Cloudflare per [[license-worker-setup]] (needs: domain name, trial-path removal approval, production keys generated offline)
+- [x] Look at `/jamrud/license-issuances` in a browser against the real Worker (2026-10-15, local dev pointed at production)
+- [ ] `php tests/manual/verify_license.php` needs a local `wrangler dev` (RAM); optional now that the production smoke test passed
+- [x] Deploy the licensing Worker to Cloudflare: production keys, D1, secrets, `https://lisensi-arti.invait.id/v1`, smoke test passed [[license-worker-setup]]
+- [x] Python clients send their own User-Agent (Cloudflare 403s `Python-urllib`): `arti_admin.py`, `~/.arti/tools/arti-license/cli.py`; client config and `pubkeys.json` are production [[license-worker-setup]]
+- [ ] Empty the `LICENSE_*` lines in the local `.env` (researcher edits it), revoke the test licenses issued from dev, delete `%TEMP%\arti-prod-client`
 - [ ] Production: cron `schedule:run` for the daily `licenses:sync`; restrict `/v1/admin/*` to the VPS IP; D1 export + restore drill [[license-worker-setup]]
-- [ ] Run `php artisan migrate` (dev, then production) and set `LICENSE_API_URL`, `LICENSE_ADMIN_TOKEN`, `LICENSE_INSTALLER_URL`; look at `/jamrud/license-issuances` in a browser
-- [ ] MFA on `/jamrud` before the key reveal goes to production: `composer require bacon/qr-code` (researcher runs it), `HasAppAuthentication` on `User`, two columns, panel `->multiFactorAuthentication()`
+- [ ] Run `php artisan migrate` (dev, then production) and set `LICENSE_API_URL=https://lisensi-arti.invait.id/v1`, `LICENSE_ADMIN_TOKEN`, `LICENSE_INSTALLER_URL` in the production `.env`; decide where the paid installer is hosted
+- [x] Decided 2026-10-15: revoke does not stop an already-activated machine; accepted for launch [[license-admin-roadmap]]
+- [x] License admin phase A built 2026-10-15: roles admin/support + permissions, default-deny for courses/settings, "Diterbitkan oleh", History, Edit contact, quick filters, drop tier, compact issue modal [[license-admin-roadmap]]
+- [ ] Run `php artisan permissions:sync` in production after deploy (creates roles and permissions, idempotent); give support staff the `support` role
+- [ ] Phase A leftovers: "Perlu ditinjau" filter waits for phase B; the "Kelola" menu only holds Ubah kontak and Riwayat until C/D add the rest; revoke decision taken: accept that it does not stop activated machines, add one sentence to `/syarat`
+- [ ] Paid installer hosting decided (not built): Cloudflare R2 with short-lived download links issued by Laravel, then set `LICENSE_INSTALLER_URL`
+- [x] License admin phase B built 2026-10-15: payment proof, verification, review queue, `/privasi` sentences [[license-admin-roadmap]]
+- [x] `R2_BUCKET` switched to `arti-private`, connection test passed 2026-10-15 [[r2-storage]]
+- [ ] Delete the old test proof object from the public `arti` bucket (`license-proofs/8HAL2SOt...jpg`) and re-attach or ignore the two dev rows whose proofs are not in `arti-private` [[r2-storage]]
+- [ ] Payment proofs on Cloudflare R2 (code ready and connection tested 2026-10-15; default stays `local`): researcher creates a private bucket and an API token limited to it, runs `composer require league/flysystem-aws-s3-v3 "^3.0"`, sets `PROOFS_DISK=r2`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_BUCKET`, `R2_ENDPOINT` (`https://<account>.r2.cloudflarestorage.com`) in the production `.env`; move any existing files from `storage/app/private/license-proofs/` into the bucket under the same keys; R2 then also covers backup of proofs [[license-admin-roadmap]]
+- [ ] Migration `2026_10_15_140000_add_payment_proof_...` is Pending on dev and production (researcher runs `migrate`; decide about the `account_password` one first since `migrate` runs both)
+- [x] License admin phase C built 2026-10-15: `LicenseApi` extend/revoke/deactivate, Release device, Extend, Rotate key, Revoke/Undo, Delete pending, Tandai ditinjau [[license-admin-roadmap]]
+- [ ] Migration `2026_10_15_150000_add_review_note_...` also Pending on dev and production; `migrate` would run all three pending ones (account_password, payment proof, review note)
+- [ ] Browser-check phase B and C actions on the dev site once the pending migrations are run; then one real round against the Worker with a test license (extend, release, rotate, revoke, undo), revoked afterwards
+- [ ] Add a sentence to `/syarat`: revoking stops renewals and new activations but not machines already activated [[license-admin-roadmap]]
+- [x] License admin phase D built 2026-10-15: Reset account password, `account_password` dropped, template fixed [[license-admin-roadmap]]
+- [ ] Pending migrations on dev: `..._160000_add_app_authentication_to_users_table` and `..._170000_drop_account_password_...` (run `php artisan migrate`); production needs all six license migrations
+- [ ] `composer require bacon/bacon-qr-code:^3.1` to replace the `*` constraint in composer.json (researcher runs it)
+- [ ] MFA postponed by the researcher: set `ADMIN_MFA_REQUIRED=true` in the production `.env` before the panel (especially extend, revoke, rotate) is used there; set up the authenticator and save the recovery codes first [[license-admin-roadmap]]
+- [ ] Worker repo (needs the researcher's OK): `resend` without email, `extend` idempotent via `order_ref`; `arti_admin.py` should show the HTTP code on a non-JSON error body
+- [ ] MFA on `/jamrud` before the key reveal goes to production: `composer require bacon/bacon-qr-code` (researcher runs it), `HasAppAuthentication` on `User`, two columns, panel `->multiFactorAuthentication()`
 - [ ] Backups for the license record: daily MySQL off the VPS, back up `APP_KEY`, nightly encrypted export of `license_issuances`, one restore drill
 - [ ] Automatic purchases (gateway webhook in Laravel, `FulfillOrder`, one email sender, idempotent Worker `extend`, atomic first-100 count, set-password link): prerequisites in [[license-admin]]
 - [ ] Add one sentence to `/privasi`: buyer email and name are kept at both the licensing Worker and the app ([[legal-review-notes]])

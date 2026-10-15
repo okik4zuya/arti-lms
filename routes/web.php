@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\FreeChapterController;
+use App\Http\Controllers\LicenseProofController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ContentController;
@@ -61,6 +62,10 @@ Route::group(array_filter(['domain' => config('app.domains.main')]), function ()
 
     Route::post('logout', [AuthController::class, 'destroy'])
         ->middleware('auth')->name('logout');
+
+    // ---- Payment proofs: signed, short-lived link, opened from the admin panel -------
+    Route::get('bukti-pembayaran/{issuance}', LicenseProofController::class)
+        ->middleware(['auth', 'signed'])->name('license.proof');
 
     // ---- Learner app ------------------------------------------------------------
     Route::get('app', [DashboardController::class, 'index'])

@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\SiteSetting;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Throwable;
 
@@ -15,6 +16,9 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        // The owner can do everything; every other role is limited to its permissions.
+        Gate::before(fn ($user) => $user->hasRole('admin') ? true : null);
+
         $this->applyAdminSettings();
     }
 

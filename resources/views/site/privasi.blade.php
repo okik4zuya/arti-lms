@@ -28,6 +28,8 @@
         <h2>Pembelian dan lisensi</h2>
         <ul>
             <li>Pembelian berlangsung lewat WhatsApp, jadi admin menerima nomor dan isi pesan Anda. Itu dipakai untuk memproses pembayaran, mengirim kunci lisensi dan akses e-course, dan menangani permintaan uang kembali.</li>
+            <li>Nama dan alamat email pembeli disimpan di server lisensi ARTi dan di aplikasi ARTi, untuk menerbitkan dan mengelola lisensi.</li>
+            <li>Bukti pembayaran (tangkapan layar atau berkas transfer, yang dapat memuat data rekening) disimpan di penyimpanan privat, hanya dapat dibuka oleh admin dan petugas dukungan ARTi, dan dipakai untuk memeriksa pembayaran.</li>
             <li>Saat instalasi, ARTi memeriksa lisensi lewat internet ke server lisensi ARTi. Yang dikirim adalah kunci lisensi dan kode perangkat yang sudah diacak (hash), bukan data mentah komputer Anda.</li>
         </ul>
 

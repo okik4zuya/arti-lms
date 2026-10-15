@@ -27,7 +27,7 @@ class IssueLicenseActionTest extends TestCase
 
     private function request(string $order = 'WA-1', string $email = 'buyer@example.test'): IssueRequest
     {
-        return new IssueRequest(email: $email, name: 'Buyer', tier: 'individual', months: 12, orderRef: $order, amountIdr: 99000);
+        return new IssueRequest(email: $email, name: 'Buyer', months: 12, orderRef: $order, amountIdr: 99000);
     }
 
     private function issued(array $over = []): array

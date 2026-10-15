@@ -5,7 +5,7 @@ metadata:
   type: project
   tier: T0
   created: 2026-09-08 21:36
-  updated: 2026-10-15 11:57
+  updated: 2026-10-15 13:43
 ---
 
 # arti-lms — Memory Index
@@ -32,6 +32,8 @@ metadata:
 - [Page speed](memories/page-speed.md) — what was measured and optimised on the public site, the `public/hot` measuring pitfall, results, and what is still unverified
 - [Contact and WhatsApp](memories/contact-whatsapp.md) — floating button opens the contact panel (dialog), /kontak as fallback, number editable in Filament over .env, gotchas
 - [License admin page](memories/license-admin.md) — Filament license issuing (A+: Worker enforces, Laravel keeps the record + encrypted key), what is verified, MFA/backup prerequisites, path to automatic purchases
-- [License Worker setup runbook](memories/license-worker-setup.md) — next-session steps: verify the license page against a real local Worker, then deploy the Worker to Cloudflare and wire Laravel production
+- [License Worker setup runbook](memories/license-worker-setup.md) — Worker deployed at lisensi-arti.invait.id and smoke-tested; progress, the Python User-Agent gotcha, what is still open (Laravel production, admin IP restriction, D1 backup, MFA)
+- [License admin roadmap](memories/license-admin-roadmap.md) — agreed next stage: admin/support roles and permissions, payment proof and review queue, tier removed from the UI, compact issue modal, phases A-D (not built)
+- [R2 storage](memories/r2-storage.md) — Cloudflare R2 buckets (arti public, arti-member, arti-private), what goes where, how the app reaches R2, gotchas; proofs must use arti-private
 - [Legal review notes](memories/legal-review-notes.md) — what /syarat, /privasi, /kontak say, what needs a lawyer, proposed wording (not live)
 - [Landing explainer storyboard](memories/landing-explainer-storyboard.md) — the 40 s explainer: 7 scenes, build and render recipe, installed on the landing page

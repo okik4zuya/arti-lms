@@ -21,7 +21,7 @@ class LicenseApi
     /**
      * Issue a new unbound key. Idempotent on order_ref: a repeat answers 409 order_exists with the key_id.
      *
-     * @param  array{email:string,name?:?string,tier:string,months:int,order:string,seats?:?int,provider?:string,amount_idr?:?int,notes?:?string}  $data
+     * @param  array{email:string,name?:?string,months:int,order:string,seats?:?int,provider?:string,amount_idr?:?int,notes?:?string}  $data
      * @return array{key:string,key_id:string,tier:string,seats:int,expires:string,updates_until:string,email:string}
      */
     public function issue(array $data): array
@@ -43,6 +43,36 @@ class LicenseApi
     public function resend(string $keyId, ?string $reason = null): array
     {
         return $this->post('admin/resend', ['key_id' => $keyId, 'show' => true, 'reason' => $reason]);
+    }
+
+    /**
+     * Add months to the license. NOT idempotent at the Worker: a repeat adds again, so callers must lock.
+     *
+     * @return array{key_id:string,expires:string,updates_until:string}
+     */
+    public function extend(string $keyId, int $months): array
+    {
+        return $this->post('admin/extend', ['key_id' => $keyId, 'months' => $months]);
+    }
+
+    /**
+     * Revoke a license, or undo a revocation. Does not stop machines that are already activated: they keep
+     * their signed license until it expires.
+     *
+     * @return array{key_id:string,status:string}
+     */
+    public function revoke(string $keyId, ?string $reason = null, bool $undo = false): array
+    {
+        return $this->post('admin/revoke', array_filter(
+            ['key_id' => $keyId, 'reason' => $reason, 'undo' => $undo ?: null],
+            fn ($v) => $v !== null,
+        ));
+    }
+
+    /** Free one activated machine (full machine hash from `show`). */
+    public function deactivate(string $keyId, string $machineHash): array
+    {
+        return $this->post('admin/deactivate', ['key_id' => $keyId, 'machine_hash' => $machineHash]);
     }
 
     /**

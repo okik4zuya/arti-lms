@@ -25,7 +25,6 @@ class SyncLicense
             return $this->issue->handle(new IssueRequest(
                 email: $row->email,
                 name: $row->name,
-                tier: $row->tier,
                 months: $row->months,
                 orderRef: $row->order_ref,
                 seats: $row->seats,
@@ -35,6 +34,8 @@ class SyncLicense
                 notes: $row->notes,
                 userId: $row->user_id,
                 issuedBy: $row->issued_by,
+                paymentRef: $row->payment_ref,
+                paymentProofPath: $row->payment_proof_path,
             ));
         }
 

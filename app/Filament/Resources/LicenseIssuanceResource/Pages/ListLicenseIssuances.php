@@ -16,6 +16,9 @@ use Filament\Actions;
 use Filament\Forms;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ListRecords;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Section;
+use Filament\Support\Enums\Width;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
@@ -42,52 +45,67 @@ class ListLicenseIssuances extends ListRecords
                 ->label('Terbitkan lisensi')
                 ->icon('heroicon-o-plus')
                 ->disabled(fn () => ! app(LicenseApi::class)->isConfigured())
+                ->authorize('license.issue')
                 ->modalHeading('Terbitkan lisensi baru')
+                ->modalWidth(Width::TwoExtraLarge)
+                ->stickyModalHeader()
                 ->modalSubmitActionLabel('Terbitkan')
                 ->fillForm(fn () => [
-                    'tier' => 'individual',
                     'months' => 12,
+                    'seats' => 1,
                     'amount_idr' => $this->suggestedPrice(),
                     'order_ref' => 'WA-'.now()->format('ymd').'-'.Str::upper(Str::random(4)),
-                    'password' => Str::password(12),
                 ])
                 ->schema([
-                    Forms\Components\TextInput::make('email')->email()->required()->maxLength(255),
-                    Forms\Components\TextInput::make('name')->label('Nama')->required()->maxLength(255),
-                    Forms\Components\Select::make('tier')
-                        ->options(['individual' => 'individual', 'lab' => 'lab', 'academic' => 'academic', 'site' => 'site'])
-                        ->required(),
-                    Forms\Components\TextInput::make('months')->label('Masa berlaku (bulan)')->numeric()->minValue(1)->maxValue(60)->required(),
-                    Forms\Components\TextInput::make('seats')->label('Jumlah perangkat')->numeric()->minValue(1)->helperText('Kosongkan untuk bawaan tier.'),
-                    Forms\Components\TextInput::make('amount_idr')->label('Harga (Rp)')->numeric()->minValue(0),
-                    Forms\Components\TextInput::make('buyer_whatsapp')->label('WhatsApp pembeli')->tel()->maxLength(30)
-                        ->helperText('Opsional; dipakai tombol Buka WhatsApp.'),
-                    Forms\Components\TextInput::make('order_ref')->label('Referensi order')->required()->maxLength(100)
-                        ->helperText('Unik. Mengulang referensi yang sama tidak pernah menerbitkan dua lisensi.'),
-                    Forms\Components\Textarea::make('notes')->label('Catatan')->rows(2),
-                    Forms\Components\Toggle::make('create_learner')
-                        ->label('Buat akun learner dan beri akses course')
-                        ->live(),
-                    Forms\Components\Select::make('courses')
-                        ->label('Course')
-                        ->multiple()
-                        ->options(fn () => Course::query()->orderBy('title')->pluck('title', 'id'))
-                        ->visible(fn ($get) => (bool) $get('create_learner')),
-                    Forms\Components\TextInput::make('password')
-                        ->label('Password sementara')
-                        ->password()
-                        ->revealable()
-                        ->minLength(8)
-                        ->visible(fn ($get) => (bool) $get('create_learner'))
-                        ->requiredIf('create_learner', true)
-                        ->helperText('Hanya dipakai bila email belum punya akun.'),
+                    Grid::make(6)->schema([
+                        Forms\Components\TextInput::make('name')->label('Nama')->required()->maxLength(255)->columnSpan(3),
+                        Forms\Components\TextInput::make('email')->email()->required()->maxLength(255)->columnSpan(3),
+                        Forms\Components\TextInput::make('buyer_whatsapp')->label('WhatsApp pembeli')->tel()->maxLength(30)
+                            ->helperText('Opsional; dipakai tombol Buka WhatsApp.')
+                            ->columnSpan(3),
+                        Forms\Components\TextInput::make('payment_ref')->label('Referensi pembayaran')->maxLength(255)
+                            ->helperText('Boleh menyusul, akan ditandai.')
+                            ->columnSpan(3),
+                        Forms\Components\TextInput::make('months')->label('Masa berlaku (bulan)')->numeric()->minValue(1)->maxValue(60)->required()->columnSpan(2),
+                        Forms\Components\TextInput::make('amount_idr')->label('Harga (Rp)')->numeric()->minValue(0)->columnSpan(2),
+                        Forms\Components\Toggle::make('create_learner')
+                            ->label('Buat akun belajar')
+                            ->live()
+                            ->inline(false)
+                            ->columnSpan(2),
+                        // Shown right under the toggle that needs it, not hidden inside "Opsi lain".
+                        Forms\Components\Select::make('courses')
+                            ->label('Akses course')
+                            ->multiple()
+                            ->options(fn () => Course::query()->orderBy('title')->pluck('title', 'id'))
+                            ->visible(fn ($get) => (bool) $get('create_learner'))
+                            ->columnSpan(6),
+                    ]),
+                    Section::make('Opsi lain')
+                        ->compact()
+                        ->collapsed()
+                        ->columns(2)
+                        ->schema([
+                            Forms\Components\TextInput::make('seats')->label('Jumlah perangkat')->numeric()->minValue(1)->maxValue(1000)->required(),
+                            Forms\Components\TextInput::make('order_ref')->label('Referensi order')->required()->maxLength(100)
+                                ->helperText('Unik. Mengulang referensi yang sama tidak pernah menerbitkan dua lisensi.'),
+                            Forms\Components\Textarea::make('notes')->label('Catatan')->rows(2)->columnSpanFull(),
+                            LicenseIssuanceResource::proofUpload()->label('Bukti pembayaran')->columnSpanFull(),
+                        ]),
                 ])
                 ->action(function (array $data, Actions\Action $action): void {
+                    // A free license (amount 0) is a gift: say why, and it goes to the review queue.
+                    if (filled($data['amount_idr'] ?? null) && (int) $data['amount_idr'] === 0 && blank($data['notes'] ?? null)) {
+                        Notification::make()->title('Harga 0: isi alasan di Catatan (Opsi lain)')->danger()->send();
+                        $action->halt();
+
+                        return;
+                    }
+
                     try {
                         $row = app(IssueLicense::class)->handle(new IssueRequest(
                             email: $data['email'],
                             name: $data['name'],
-                            tier: $data['tier'],
                             months: (int) $data['months'],
                             orderRef: $data['order_ref'],
                             seats: filled($data['seats'] ?? null) ? (int) $data['seats'] : null,
@@ -95,6 +113,8 @@ class ListLicenseIssuances extends ListRecords
                             buyerWhatsapp: $data['buyer_whatsapp'] ?? null,
                             notes: $data['notes'] ?? null,
                             issuedBy: auth()->id(),
+                            paymentRef: $data['payment_ref'] ?? null,
+                            paymentProofPath: $data['payment_proof'] ?? null,
                         ));
                     } catch (LicenseApiException|InvalidArgumentException $e) {
                         Notification::make()
@@ -108,13 +128,12 @@ class ListLicenseIssuances extends ListRecords
                         return;
                     }
 
-                    if (! empty($data['create_learner'])) {
-                        $this->attachLearner($row, $data);
-                    }
+                    // The password exists only in this request and in the modal opened next; it is never stored.
+                    $accountPassword = ! empty($data['create_learner']) ? $this->attachLearner($row, $data) : null;
 
                     Notification::make()->title('Lisensi terbit')->success()->send();
 
-                    $this->replaceMountedTableAction('sendKey', (string) $row->getKey());
+                    $this->replaceMountedTableAction('sendKey', (string) $row->getKey(), ['account_password' => $accountPassword]);
                 }),
         ];
     }
@@ -127,21 +146,23 @@ class ListLicenseIssuances extends ListRecords
         return LicenseIssuance::sold()->count() < $offer->quota() ? $offer->launchPrice() : $offer->normalPrice();
     }
 
-    /** Link the license to a learner account (created if the email has none) and grant the chosen courses. */
-    private function attachLearner(LicenseIssuance $row, array $data): void
+    /**
+     * Link the license to a learner account (created if the email has none) and grant the chosen courses.
+     *
+     * @return ?string the new password when the account was created here, null for an existing account
+     */
+    private function attachLearner(LicenseIssuance $row, array $data): ?string
     {
         $courses = Course::query()->whereKey($data['courses'] ?? [])->get();
         $user = User::where('email', $data['email'])->first();
+        $newPassword = null;
 
         if ($user === null) {
-            $user = app(CreateLearner::class)->handle($data['name'], $data['email'], $data['password'], $courses);
+            // Generated here, never typed into the form; it reaches the buyer only through the key message.
+            $newPassword = Str::password(12);
+            $user = app(CreateLearner::class)->handle($data['name'], $data['email'], $newPassword, $courses);
 
-            Notification::make()
-                ->title('Akun learner dibuat')
-                ->body("{$user->email}, password sementara: {$data['password']}")
-                ->persistent()
-                ->success()
-                ->send();
+            Notification::make()->title('Akun learner dibuat')->body($user->email)->success()->send();
         } else {
             foreach ($courses as $course) {
                 $user->courseAccess()->firstOrCreate(['course_id' => $course->id], ['granted_at' => now()]);
@@ -149,5 +170,7 @@ class ListLicenseIssuances extends ListRecords
         }
 
         $row->forceFill(['user_id' => $user->id])->save();
+
+        return $newPassword;
     }
 }

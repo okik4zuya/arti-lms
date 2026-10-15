@@ -10,6 +10,15 @@ return [
     'contact_whatsapp' => env('SITE_CONTACT_WHATSAPP'),
 
     /*
+    | Admin panel (/jamrud). `mfa_required`: admin and support must set up an authenticator app before they
+    | can use the panel. OFF for now (decision 2026-10-15, MFA postponed); the code is built and tested, so
+    | set ADMIN_MFA_REQUIRED=true before the panel is used in production.
+    */
+    'admin' => [
+        'mfa_required' => env('ADMIN_MFA_REQUIRED', false),
+    ],
+
+    /*
     | Landing page offer. Prices are whole rupiah. `launch_sold` is the number of licenses the admin
     | has actually issued at the launch price; leave it empty to hide the live counter. Never round it.
     */
@@ -25,14 +34,20 @@ return [
 
     /*
     | Message the admin sends a buyer with the license key (Filament license page). Placeholders:
-    | {name} {key} {tier} {seats} {expires} {installer}
+    | {name} {key} {seats} {expires} {installer} {account}
+    | {account} is the login block below; it is empty when the license has no learner account.
     */
     'license' => [
         'whatsapp_template' => "Halo {name}, terima kasih sudah membeli ARTi.\n\n"
-            ."Kunci lisensi Anda ({tier}, {seats} perangkat, berlaku sampai {expires}):\n\n{key}\n\n"
+            ."Kunci lisensi Anda ({seats} perangkat, berlaku sampai {expires}):\n\n{key}\n\n"
             ."1. Unduh dan jalankan installer: {installer}\n"
             ."2. Buka terminal lalu jalankan: arti-license activate {key}\n\n"
+            .'{account}'
             .'Simpan kunci ini dan jangan dibagikan. Balas pesan ini bila butuh bantuan atau ingin memindahkan lisensi ke komputer lain.',
+        // Placeholders: {email} {password} {login_url}. Used when the account was created with the license.
+        'account_template' => "Akun belajar Anda:\nEmail: {email}\nPassword sementara: {password}\nMasuk di: {login_url}\nSimpan password ini baik-baik.\n\n",
+        // Used when the email already had an account (the password is not known here).
+        'account_existing_template' => "Akun belajar Anda memakai email {email} (password lama Anda tetap berlaku). Masuk di: {login_url}\n\n",
     ],
 
     /*

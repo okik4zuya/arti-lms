@@ -35,7 +35,6 @@ class IssueLicense
             $issued = $this->api->issue(array_filter([
                 'email' => $request->email,
                 'name' => $request->name,
-                'tier' => $request->tier,
                 'months' => $request->months,
                 'order' => $request->orderRef,
                 'seats' => $request->seats,
@@ -51,6 +50,14 @@ class IssueLicense
         $row->key_id = $issued['key_id'];
         $row->key_stale = false;
         $row->applyWorkerState($issued);
+        // A gateway order is paid by construction; only manual sales wait for an admin to check the proof.
+        if ($request->source !== 'manual' && $row->payment_verified_at === null) {
+            $row->payment_verified_at = now();
+        }
+        // A free license is a gift: it always waits for an admin to look at the reason.
+        if ($request->amountIdr === 0 && blank($row->review_note)) {
+            $row->review_note = 'Lisensi gratis (harga 0)';
+        }
         $row->save();
         $row->logEvent('issued', $request->issuedBy, $request->orderRef);
 
@@ -64,7 +71,7 @@ class IssueLicense
             'source' => $request->source,
             'email' => $request->email,
             'name' => $request->name,
-            'tier' => $request->tier,
+            'tier' => 'individual', // placeholder for the NOT NULL column; the Worker's value replaces it on sync
             'seats' => $request->seats,
             'months' => $request->months,
             'amount_idr' => $request->amountIdr,
@@ -72,6 +79,8 @@ class IssueLicense
             'user_id' => $request->userId,
             'issued_by' => $request->issuedBy,
             'notes' => $request->notes,
+            'payment_ref' => $request->paymentRef,
+            'payment_proof_path' => $request->paymentProofPath,
         ];
 
         try {

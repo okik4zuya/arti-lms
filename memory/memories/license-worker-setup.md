@@ -4,12 +4,21 @@ description: Runbook for the next session — verify the Laravel license page ag
 metadata:
   type: project
   created: 2026-10-15 11:57
-  updated: 2026-10-15 11:57
+  updated: 2026-10-15 13:43
 ---
 
 Written at the end of the 2026-10-15 session so a new session can pick up without re-deriving. Context: [[license-admin]] (what was built and why), `~/.arti/memory/memories/licensing-update-plan.md` (Worker plan). Nothing is deployed; the Worker lives in `C:\Users\user\arti-services\licensing-worker` (own git repo, no commits yet); run its commands in PowerShell there. **Do not commit anything unless asked** (working-preferences).
 
-## State at the end of the session
+## Progress, 2026-10-15 afternoon (the Worker is deployed)
+Done by the researcher in their own terminal, skipping Step 0 (RAM ~900 MB free): keys generated and stored (password manager plus offline copy), D1 `arti-licensing` created, migration `0001_init.sql` applied remotely, the four secrets set, `wrangler deploy` to **`https://lisensi-arti.invait.id/v1`**. Checked: `/v1/validate` GET gives 405, `/v1/admin/outbox` without a token gives 401 `not_entitled`. Production smoke test passed (issue, activate, second machine refused with `seat_limit`, revoke, refresh gives `key_revoked`). `~/.arti/tools/arti-license/config.json` `api_base` and `pubkeys.json` (now identical to `pubkeys.prod.json`) are production; the dev public keys are kept at `C:\Users\user\arti-secrets\dev\pubkeys.dev.json`. A throwaway client copy with production keys is in `%TEMP%\arti-prod-client` (delete when done). The smoke license stays in D1 as revoked.
+
+**Gotcha found:** Cloudflare answers 403 with an empty body to the default `Python-urllib` User-Agent, so `arti_admin.py` and the buyer-facing `~/.arti/tools/arti-license/cli.py` failed (JSON decode error). Both now send their own User-Agent (`arti-admin/1.0`, `arti-license/1.0`); Guzzle and curl were never blocked. Any new Python client needs a custom User-Agent, and `arti_admin.py` still crashes with a traceback on a non-JSON error body. Revoke does not stop an already-activated machine (see [[license-admin-roadmap]]).
+
+Local Filament check: the researcher pointed the local `.env` at the production Worker and the page worked (issue, key modal). Empty the three `LICENSE_*` lines in the local `.env` afterwards so dev is not tied to production, and revoke the test licenses made that way. Never open `.env` files (working-preferences); ask the researcher to edit them.
+
+Still open from the runbook: Step 10 production Laravel (`.env`, `migrate`, cron `schedule:run`), Step 11 (restrict `/v1/admin/*` to the VPS IP, D1 export plus one restore drill), MFA on `/jamrud`, backups, the `/privasi` sentence, removing the trial path in the Worker (needs the researcher's OK), and the installer link for `LICENSE_INSTALLER_URL` (where the paid bundle installer will be hosted is undecided).
+
+## State at the end of the earlier session (before deploy)
 - Laravel stage 1 is built and tested with `Http::fake` (suite 140 green). Dev DB migrated, `.env` local uses `database` drivers (Redis was dropped after a MISCONF error; see [[redis-setup]]).
 - **Never run against a real Worker.** `wrangler dev` crashed in the agent session (V8 out of memory, ~650 MB free of 8 GB; a second try outside the sandbox failed "cannot execute"). It has worked on the researcher's machine before (e2e 45 checks, 2026-10-13).
 - Not done: MFA, backups, browser look, privacy sentence, trial removal in the Worker, production anything.
@@ -20,7 +29,8 @@ Written at the end of the 2026-10-15 session so a new session can pick up withou
 3. Then open `/jamrud/license-issuances` in a browser: table, "Terbitkan lisensi" (needs `LICENSE_API_URL=http://127.0.0.1:8760/v1` and `LICENSE_ADMIN_TOKEN` = the `ADMIN_TOKEN` in `dev.vars`, local `.env` only), key modal, copy button, WhatsApp button.
 
 ## Step 1 — decisions needed from the researcher before deploying
-- **Worker domain** (final: it is baked into `tools/arti-license/config.json` shipped to every buyer; changing it later means changing installed clients). e.g. `lisensi.invait.id`. A Worker `custom_domain` needs the zone managed by Cloudflare; avoid `*.workers.dev` for a paid product.
+- **Worker domain: DECIDED 2026-10-15, `lisensi-arti.invait.id`** (final: it is baked into `tools/arti-license/config.json` shipped to every buyer; changing it later means changing installed clients). Use it wherever `<domain>` appears below. A Worker `custom_domain` needs the `invait.id` zone on Cloudflare nameservers and no existing DNS record for that hostname (wrangler creates the record and certificate on deploy; no manual DNS). Avoid `*.workers.dev` for a paid product.
+- `wrangler.toml`: `routes = [{ pattern = "lisensi-arti.invait.id", custom_domain = true }]` goes at the top level, before the first `[[d1_databases]]` header (below a table header TOML makes it part of that table and wrangler ignores it). Keep `binding = "DB"` (the code reads `env.DB`); only replace `database_id`.
 - A separate Cloudflare account with 2FA (Phase 0 item, researcher doing it).
 - Permission to **remove the unused trial path** in the Worker (`/trial`, CLI `trial`, `trial` tier). It is a code change in the other repo; do not touch it unasked.
 
@@ -49,10 +59,12 @@ In `~/.arti`: `tools/arti-license/config.json` `api_base` to `https://<domain>/v
 - Public `/v1/activations` is rate-limited per IP (20/min, `RATE_ACTIVATE_PER_MIN`); `licenses:sync --verify` defaults to 10 key checks per run to stay under it.
 
 ## Laravel-side leftovers (can be done in parallel)
-- **MFA on `/jamrud`**: `composer require bacon/qr-code` (researcher runs it), `HasAppAuthentication` (+ recovery) on `User`, two nullable columns, panel `->multiFactorAuthentication([AppAuthentication::make()->recoverable()])`. Needed before the key reveal is used in production.
+- **MFA on `/jamrud`**: `composer require bacon/bacon-qr-code` (researcher runs it), `HasAppAuthentication` (+ recovery) on `User`, two nullable columns, panel `->multiFactorAuthentication([AppAuthentication::make()->recoverable()])`. Needed before the key reveal is used in production.
 - Backups: daily MySQL off the VPS, a copy of `APP_KEY`, nightly encrypted export of `license_issuances`, one restore drill.
 - One sentence in `/privasi`: buyer email and name are kept at the licensing Worker and in the app ([[legal-review-notes]]).
 - Then the automatic-purchase path in [[license-admin]] (needs Phase 0: gateway, email sender; Worker `extend` must become idempotent on `order_ref`; `resend` must stop emailing from the Worker).
 
 ## Change log
+- 2026-10-15 13:43 — Worker deployed and smoke-tested; recorded the progress, the User-Agent gotcha and what is still open.
+- 2026-10-15 12:28 — Worker domain decided (`lisensi-arti.invait.id`); researcher chose to skip local Step 0 (RAM ~900 MB free) and go straight to the Cloudflare steps; notes on `binding`, `routes` placement and DNS added.
 - 2026-10-15 11:57 — created from the end-of-session planning; the verification script was copied from the session scratchpad to `tests/manual/verify_license.php`.
