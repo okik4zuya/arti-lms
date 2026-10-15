@@ -11,6 +11,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        // Behind Cloudflare: without this every visitor shares a Cloudflare IP, so per-IP throttling
+        // (login, subscribe) would lock everyone out together and logs would show no real address.
+        $middleware->trustProxies(at: '*');
+
         $middleware->alias([
             'course.access' => \App\Http\Middleware\EnsureCourseAccess::class,
         ]);
