@@ -29,6 +29,9 @@ Next.js/Astro-first suggestion made earlier. Builds on [[tech-stack-options]] (O
 - **Dashboard moves to `/app`**; `/dashboard` is a 301 to `/app`. Route name `dashboard` kept, so every `route('dashboard')` call is unchanged.
 - **Customer login: password first** (admin-created accounts), magic link later when the email provider is chosen.
 
+## Update 2026-10-15 (licensing UI): see [[license-admin]]
+Refines "Laravel is only an API client, no Eloquent license tables": the Worker still enforces and owns license state, but Laravel now has a `license_issuances` table (commercial record, display copy of Worker state, and the **key encrypted** so the admin can resend it). The Worker wins on differences. The future payment webhook lands in **Laravel**, not the Worker (the email carries a learner account). Replaces the "payment webhook stays on the Worker" line above.
+
 ## Business decisions 2026-10-14 (override earlier notes where they conflict)
 - **Product = e-course (LMS) + ARTi Framework license in one package.** Price Rp199.000/year; Rp99.000 for the first 100 buyers; install requires internet; no trial; landing domain `arti.invait.id`. Details and the manual-issuing/fail-closed activation rules: `~/.arti/memory/memories/licensing-update-plan.md`.
 - **Sales flow:** admin sends the license key by WhatsApp; the framework calls the Cloudflare Worker to confirm the key is valid and unused, else install fails. The earlier Facebook-ads/WhatsApp/manual-payment note is therefore consistent; the Midtrans/Xendit webhook flow is deferred.

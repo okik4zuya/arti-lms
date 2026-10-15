@@ -100,8 +100,8 @@ class LandingPageTest extends TestCase
     {
         $this->get('/')
             ->assertSee('images/landing/artipdf-editor.webp', false)
-            ->assertSee('https://github.com/okik4zuya/artipdf/releases/latest', false)
-            ->assertSee('Unduh untuk Windows')
+            ->assertSee('href="'.route('artipdf').'"', false)
+            ->assertSee('Lihat ARTi PDF')
             ->assertSee('tabel dan persamaan tidak dipertahankan')
             ->assertSee('belum bertanda tangan')
             ->assertDontSee('macOS');
@@ -146,7 +146,7 @@ class LandingPageTest extends TestCase
     {
         $response = $this->get('/');
 
-        foreach (['rithah.webp', 'scipeek-scopus.webp', 'youtube-channel.webp', 'ecourse.webp'] as $file) {
+        foreach (['benang-terurai.webp', 'scipeek-scopus.webp', 'youtube-channel.webp', 'ecourse.webp'] as $file) {
             $response->assertSee('images/landing/'.$file, false);
             $this->assertFileExists(public_path('images/landing/'.$file));
         }

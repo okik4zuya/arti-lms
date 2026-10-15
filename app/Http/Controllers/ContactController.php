@@ -15,29 +15,50 @@ class ContactController extends Controller
         'lainnya' => 'Lainnya',
     ];
 
-    public function show()
+    /**
+     * Pre-filled message per topic, so a buyer only has to tap send. The greeting is dropped because
+     * the composed message already opens with "Halo".
+     */
+    public static function templates(): array
     {
-        return view('site.kontak', ['topics' => self::TOPICS, 'hasWhatsapp' => Offer::whatsappNumber() !== null]);
+        $buy = preg_replace('/^Halo,?\s*/i', '', (string) config('site.offer.whatsapp_message'));
+
+        return ['pembelian' => ucfirst($buy)];
     }
 
-    /** Builds the message and sends the visitor to WhatsApp; nothing is stored on the server. */
+    public function show(Request $request)
+    {
+        $topic = $request->query('topik');
+
+        return view('site.kontak', [
+            'topics' => self::TOPICS,
+            'hasWhatsapp' => Offer::whatsappNumber() !== null,
+            'selectedTopic' => array_key_exists((string) $topic, self::TOPICS) ? $topic : null,
+        ]);
+    }
+
+    /**
+     * Builds the message and sends the visitor to WhatsApp; nothing is stored on the server.
+     * resources/js/contact-panel.js builds the same text, keep the two formats identical.
+     */
     public function send(Request $request)
     {
         $data = $request->validate([
-            'nama' => ['required', 'string', 'max:80'],
+            'nama' => ['nullable', 'string', 'max:80'],
             'topik' => ['required', 'in:'.implode(',', array_keys(self::TOPICS))],
             'pesan' => ['required', 'string', 'max:1000'],
         ], [
-            'nama.required' => 'Isi nama Anda.',
             'topik.required' => 'Pilih keperluan Anda.',
             'topik.in' => 'Pilih keperluan dari daftar.',
             'pesan.required' => 'Tulis pesan Anda.',
             'pesan.max' => 'Pesan terlalu panjang (maksimal 1000 karakter).',
         ]);
 
+        $nama = trim((string) ($data['nama'] ?? ''));
+
         $url = Offer::whatsappUrl(sprintf(
-            "Halo, saya %s.\nKeperluan: %s\n\n%s",
-            trim($data['nama']),
+            "%s\nKeperluan: %s\n\n%s",
+            $nama !== '' ? "Halo, saya {$nama}." : 'Halo.',
             self::TOPICS[$data['topik']],
             trim($data['pesan'])
         ));

@@ -4,6 +4,7 @@ namespace App\Filament\Pages;
 
 use App\Models\SiteSetting;
 use BackedEnum;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
@@ -23,9 +24,12 @@ class SiteSettings extends Page
 
     public function mount(): void
     {
-        $this->form->fill([
-            'contact_whatsapp' => SiteSetting::values()['contact_whatsapp'] ?? null,
-        ]);
+        $values = SiteSetting::values();
+
+        $this->form->fill(array_merge(
+            array_fill_keys(array_keys(SiteSetting::CONFIG_KEYS), null),
+            array_intersect_key($values, SiteSetting::CONFIG_KEYS),
+        ));
     }
 
     public function form(Schema $schema): Schema
@@ -39,7 +43,19 @@ class SiteSettings extends Page
                     ->maxLength(20)
                     ->regex('/^\+?[0-9][0-9 \-]{7,18}$/')
                     ->validationMessages(['regex' => 'Isi nomor saja, contoh 081234567890 atau +6281234567890.'])
-                    ->helperText('Dipakai tombol "Beli lewat WhatsApp" dan formulir di /kontak. Awalan 0 diubah otomatis menjadi 62. Kosongkan untuk memakai nilai SITE_CONTACT_WHATSAPP di .env.'),
+                    ->helperText('Dipakai tombol "Beli lewat WhatsApp", tombol WhatsApp mengambang, dan formulirnya. Awalan 0 diubah otomatis menjadi 62. Kosongkan untuk memakai nilai SITE_CONTACT_WHATSAPP di .env.'),
+                Textarea::make('whatsapp_message')
+                    ->label('Pesan default pembelian')
+                    ->rows(2)
+                    ->maxLength(300)
+                    ->placeholder(config('site.offer.whatsapp_message'))
+                    ->helperText('Terisi otomatis di formulir saat pengunjung menekan "Beli lewat WhatsApp", dan menjadi pesan di tautan WhatsApp tombol itu bila JavaScript mati. Di formulir, sapaan "Halo," di awal dibuang karena formulir sudah membuka dengan "Halo". Kosongkan untuk memakai teks bawaan.'),
+                Textarea::make('chat_message')
+                    ->label('Pesan default chat umum')
+                    ->rows(2)
+                    ->maxLength(300)
+                    ->placeholder(config('site.offer.chat_message'))
+                    ->helperText('Pesan di tautan tombol WhatsApp mengambang bila JavaScript mati. Formulirnya sendiri dimulai kosong untuk keperluan selain pembelian. Kosongkan untuk memakai teks bawaan.'),
             ])
             ->statePath('data');
     }
@@ -48,7 +64,9 @@ class SiteSettings extends Page
     {
         $data = $this->form->getState();
 
-        SiteSetting::put('contact_whatsapp', filled($data['contact_whatsapp'] ?? null) ? trim($data['contact_whatsapp']) : null);
+        foreach (array_keys(SiteSetting::CONFIG_KEYS) as $key) {
+            SiteSetting::put($key, filled($data[$key] ?? null) ? trim($data[$key]) : null);
+        }
 
         Notification::make()->title('Pengaturan disimpan')->success()->send();
     }

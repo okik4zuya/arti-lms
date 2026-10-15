@@ -5,7 +5,7 @@ metadata:
   type: project
   tier: T0
   created: 2026-09-08 21:36
-  updated: 2026-10-15 09:30
+  updated: 2026-10-15 11:57
 ---
 
 ### Landing page (arti.invait.id), see [[landing-page-concept]]
@@ -16,8 +16,7 @@ metadata:
 - [ ] Media: record the real 1-2 min demo, make its poster, set `SITE_DEMO_VIDEO_EMBED_URL`
 - [ ] Media: real hero screenshot (VS Code + Claude Code)
 - [ ] Media: author photo / "Tentang penulis" section (undecided)
-- [ ] Media: lift the staircase in `ad-story` (bottom ~250 px is Facebook UI); optimize the Rithah image use if reused elsewhere
-- [ ] Check at 375px the sections not yet checked (free chapter pages `/baca`, explainer video, dashboard image, icons); the solution, memory pair, ARTi PDF card and `/fitur` were checked
+- [ ] Media: lift the staircase in `ad-story` (bottom ~250 px is Facebook UI)- [ ] Check at 375px the sections not yet checked (free chapter pages `/baca`, explainer video, dashboard image, icons); the solution, memory pair, ARTi PDF card and `/fitur` were checked
 - [x] Rewrite `/fitur` per the agreed concept (stages, all tools grouped, honest "what ARTi does not do"); animated `model-skill-alat.mp4` placed there [[landing-page-concept]]
 - [ ] Review the Indonesian example commands and the new copy on `/fitur`, and confirm the autoplay loop in a real browser
 - [x] Top menu: Fitur, Harga (to `/#harga`), Baca bab 1 gratis, Kontak; `/harga` and `/unduh` removed with 301 redirects
@@ -30,13 +29,27 @@ metadata:
 - [ ] `composer audit`: 4 advisories on laravel/framework 11.x; plan an upgrade
 - [ ] Decide whether to hide `/artikel`, its sitemap entry and the footer "Umpan artikel" until the first article exists
 - [x] Model + skill + tool illustration: 3 variants built, variant 1 placed in the Solution section with HTML legend and test
-- [ ] Fill `SITE_CONTACT_WHATSAPP`, `SITE_LAUNCH_SOLD`, `APP_DOMAIN_MAIN=arti.invait.id` in the prod `.env`
+- [x] WhatsApp form on `/kontak`, admin-editable number (Filament Pengaturan situs), floating button [[contact-whatsapp]]
+- [ ] Enter the WhatsApp number in the admin (or `SITE_CONTACT_WHATSAPP`) and run `php artisan migrate` in production
+- [x] Floating button colour: kept the original `#25d366` with a white icon (contrast fixes were tried and rejected by the researcher); WhatsApp panel replaces direct links, `/kontak` kept as fallback [[contact-whatsapp]]
+- [x] Default messages (purchase, general chat) editable in Filament Pengaturan situs [[contact-whatsapp]]
+- [x] Rithah image replaced by the "benang terurai" illustration (`benang-terurai.webp`, source in `resources/media-src/landing/`) [[landing-page-concept]]
+- [ ] On a real phone: open the panel from "Beli", send, and confirm the WhatsApp app opens with the text (only headless-checked)
+- [ ] Fill `SITE_LAUNCH_SOLD`, `APP_DOMAIN_MAIN=arti.invait.id` in the prod `.env`
 - [ ] Remove or disable the unused trial path (`/trial`, `arti-license trial`, `trial` tier) in the licensing Worker before deploy (see `~/.arti` licensing plan)
 - [ ] Legal review of `/syarat` and `/privasi` including the 7-day refund line; fix README "nine skills" to ten
 - [ ] Revise ebook chapter 3 wording ("not a product, not a tool to install") to match the paid-bundle story
 - [ ] Decide: name "ARTi Workflow" vs "ARTi Framework" outside the ebook; offline grace after activation
 - [x] Landing, `/harga`, `/fitur`, mobile header, free chapter 1 (`/baca`), icons, example cards, OG image, 600px column, tests
 - [x] 40 s explainer (storyboard approved, rendered, lazy `<video>` in the demo section) and the dashboard screenshot with the manuscript pane pixelated, in the licence card
+
+### Free-tool pages, see [[landing-scipeek-artipdf]]
+
+- [x] Keyword audit and concept for `/scipeek` and `/artipdf`; installer ARTi PDF 1.0.7 built (62.9 MB)
+- [x] Build `/scipeek` (page, media, tests)
+- [ ] Look at `/scipeek` in a real browser (video playback, phone) and decide the copy
+- [x] ARTi PDF v1.0.7 released; `/artipdf` built (tests green, images and layout still to look at in the real dev site)
+- [ ] Decide whether the "Summarize with AI" right-click (needs the ARTi dashboard) should ship in the public installer
 
 ### Landing finalisation (next session), prompt in [[landing-finalisation-prompt]]
 
@@ -116,6 +129,15 @@ chapter (not the full imagined scope).
 - [ ] Run `php artisan db:seed` on the dev DB (seeder verified on the testing DB only; admin@example.com / test@example.com, both `password`)
 - [ ] Browser-check an authenticated flow after phase 1 and the Filament 4 upgrade (login → `/app` → a `learn/*` page; `/jamrud` visual look under v4)
 - [x] Upgrade Filament 3 → 4 (v4.15.2, done 2026-10-14; resource + relation manager converted by hand, covered by `FilamentCourseResourceTest`)
+- [x] Filament license page stage 1: issue, encrypted key, WhatsApp message, sync, tests (Http::fake, suite 140 green) [[license-admin]]
+- [ ] NEXT SESSION: follow [[license-worker-setup]] step 0: start `wrangler dev` with enough free RAM, run `php tests/manual/verify_license.php`, then look at `/jamrud/license-issuances` in a browser
+- [ ] Deploy the licensing Worker to Cloudflare per [[license-worker-setup]] (needs: domain name, trial-path removal approval, production keys generated offline)
+- [ ] Production: cron `schedule:run` for the daily `licenses:sync`; restrict `/v1/admin/*` to the VPS IP; D1 export + restore drill [[license-worker-setup]]
+- [ ] Run `php artisan migrate` (dev, then production) and set `LICENSE_API_URL`, `LICENSE_ADMIN_TOKEN`, `LICENSE_INSTALLER_URL`; look at `/jamrud/license-issuances` in a browser
+- [ ] MFA on `/jamrud` before the key reveal goes to production: `composer require bacon/qr-code` (researcher runs it), `HasAppAuthentication` on `User`, two columns, panel `->multiFactorAuthentication()`
+- [ ] Backups for the license record: daily MySQL off the VPS, back up `APP_KEY`, nightly encrypted export of `license_issuances`, one restore drill
+- [ ] Automatic purchases (gateway webhook in Laravel, `FulfillOrder`, one email sender, idempotent Worker `extend`, atomic first-100 count, set-password link): prerequisites in [[license-admin]]
+- [ ] Add one sentence to `/privasi`: buyer email and name are kept at both the licensing Worker and the app ([[legal-review-notes]])
 - [ ] Write the first real articles in `resources/articles/` (site shows the empty state now)
     // ... 180 lines omitted
   from `resources/inbox/260906_OK_narasi-ai-bar-bar-dan-analogi-alzheimer.md`. Renumbered every

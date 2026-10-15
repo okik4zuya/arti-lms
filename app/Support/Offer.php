@@ -67,7 +67,13 @@ class Offer
     /** The WhatsApp number in international digits (a leading 0 becomes 62), or null when none is set. */
     public static function whatsappNumber(): ?string
     {
-        $number = preg_replace('/\D+/', '', (string) config('site.contact_whatsapp'));
+        return static::normalizeNumber((string) config('site.contact_whatsapp'));
+    }
+
+    /** Any phone number in international digits (a leading 0 becomes 62), or null when empty. */
+    public static function normalizeNumber(?string $raw): ?string
+    {
+        $number = preg_replace('/\D+/', '', (string) $raw);
 
         if ($number === '') {
             return null;
@@ -76,10 +82,10 @@ class Offer
         return str_starts_with($number, '0') ? '62'.substr($number, 1) : $number;
     }
 
-    /** wa.me link for a message, or null while no number is configured. */
-    public static function whatsappUrl(string $message): ?string
+    /** wa.me link for a message (to the site number unless another is given), or null while no number is known. */
+    public static function whatsappUrl(string $message, ?string $number = null): ?string
     {
-        $number = static::whatsappNumber();
+        $number = $number !== null ? static::normalizeNumber($number) : static::whatsappNumber();
 
         return $number ? 'https://wa.me/'.$number.'?text='.rawurlencode($message) : null;
     }

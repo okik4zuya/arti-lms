@@ -13,6 +13,13 @@ class SiteSetting extends Model
 {
     public const CACHE_KEY = 'site_settings.all';
 
+    /** Setting key => the config entry it overrides when filled. */
+    public const CONFIG_KEYS = [
+        'contact_whatsapp' => 'site.contact_whatsapp',
+        'whatsapp_message' => 'site.offer.whatsapp_message',
+        'chat_message' => 'site.offer.chat_message',
+    ];
+
     protected $primaryKey = 'key';
 
     public $incrementing = false;

@@ -24,6 +24,13 @@ Tabs: PDF to MD, MD to PDF, Compress, Merge, Split, Page Editor, About. Output i
 - MD to PDF needs Edge or Chrome installed (headless print).
 - Name clash risk: `/fitur` lists the internal tool `arti-pdf` ("Markdown jadi PDF A4"), which readers may confuse with this app.
 
+## Installer built 2026-10-15
+`C:\python_tools\artipdf\dist\ArtiPDFSetup-1.0.7.exe`, 62.9 MB (the old 44.6 MB 1.0.7 file from 2026-09-19 predated the compress changes and was replaced). Built with `build_installer.bat` (PyInstaller via `ArtiPDF.spec`, UPX, NSIS); `dist/ArtiPDF/` holds ArtiPDF, ArtiPDFCompress, ArtiPDFConvert, ArtiPDFSummarize exes. Not installed or run on a clean machine; the release is the researcher's. Run it from a path with `Set-Location` and `call` (a relative `cmd /c build_installer.bat` failed once). Page plan: [[landing-scipeek-artipdf]].
+
+**Released 2026-10-15:** v1.0.7 is public (one asset, the 62.9 MB installer; no macOS dmg), MIT licence detected by GitHub. The earlier "v1.0.6 public / 1.0.7 unreleased" and "no LICENSE pushed" notes above are superseded. Page: [[landing-scipeek-artipdf]].
+
 ## Change log
+- 2026-10-15 12:50 — release verified.
+- 2026-10-15 11:30 — installer rebuilt (62.9 MB), link to the page concept.
 - 2026-10-15 08:20 — MIT licence files and three screenshots prepared in the artipdf repo (uncommitted).
 - 2026-10-15 07:49 — created from a study of the repo, GitHub releases API and sample outputs.

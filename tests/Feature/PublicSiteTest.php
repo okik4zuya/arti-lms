@@ -58,13 +58,21 @@ class PublicSiteTest extends TestCase
         $this->get('/unduh')->assertStatus(301)->assertRedirect('/');
     }
 
-    public function test_top_menu_has_fitur_harga_free_chapter_and_contact_only(): void
+    public function test_top_menu_has_beranda_fitur_harga_and_the_two_free_tools(): void
     {
         $html = $this->get('/fitur')->assertOk()->getContent();
 
-        $this->assertStringContainsString('Baca bab 1 gratis', $html);
         $this->assertStringContainsString(url('/').'#harga', $html);
-        $this->assertStringContainsString(route('free.start'), $html);
+        // The free chapter is reached from the landing page, not from the top menu.
+        preg_match('#<nav class="site-nav site-nav--desktop".*?</nav>#s', $html, $nav);
+        $this->assertStringNotContainsString('Baca bab 1 gratis', $nav[0]);
+        $this->assertStringNotContainsString(route('free.start'), $nav[0]);
+        $this->assertStringContainsString('>Beranda</a>', $html);
+        $this->assertStringContainsString('>ARTi PDF</a>', $html);
+        $this->assertStringContainsString('>ARTi SciPeek</a>', $html);
+        // Kontak left the top menu (it stays in the footer and the floating button).
+        $this->assertStringNotContainsString('<a href="'.route('kontak').'" >Kontak</a>', $html);
+        $this->assertSame(1, substr_count($html, '>Kontak</a>'));
         $this->assertStringNotContainsString('>Unduh<', $html);
         $this->assertStringNotContainsString('>Artikel<', $html);
         $this->assertStringNotContainsString(route('articles.index').'"', $html);

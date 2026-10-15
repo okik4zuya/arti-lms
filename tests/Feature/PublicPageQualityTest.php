@@ -11,7 +11,7 @@ use Tests\TestCase;
 class PublicPageQualityTest extends TestCase
 {
     protected const PAGES = [
-        '/', '/fitur', '/kontak', '/privasi', '/syarat', '/artikel',
+        '/', '/fitur', '/scipeek', '/artipdf', '/kontak', '/privasi', '/syarat', '/artikel',
         '/baca/01-2-masalah-utama', '/baca/02-solusi-parsial',
         '/baca/03-halusinasi-meruntuhkan-kredibilitas-akademik', '/baca/04-hilang-memori-tak-berarti',
     ];

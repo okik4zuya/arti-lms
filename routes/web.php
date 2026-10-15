@@ -23,6 +23,8 @@ Route::group(array_filter(['domain' => config('app.domains.main')]), function ()
     // ---- Public site --------------------------------------------------------
     Route::get('/', [PageController::class, 'home'])->name('home');
     Route::view('fitur', 'site.fitur')->name('fitur');
+    Route::view('scipeek', 'site.scipeek')->name('scipeek');
+    Route::view('artipdf', 'site.artipdf')->name('artipdf');
     // Pricing lives in the landing page's #harga section; the downloads page is gone (tools are in the LMS).
     Route::redirect('harga', '/#harga', 301);
     Route::redirect('unduh', '/', 301);

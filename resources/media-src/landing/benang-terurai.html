@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8">
+<style>
+@font-face { font-family: "Figtree"; font-weight: 700; src: url("../../../public/fonts/figtree/figtree-latin-700-normal.woff2") format("woff2"); }
+*{box-sizing:border-box;margin:0}
+body{width:1200px;height:560px;background:#fff;overflow:hidden}
+svg{display:block}
+text{font-family:"Figtree",system-ui,sans-serif;font-weight:700}
+</style></head><body>
+<!-- Concept A: "Benang yang terurai tiap sesi". Three days, same robot as model-skill-alat.
+     Day 1: a big blue ball of thread and finished work cards. Day 2 and 3: the ball is gone, only a
+     dashed ghost, grey loose thread and fading cards; the robot starts a new small ball. -->
+<svg width="1200" height="560" viewBox="0 0 1200 560" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- robot without arms or face, feet on y=700 -->
+    <g id="bot">
+      <rect x="545" y="580" width="36" height="115" rx="16" fill="#334155"/>
+      <rect x="619" y="580" width="36" height="115" rx="16" fill="#334155"/>
+      <ellipse cx="560" cy="696" rx="32" ry="12" fill="#1f2328"/>
+      <ellipse cx="640" cy="696" rx="32" ry="12" fill="#1f2328"/>
+      <rect x="510" y="402" width="180" height="200" rx="52" fill="#334155"/>
+      <circle cx="600" cy="478" r="16" fill="#2563eb"/>
+      <rect x="528" y="274" width="144" height="120" rx="36" fill="#334155"/>
+      <rect x="546" y="296" width="108" height="72" rx="26" fill="#fff"/>
+    </g>
+    <g id="hand"><circle r="23" fill="#f1f5f9" stroke="#334155" stroke-width="6"/></g>
+
+    <!-- work card, 60x76; stroke and color come from the <use> -->
+    <g id="card">
+      <rect width="60" height="76" rx="9" fill="#fff" stroke-width="4"/>
+      <path d="M2 18 L2 11 Q2 2 11 2 L49 2 Q58 2 58 11 L58 18 Z" fill="currentColor" stroke="none"/>
+      <rect x="10" y="30" width="40" height="7" rx="3.5" fill="currentColor" opacity=".35" stroke="none"/>
+      <rect x="10" y="62" width="26" height="7" rx="3.5" fill="currentColor" opacity=".35" stroke="none"/>
+    </g>
+    <g id="ic-check"><polyline points="12,50 20,58 34,42" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></g>
+    <g id="ic-lines"><rect x="10" y="46" width="34" height="7" rx="3.5" fill="currentColor" opacity=".35" stroke="none"/></g>
+    <g id="ic-quote"><circle cx="20" cy="50" r="7" fill="currentColor" stroke="none"/><circle cx="40" cy="50" r="7" fill="currentColor" stroke="none"/></g>
+
+    <clipPath id="ball-clip"><circle cx="860" cy="600" r="100"/></clipPath>
+  </defs>
+
+  <!-- ground -->
+  <rect x="0" y="500" width="1200" height="60" fill="#f1f5f9"/>
+  <line x1="0" y1="500" x2="1200" y2="500" stroke="#cbd5e1" stroke-width="4"/>
+
+  <!-- day labels -->
+  <g fill="#334155" font-size="34" text-anchor="middle">
+    <text x="200" y="62">Hari 1</text><text x="600" y="62">Hari 2</text><text x="1000" y="62">Hari 3</text>
+  </g>
+
+  <!-- session dividers -->
+  <g stroke="#cbd5e1" stroke-width="4" stroke-dasharray="3 12" stroke-linecap="round">
+    <line x1="400" y1="100" x2="400" y2="500"/><line x1="800" y1="100" x2="800" y2="500"/>
+  </g>
+  <g>
+    <rect x="304" y="128" width="192" height="46" rx="23" fill="#fff" stroke="#e8622c" stroke-width="3"/>
+    <rect x="704" y="128" width="192" height="46" rx="23" fill="#fff" stroke="#e8622c" stroke-width="3"/>
+    <g fill="#c2410c" font-size="26" text-anchor="middle"><text x="400" y="160">sesi berakhir</text><text x="800" y="160">sesi berakhir</text></g>
+  </g>
+
+  <!-- ===== Day 1: the work piles up ===== -->
+  <g transform="translate(105 500) scale(.62) translate(-600 -700)">
+    <use href="#bot"/>
+    <circle cx="580" cy="330" r="9" fill="#1f2328"/><circle cx="620" cy="330" r="9" fill="#1f2328"/>
+    <path d="M586 350 Q600 360 614 350" fill="none" stroke="#1f2328" stroke-width="5" stroke-linecap="round"/>
+    <!-- left arm hangs, right arm rests on the ball -->
+    <line x1="522" y1="450" x2="480" y2="560" stroke="#334155" stroke-width="34" stroke-linecap="round"/><use href="#hand" x="480" y="560"/>
+    <!-- big ball of thread -->
+    <circle cx="860" cy="600" r="100" fill="#2563eb"/>
+    <g clip-path="url(#ball-clip)" fill="none" stroke="#60a5fa" stroke-width="6" stroke-linecap="round">
+      <path d="M745 535 Q850 585 935 705"/><path d="M790 505 Q885 560 960 665"/><path d="M740 590 Q815 640 875 710"/><path d="M830 500 Q925 550 975 625"/>
+      <path d="M955 520 Q850 555 760 665" stroke="#3b82f6"/><path d="M965 585 Q870 610 790 710" stroke="#3b82f6"/><path d="M905 500 Q820 530 745 600" stroke="#3b82f6"/>
+    </g>
+    <circle cx="860" cy="600" r="100" fill="none" stroke="#1d4ed8" stroke-width="6"/>
+    <line x1="678" y1="450" x2="792" y2="528" stroke="#334155" stroke-width="34" stroke-linecap="round"/><use href="#hand" x="792" y="528"/>
+    <!-- finished work -->
+    <g stroke="#93c5fd" color="#2563eb">
+      <g transform="translate(766 322) rotate(-6 30 38)"><use href="#card"/><use href="#ic-check" color="#16a34a"/></g>
+      <g transform="translate(852 338) rotate(3 30 38)"><use href="#card"/><use href="#ic-lines"/></g>
+      <g transform="translate(938 322) rotate(7 30 38)"><use href="#card"/><use href="#ic-quote"/></g>
+    </g>
+  </g>
+
+  <!-- ===== Day 2: everything unravelled, start again ===== -->
+  <g transform="translate(505 500) scale(.62) translate(-600 -700)">
+    <use href="#bot"/>
+    <path d="M562 312 L594 303 M608 306 L640 312" fill="none" stroke="#1f2328" stroke-width="5" stroke-linecap="round"/>
+    <circle cx="580" cy="334" r="9" fill="#1f2328"/><circle cx="620" cy="334" r="9" fill="#1f2328"/>
+    <path d="M584 354 q8 -8 16 0 t16 0" fill="none" stroke="#1f2328" stroke-width="5" stroke-linecap="round"/>
+    <text x="684" y="262" font-size="70" fill="#93c5fd">?</text>
+    <line x1="522" y1="450" x2="480" y2="560" stroke="#334155" stroke-width="34" stroke-linecap="round"/><use href="#hand" x="480" y="560"/>
+    <!-- ghost of yesterday's ball, loose thread -->
+    <circle cx="860" cy="600" r="100" fill="none" stroke="#cbd5e1" stroke-width="5" stroke-dasharray="10 12"/>
+    <g fill="none" stroke="#cbd5e1" stroke-width="8" stroke-linecap="round">
+      <path d="M900 692 q25 -34 52 -6 t52 -4 t26 2"/><path d="M968 690 q30 -50 40 -4 q-20 24 -36 -6"/>
+    </g>
+    <!-- new small ball -->
+    <circle cx="850" cy="666" r="34" fill="#2563eb"/>
+    <path d="M820 654 Q850 682 880 654" fill="none" stroke="#60a5fa" stroke-width="5" stroke-linecap="round"/>
+    <path d="M775 575 Q790 640 836 634" fill="none" stroke="#2563eb" stroke-width="6" stroke-linecap="round"/>
+    <line x1="678" y1="450" x2="775" y2="575" stroke="#334155" stroke-width="34" stroke-linecap="round"/><use href="#hand" x="775" y="575"/>
+    <!-- fading work -->
+    <g stroke="#cbd5e1" color="#cbd5e1" stroke-dasharray="7 7">
+      <g transform="translate(790 400) rotate(12 30 38)" opacity=".7"><use href="#card"/></g>
+      <g transform="translate(900 452) rotate(-18 30 38)" opacity=".55"><use href="#card"/></g>
+      <g transform="translate(962 600) rotate(75 30 38)" opacity=".4"><use href="#card"/></g>
+    </g>
+  </g>
+
+  <!-- ===== Day 3: the same again ===== -->
+  <g transform="translate(905 500) scale(.62) translate(-600 -700)">
+    <use href="#bot"/>
+    <path d="M568 332 h24 M608 332 h24" fill="none" stroke="#1f2328" stroke-width="7" stroke-linecap="round"/>
+    <path d="M588 354 h24" fill="none" stroke="#1f2328" stroke-width="5" stroke-linecap="round"/>
+    <line x1="522" y1="450" x2="480" y2="560" stroke="#334155" stroke-width="34" stroke-linecap="round"/><use href="#hand" x="480" y="560"/>
+    <circle cx="860" cy="600" r="100" fill="none" stroke="#cbd5e1" stroke-width="5" stroke-dasharray="10 12" opacity=".7"/>
+    <g fill="none" stroke="#cbd5e1" stroke-width="8" stroke-linecap="round">
+      <path d="M880 692 q25 -34 52 -6 t52 -4 t26 2"/><path d="M950 690 q30 -50 40 -4 q-20 24 -36 -6"/><path d="M780 690 q18 -26 38 -4"/>
+    </g>
+    <circle cx="848" cy="676" r="24" fill="#2563eb"/>
+    <path d="M826 668 Q848 688 870 668" fill="none" stroke="#60a5fa" stroke-width="4" stroke-linecap="round"/>
+    <path d="M772 610 Q790 668 828 670" fill="none" stroke="#2563eb" stroke-width="6" stroke-linecap="round"/>
+    <line x1="678" y1="450" x2="772" y2="610" stroke="#334155" stroke-width="34" stroke-linecap="round"/><use href="#hand" x="772" y="610"/>
+    <g stroke="#cbd5e1" color="#cbd5e1" stroke-dasharray="7 7">
+      <g transform="translate(850 450) rotate(-10 30 38)" opacity=".5"><use href="#card"/></g>
+      <g transform="translate(956 556) rotate(28 30 38)" opacity=".35"><use href="#card"/></g>
+    </g>
+  </g>
+</svg>
+</body></html>

@@ -22,13 +22,15 @@ class AppServiceProvider extends ServiceProvider
     protected function applyAdminSettings(): void
     {
         try {
-            $whatsapp = SiteSetting::values()['contact_whatsapp'] ?? null;
+            $values = SiteSetting::values();
         } catch (Throwable) {
             return; // table not migrated yet (fresh deploy, CI)
         }
 
-        if (filled($whatsapp)) {
-            config(['site.contact_whatsapp' => $whatsapp]);
+        foreach (SiteSetting::CONFIG_KEYS as $key => $configKey) {
+            if (filled($values[$key] ?? null)) {
+                config([$configKey => $values[$key]]);
+            }
         }
     }
 }

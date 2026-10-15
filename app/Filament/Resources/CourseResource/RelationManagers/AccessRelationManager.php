@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\CourseResource\RelationManagers;
 
+use App\Actions\Learners\CreateLearner;
 use App\Models\User;
 use Filament\Actions;
 use Filament\Forms;
@@ -10,7 +11,6 @@ use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class AccessRelationManager extends RelationManager
@@ -79,17 +79,12 @@ class AccessRelationManager extends RelationManager
                             ->minLength(8),
                     ])
                     ->action(function (array $data): void {
-                        $user = User::create([
-                            'name' => $data['name'],
-                            'email' => $data['email'],
-                            'password' => Hash::make($data['password']),
-                        ]);
-                        $user->assignRole('learner');
-
-                        $this->getRelationship()->create([
-                            'user_id' => $user->id,
-                            'granted_at' => now(),
-                        ]);
+                        $user = app(CreateLearner::class)->handle(
+                            $data['name'],
+                            $data['email'],
+                            $data['password'],
+                            [$this->getOwnerRecord()],
+                        );
 
                         Notification::make()
                             ->title('Learner created')

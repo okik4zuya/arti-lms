@@ -6,7 +6,7 @@
 @section('main_class', 'site-main--flush')
 
 @section('header_cta')
-    <a href="{{ $offer->buyUrl() }}" class="btn btn--primary header-cta"><span class="cta-long">Beli lewat WhatsApp</span><span class="cta-short">Beli</span></a>
+    <a href="{{ $offer->buyUrl() }}" class="btn btn--primary header-cta" data-kontak="pembelian"><span class="cta-long">Beli lewat WhatsApp</span><span class="cta-short">Beli</span></a>
 @endsection
 
 @section('content')
@@ -22,7 +22,7 @@
                 Dilengkapi e-course untuk mempelajarinya.
             </p>
             <div class="hero__actions">
-                <a href="{{ $offer->buyUrl() }}" class="btn btn--primary btn--lg">Beli lewat WhatsApp</a>
+                <a href="{{ $offer->buyUrl() }}" class="btn btn--primary btn--lg" data-kontak="pembelian">Beli lewat WhatsApp</a>
                 @if ($freeChapterUrl)
                     <a href="{{ $freeChapterUrl }}" class="btn btn--outline btn--lg">Baca bab 1 gratis</a>
                 @else
@@ -73,10 +73,10 @@
             </ol>
             <p class="figure-note">Ilustrasi alur penyebaran kesalahan, bukan data.</p>
             <p>Itu baru soal kredibilitas. Soal tenaga, ada cerita lama tentang Rithah yang memintal benang seharian, lalu menguraikannya lagi tiap malam. Bekerja dengan AI yang tidak punya memori terasa persis begitu. Kerja hari ini tidak pernah jadi pijakan untuk besok.</p>
-            <figure class="figure">
-                <img src="{{ asset('images/landing/rithah.webp') }}" width="1000" height="560" loading="lazy"
-                     alt="Perempuan memintal benang dengan alat pemintal tradisional, di samping ilustrasi hati yang patah">
-                <figcaption>Rithah dan benang pintalnya, cerita lama yang saya ceritakan di e-course.</figcaption>
+            <figure class="figure figure--model">
+                <img src="{{ asset('images/landing/benang-terurai.webp') }}" width="1200" height="560" loading="lazy"
+                     alt="Robot memintal benang biru menjadi gulungan besar di hari pertama. Di hari kedua dan ketiga, setelah sesi berakhir, gulungannya hilang, benangnya terurai, dan robot memulai gulungan kecil lagi dari awal">
+                <figcaption>Tiap sesi baru, kerja kemarin terurai lagi. Ilustrasi, bukan data.</figcaption>
             </figure>
             <p class="aside">Bukan berarti AI-nya buruk. Alatnya hebat, tapi belum jadi sistem.</p>
         </div>
@@ -323,7 +323,7 @@
                          alt="ARTi SciPeek menampilkan kuartil, SJR, dan H-index di samping nama jurnal pada hasil pencarian Scopus">
                     <h3>Pasang ARTi SciPeek</h3>
                     <p>Ekstensi Chrome gratis. Menampilkan kuartil, SJR, dan H-index jurnal langsung di Scopus, ScienceDirect, dan Google Scholar. Berjalan offline, tanpa pelacakan.</p>
-                    <a href="{{ config('site.scipeek_url') }}" class="btn btn--outline" rel="noopener">Pasang dari Chrome Web Store</a>
+                    <a href="{{ route('scipeek') }}" class="btn btn--outline">Lihat ARTi SciPeek</a>
                 </div>
                 <div class="panel">
                     <img src="{{ asset('images/landing/artipdf-editor.webp') }}" width="778" height="688" loading="lazy" class="panel__img"
@@ -331,7 +331,7 @@
                     <h3>Pakai ARTi PDF</h3>
                     <p>Aplikasi Windows gratis untuk PDF. Gabung, pisah, kompres, atur halaman, ubah PDF ke Markdown, dan Markdown ke PDF. Berjalan offline: tanpa unggah, tanpa akun.</p>
                     <p class="muted"><strong>Jujur:</strong> ubah PDF ke Markdown di sini hanya mengambil teks, tabel dan persamaan tidak dipertahankan. Installer belum bertanda tangan, jadi Windows bisa menampilkan peringatan.</p>
-                    <a href="{{ config('site.artipdf_url') }}" class="btn btn--outline" rel="noopener">Unduh untuk Windows</a>
+                    <a href="{{ route('artipdf') }}" class="btn btn--outline">Lihat ARTi PDF</a>
                 </div>
             </div>
         </div>
@@ -391,7 +391,7 @@
 
                 <p><strong>Cara membeli:</strong> tekan tombol, kirim pesan WhatsApp, lakukan pembayaran, lalu kunci lisensi dan akses e-course dikirim oleh admin.</p>
 
-                <a href="{{ $offer->buyUrl() }}" class="btn btn--primary btn--lg">Beli lewat WhatsApp</a>
+                <a href="{{ $offer->buyUrl() }}" class="btn btn--primary btn--lg" data-kontak="pembelian">Beli lewat WhatsApp</a>
             </div>
         </div>
     </section>
@@ -442,7 +442,7 @@
         <div class="container container--narrow">
             <p class="tagline tagline--lg">Dari ide sampai publish, bersama ARTi.</p>
             <div class="hero__actions hero__actions--center">
-                <a href="{{ $offer->buyUrl() }}" class="btn btn--primary btn--lg">Beli lewat WhatsApp</a>
+                <a href="{{ $offer->buyUrl() }}" class="btn btn--primary btn--lg" data-kontak="pembelian">Beli lewat WhatsApp</a>
                 <a href="#coba-gratis" class="btn btn--outline btn--lg">Coba gratis dulu</a>
             </div>
             <p class="disclaimer">ARTi tidak berafiliasi dengan Anthropic. Claude dan Claude Code adalah produk Anthropic.</p>

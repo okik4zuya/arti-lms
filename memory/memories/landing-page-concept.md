@@ -44,7 +44,7 @@ Concept from the 2026-10-14 brainstorm. Facts and decisions it rests on: [[landi
 - Three layers. Page: skills grouped by stage inside "cara kerja", benefit language, skill name as a small label. Tools almost invisible: one "di balik layar" line (PDF to Markdown, Word/PDF export, literature search via OpenAlex/Semantic Scholar/Scholar, local dashboard, runs locally). Full list of 10 skills and tools only on `/fitur`, linked from the page. Say "10 skill" only after the README's "nine skills" is fixed.
 
 ## Marketing rules (honest persuasion only)
-- **Use:** real scarcity (live quota), one price step (99rb to 199rb after 100 buyers), crossed-out Rp199.000, "Rp16.600/bulan" comparison, real bonuses only (SciPeek, chapter updates during the subscription), total-cost transparency (Claude plan is extra), risk reversal if a refund policy is decided.
+- **Use:** real scarcity (live quota), one price step (99rb to 199rb after 100 buyers), crossed-out Rp199.000, "Rp16.600/bulan" comparison, real bonuses only (chapter updates during the subscription; **not SciPeek**, its Scimago data is non-commercial, see [[landing-scipeek-artipdf]]), total-cost transparency (Claude plan is extra), risk reversal if a refund policy is decided.
 - **Avoid:** countdown timers or deadlines (quota is the only limiter), invented "value" prices for the course or bonuses, fake-urgency wording, selling unwritten BONUS chapters (Toolkit, Panduan Instalasi, Prompt Guide) as bonuses.
 
 ## Decided 2026-10-14 (researcher)
@@ -75,13 +75,13 @@ Concept from the 2026-10-14 brainstorm. Facts and decisions it rests on: [[landi
 ## Media made with html2media (2026-10-14)
 - Sources in `resources/media-src/landing/*.html` (Figtree from fonts.bunny.net, so re-rendering needs internet); renders in `resources/media-src/landing/out/`. Render: `node ~/.claude/skills/html2media/scripts/stills.mjs --html "og-image.html@1200x630,diagram-tangga.html@1600x900,diagram-rantai-sitasi.html@1600x640,ad-square.html@1080x1080" --out out`, then copy the site ones to `public/images/landing/`.
 - On the page: `og-image.png` (meta og:image + twitter large card in `layouts/site`), `diagram-tangga.png` in "Cara kerja" (desktop only; text is unreadable when scaled to phone width), and the citation chain as a responsive HTML component (`.chain`, a vertical stepper with arrows at every width, max 600px, and the agitation section uses `.container--600` so text and figure align; labelled "Ilustrasi ... bukan data"). `diagram-rantai-sitasi.png` and `ad-square.png` (Facebook ad, headline "AI-nya ngawur dan lupa terus?", no price) are spare assets, not on the page.
-- Still missing: real hero screenshot, the real demo recording and poster, an author photo/"Tentang penulis" section (suggested, not decided). Icons, the Rithah image, the e-course and dashboard screenshots and the explainer are done (see below).
+- Still missing: real hero screenshot, the real demo recording and poster, an author photo/"Tentang penulis" section (suggested, not decided). Icons, the thread illustration (was the Rithah image), the e-course and dashboard screenshots and the explainer are done (see below).
 
 ## One 600px column (2026-10-14, researcher's decision)
 - Every landing section sits in a 600px reading column (`.landing .container` = 632px incl. side padding); grids are single-column; header and footer keep the site-wide 960px. The step diagram was re-rendered at 1200x640 with names only (descriptions live in the panels below) so text stays readable at 600px; it is hidden under 480px wide. Compare tables still fit (the 5-column one scrolls horizontally only if needed).
 
 ## Existing media now placed (2026-10-14)
-- WebP copies in `public/images/landing/`: `rithah.webp` (33 KB, agitation figure with caption), `scipeek-scopus.webp` (56 KB, from the Web Store screenshot 1, English UI, in the SciPeek card), `youtube-channel.webp` (10 KB, the channel banner, in the YouTube card). Sources: ebook ch. 4 `pemintal-benang.png`, extension `store-assets/screenshot-1.png`, `YT Dosen Berarti/assets/branding/banner.png`. Not placed on purpose: the Facebook ad (an ad creative) and the chain PNG (the page uses the HTML version). The SciPeek screenshot is a composed image of real Scopus crops.
+- WebP copies in `public/images/landing/`: `benang-terurai.webp` (33 KB, 1200x560, agitation figure, replaced the Rithah clip-art/engraving image on 2026-10-15: same robot as `model-skill-alat`, three panels Hari 1/2/3 where the blue ball of thread and work cards of day 1 are a dashed ghost with loose grey thread by day 2-3, "sesi berakhir" pills between; caption "Tiap sesi baru, kerja kemarin terurai lagi. Ilustrasi, bukan data."; source `resources/media-src/landing/benang-terurai.html`, PNG via `stills.mjs --size 1200x560`, WebP via vendored PIL q88; the Rithah story stays in the paragraph text), `scipeek-scopus.webp` (56 KB, from the Web Store screenshot 1, English UI, in the SciPeek card), `youtube-channel.webp` (10 KB, the channel banner, in the YouTube card). Sources: ebook ch. 4 `pemintal-benang.png`, extension `store-assets/screenshot-1.png`, `YT Dosen Berarti/assets/branding/banner.png`. Not placed on purpose: the Facebook ad (an ad creative) and the chain PNG (the page uses the HTML version). The SciPeek screenshot is a composed image of real Scopus crops.
 
 ## Added 2026-10-14 (late)
 - **Icons:** Blade component `<x-glyph name="...">` (`resources/views/components/glyph.blade.php`; `x-icon` clashes with Filament's blade-icons) with 11 own line icons, used on pain cards, the three foundations, the three steps and the package cards.
@@ -130,6 +130,7 @@ Concept from the 2026-10-14 brainstorm. Facts and decisions it rests on: [[landi
 Record the real demo and its poster; real hero screenshot; decide the author section; check the new sections at true 375px; fill the prod `.env` values. Checklist in `todo-list.md`.
 
 ## Change log
+- 2026-10-15 10:37 — Rithah image replaced by `benang-terurai.webp` (concept A, three panels); `rithah.webp` deleted (still in git history).
 - 2026-10-15 09:28 — finalisation pass recorded.
 - 2026-10-15 08:10 — ARTi PDF card added to the free section (Windows only).
 - 2026-10-15 06:44 — model + skill + tool illustration (3 variants) built, variant 1 placed in Solution; copy of section 4 changed (see [[landing-page-copy]]).
@@ -139,3 +140,7 @@ Record the real demo and its poster; real hero screenshot; decide the author sec
 - 2026-10-14 22:40 — recorded renewal rule, one-batch quota, CTA/free chapter/demo decisions; added guarantee proposal.
 - 2026-10-14 22:25 — added Pain language section, comparison block, and AI-detector FAQ from [[landing-page-keywords]].
 - 2026-10-14 22:11 — created from the brainstorm (positioning, PAS formula, outline, tagline and skills placement, marketing rules).
+
+## Top menu update (2026-10-15, researcher's decision)
+Menu is now **Fitur, Harga, Baca bab 1 gratis, ARTi PDF, ARTi SciPeek** (`layouts/partials/site-links.blade.php`). "Kontak" left the top menu; it stays in the footer, the floating WhatsApp button and every "Beli" button. The hamburger breakpoint moved from 760px to 900px because five links wrapped to two lines at 768px. Test: `PublicSiteTest::test_top_menu_has_fitur_harga_free_chapter_and_the_two_free_tools`.
+- Later the same day: **Beranda** added as first item and **Baca bab 1 gratis** removed from the top menu (the free chapter stays reachable from the landing hero, `#coba-gratis` and the closing cards of `/scipeek` and `/artipdf`). Menu: Beranda, Fitur, Harga, ARTi PDF, ARTi SciPeek.

@@ -28,6 +28,16 @@ return [
         'key' => env('RESEND_KEY'),
     ],
 
+    /*
+    | The ARTi licensing Worker (Cloudflare). Laravel is only its client; the admin token stays in .env.
+    | `url` is the API base including /v1, e.g. http://127.0.0.1:8760/v1 for `wrangler dev`.
+    */
+    'licensing' => [
+        'url' => env('LICENSE_API_URL'),
+        'admin_token' => env('LICENSE_ADMIN_TOKEN'),
+        'installer_url' => env('LICENSE_INSTALLER_URL'),
+    ],
+
     'slack' => [
         'notifications' => [
             'bot_user_oauth_token' => env('SLACK_BOT_USER_OAUTH_TOKEN'),

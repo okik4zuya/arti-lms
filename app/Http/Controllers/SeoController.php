@@ -7,7 +7,7 @@ use App\Support\ArticleRepository;
 class SeoController extends Controller
 {
     /** Public pages listed in the sitemap, by route name. */
-    protected const PAGES = ['home', 'fitur', 'articles.index', 'kontak', 'privasi', 'syarat'];
+    protected const PAGES = ['home', 'fitur', 'scipeek', 'artipdf', 'articles.index', 'kontak', 'privasi', 'syarat'];
 
     public function sitemap(ArticleRepository $articles, FreeChapterController $free)
     {

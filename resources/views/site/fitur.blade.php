@@ -7,7 +7,7 @@
 @section('main_class', 'site-main--flush')
 
 @section('header_cta')
-    <a href="{{ $offer->buyUrl() }}" class="btn btn--primary header-cta"><span class="cta-long">Beli lewat WhatsApp</span><span class="cta-short">Beli</span></a>
+    <a href="{{ $offer->buyUrl() }}" class="btn btn--primary header-cta" data-kontak="pembelian"><span class="cta-long">Beli lewat WhatsApp</span><span class="cta-short">Beli</span></a>
 @endsection
 
 @section('content')
@@ -253,7 +253,7 @@
         <div class="container container--narrow">
             <p class="tagline tagline--lg">Dari ide sampai publish, bersama ARTi.</p>
             <div class="hero__actions hero__actions--center">
-                <a href="{{ $offer->buyUrl() }}" class="btn btn--primary btn--lg">Beli lewat WhatsApp</a>
+                <a href="{{ $offer->buyUrl() }}" class="btn btn--primary btn--lg" data-kontak="pembelian">Beli lewat WhatsApp</a>
                 <a href="{{ route('free.start') }}" class="btn btn--outline btn--lg">Baca bab 1 gratis</a>
             </div>
             <p class="trust-line"><a href="{{ route('home') }}#harga">Lihat harga</a> &middot; Garansi uang kembali {{ $offer->guaranteeDays() }} hari</p>
