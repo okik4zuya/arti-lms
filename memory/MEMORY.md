@@ -36,5 +36,5 @@ metadata:
 - [License admin roadmap](memories/license-admin-roadmap.md) — agreed next stage: admin/support roles and permissions, payment proof and review queue, tier removed from the UI, compact issue modal, phases A-D (not built)
 - [R2 storage](memories/r2-storage.md) — Cloudflare R2 buckets (arti public, arti-member, arti-private), what goes where, how the app reaches R2, gotchas; proofs must use arti-private
 - [Legal review notes](memories/legal-review-notes.md) — what /syarat, /privasi, /kontak say, what needs a lawyer, proposed wording (not live)
-- [List building](memories/list-building.md) — double opt-in mailing list; ARTi PDF download via R2 with thank-you dialog; sign-up cards on every free-chapter page; plus Filament "Daftar email" admin (filters, CSV, widgets, buyer marking); browser- and Brevo-checked
+- [List building](memories/list-building.md) — double opt-in mailing list; ARTi PDF download via R2 with thank-you dialog; sign-up cards on every free-chapter page; plus Filament "Daftar email" admin (filters, CSV, widgets, buyer marking), the 4-email welcome series (off by default), broadcasts, one-click unsubscribe; dev Redis -MISCONF gotcha
 - [Landing explainer storyboard](memories/landing-explainer-storyboard.md) — the 40 s explainer: 7 scenes, build and render recipe, installed on the landing page

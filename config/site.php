@@ -56,10 +56,10 @@ return [
     'free_chapter_url' => env('SITE_FREE_CHAPTER_URL'),
     'demo_video_embed_url' => env('SITE_DEMO_VIDEO_EMBED_URL'),
     'artipdf_url' => 'https://github.com/okik4zuya/artipdf/releases/latest',
-    // Direct link to the installer on the public R2 bucket (cdn-arti.invait.id), built from the version
+    // Direct link to the installer on the public R2 bucket (cdn.arti.ai.id), built from the version
     // below; ARTIPDF_DOWNLOAD_URL overrides it. With neither, /artipdf/unduh sends the visitor to the
     // GitHub release page instead, so the page never has a dead button.
-    'artipdf_download_url' => env('ARTIPDF_DOWNLOAD_URL') ?: 'https://cdn-arti.invait.id/downloads/artipdf/ArtiPDFSetup-1.0.7.exe',
+    'artipdf_download_url' => env('ARTIPDF_DOWNLOAD_URL') ?: 'https://cdn.arti.ai.id/downloads/artipdf/ArtiPDFSetup-1.0.7.exe',
     // SHA-256 of that exact file (the installer is not code-signed); ARTIPDF_SHA256 overrides it.
     // On a new release change the version, this URL and this hash together after uploading the file.
     'artipdf_sha256' => env('ARTIPDF_SHA256') ?: '337e15a23160c911c846e22d46269b6469baa7ad32331c5fac0a7cee66644f9b',
@@ -68,5 +68,15 @@ return [
     'artipdf_size' => '63 MB',
     'youtube_url' => 'https://www.youtube.com/@dosenberarti',
     'scipeek_url' => 'https://chromewebstore.google.com/detail/arti-scipeek-%E2%80%94-journal-qu/dhbbdhnepmodmcheapjhcaolpcmpoanj',
+
+    /*
+    | Mailing list. The welcome series (subscribers:send-series, hourly) stays off until MAIL_SERIES_ENABLED=true,
+    | so deploying never starts mailing people before the copy in resources/views/mail/series has been read.
+    | MAIL_SERIES_BATCH caps how many people one run queues (Brevo's free plan allows 300 mails a day).
+    */
+    'mail' => [
+        'series_enabled' => (bool) env('MAIL_SERIES_ENABLED', false),
+        'series_batch' => (int) env('MAIL_SERIES_BATCH', 100),
+    ],
 
 ];

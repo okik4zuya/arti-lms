@@ -8,7 +8,7 @@ metadata:
   updated: 2026-10-15 16:59
 ---
 
-### Landing page (arti.invait.id), see [[landing-page-concept]]
+### Landing page (arti.ai.id), see [[landing-page-concept]]
 
 - [ ] Listen to the explainer's music and watch it through once (only levels and 8 frames were checked) [[landing-explainer-storyboard]]
 - [ ] Move or delete the unredacted `arti-dashboard.png` in the repo root (gitignored, but it shows the unpublished manuscript)
@@ -35,7 +35,7 @@ metadata:
 - [x] Default messages (purchase, general chat) editable in Filament Pengaturan situs [[contact-whatsapp]]
 - [x] Rithah image replaced by the "benang terurai" illustration (`benang-terurai.webp`, source in `resources/media-src/landing/`) [[landing-page-concept]]
 - [ ] On a real phone: open the panel from "Beli", send, and confirm the WhatsApp app opens with the text (only headless-checked)
-- [ ] Fill `SITE_LAUNCH_SOLD`, `APP_DOMAIN_MAIN=arti.invait.id` in the prod `.env`
+- [ ] Fill `SITE_LAUNCH_SOLD`, `APP_DOMAIN_MAIN=arti.ai.id` in the prod `.env`
 - [ ] Remove or disable the unused trial path (`/trial`, `arti-license trial`, `trial` tier) in the licensing Worker before deploy (see `~/.arti` licensing plan)
 - [ ] Legal review of `/syarat` and `/privasi` including the 7-day refund line; fix README "nine skills" to ten
 - [ ] Revise ebook chapter 3 wording ("not a product, not a tool to install") to match the paid-bundle story
@@ -64,7 +64,11 @@ metadata:
 - [ ] Rotate the R2 `arti-private` token (key id and secret prefix were shown in a tool result)
 - [x] Filament subscribers resource (list, filters, CSV export, widgets, resend, delete) and buyer marking on license issue [[list-building]]
 - [ ] Run `php artisan permissions:sync` in production (adds `subscriber.manage`, admin only)
-- [ ] Next phase: email series and its scheduler, manual broadcasts that skip buyers/unconfirmed/unsubscribed
+- [x] Welcome series (4 emails, hourly scheduler, off by default), broadcasts in Filament, one-click unsubscribe headers and the two-step unsubscribe page, all tested [[list-building]]
+- [ ] Read the four series emails in `resources/views/mail/series/` (or send yourself a test) and edit the copy; only then set `MAIL_SERIES_ENABLED=true` in production
+- [ ] Production: run `php artisan migrate` (two new migrations), make sure `php artisan schedule:run` is on cron (hourly series, daily license sync) and a queue worker is supervised
+- [ ] Fix the dev Redis (`-MISCONF`, see [[list-building]]), then `php artisan queue:clear redis` and re-test the series/broadcast through the Redis queue
+- [ ] Send a real test of a series email and a broadcast through Brevo and look at it in Gmail (and a phone)
 
 ### Landing finalisation (next session), prompt in [[landing-finalisation-prompt]]
 
@@ -151,7 +155,7 @@ chapter (not the full imagined scope).
 - [x] Python clients send their own User-Agent (Cloudflare 403s `Python-urllib`): `arti_admin.py`, `~/.arti/tools/arti-license/cli.py`; client config and `pubkeys.json` are production [[license-worker-setup]]
 - [ ] Empty the `LICENSE_*` lines in the local `.env` (researcher edits it), revoke the test licenses issued from dev, delete `%TEMP%\arti-prod-client`
 - [ ] Production: cron `schedule:run` for the daily `licenses:sync`; restrict `/v1/admin/*` to the VPS IP; D1 export + restore drill [[license-worker-setup]]
-- [ ] Run `php artisan migrate` (dev, then production) and set `LICENSE_API_URL=https://lisensi-arti.invait.id/v1`, `LICENSE_ADMIN_TOKEN`, `LICENSE_INSTALLER_URL` in the production `.env`; decide where the paid installer is hosted
+- [ ] Run `php artisan migrate` (dev, then production) and set `LICENSE_API_URL=https://lisensi.arti.ai.id/v1`, `LICENSE_ADMIN_TOKEN`, `LICENSE_INSTALLER_URL` in the production `.env`; decide where the paid installer is hosted
 - [x] Decided 2026-10-15: revoke does not stop an already-activated machine; accepted for launch [[license-admin-roadmap]]
 - [x] License admin phase A built 2026-10-15: roles admin/support + permissions, default-deny for courses/settings, "Diterbitkan oleh", History, Edit contact, quick filters, drop tier, compact issue modal [[license-admin-roadmap]]
 - [ ] Run `php artisan permissions:sync` in production after deploy (creates roles and permissions, idempotent); give support staff the `support` role
@@ -178,3 +182,12 @@ chapter (not the full imagined scope).
   from `resources/inbox/260906_OK_narasi-ai-bar-bar-dan-analogi-alzheimer.md`. Renumbered every
 // ... 179 more lines (total: 272)
 - [ ] Learner change-password page (`/app/password`: current, new, confirm; link on the dashboard; one sentence in the WhatsApp template); proposed 2026-10-15, researcher has not answered
+
+### Domain migration arti.invait.id → arti.ai.id (plan: `~/.claude/plans/jadi-begini-saya-ingin-giggly-sloth.md`)
+- [x] Code/text swapped: `config/site.php`, `.env.example`, `ArtiPdfDownloadTest`, media sources, `~/.arti/tools/arti-license/config.json` + README, SciPeek extension files (version not bumped)
+- [ ] Cloudflare DNS for arti.ai.id (A → VPS, www CNAME), SSL Full (strict), bypass cache `/jamrud*`; vhost on the shared VPS
+- [ ] R2 custom domain `cdn.arti.ai.id`; Worker route `lisensi.arti.ai.id` in `wrangler.toml` + `wrangler deploy` (the deployed Worker is still on `lisensi-arti.invait.id`)
+- [ ] Brevo sender domain arti.ai.id (SPF/DKIM/DMARC), `MAIL_FROM_ADDRESS=noreply@arti.ai.id`; prod `.env`: `APP_URL`, `APP_DOMAIN_MAIN`, `LICENSE_API_URL`
+- [ ] 301 Redirect Rule arti.invait.id/* → arti.ai.id/$1
+- [ ] Re-render OG image + explainer video (URL baked in pixels); SciPeek: bump version, submit to Web Store, re-render tutorial video
+- [ ] `DomainRoutingTest::test_generated_urls_use_the_main_domain` fails on a clean stash too (pre-existing, unrelated)

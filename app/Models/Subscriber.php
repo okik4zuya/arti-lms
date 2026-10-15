@@ -39,6 +39,7 @@ class Subscriber extends Model
             'confirmed_at' => 'datetime',
             'unsubscribed_at' => 'datetime',
             'buyer_at' => 'datetime',
+            'series_sent_at' => 'datetime',
         ];
     }
 
@@ -46,6 +47,12 @@ class Subscriber extends Model
     public function scopeActive(Builder $query): Builder
     {
         return $query->whereNotNull('confirmed_at')->whereNull('unsubscribed_at');
+    }
+
+    /** People who have not bought: the only ones the sales emails go to. */
+    public function scopeNotBuyers(Builder $query): Builder
+    {
+        return $query->whereNull('buyer_at');
     }
 
     /** Signed up but has not clicked the confirmation link. */

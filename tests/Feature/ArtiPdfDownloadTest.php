@@ -12,10 +12,10 @@ class ArtiPdfDownloadTest extends TestCase
 
     public function test_the_download_redirects_to_the_r2_installer_and_counts_it(): void
     {
-        config(['site.artipdf_download_url' => 'https://cdn-arti.invait.id/downloads/artipdf/ArtiPDFSetup-1.0.7.exe']);
+        config(['site.artipdf_download_url' => 'https://cdn.arti.ai.id/downloads/artipdf/ArtiPDFSetup-1.0.7.exe']);
 
         $this->get(route('artipdf.unduh'))
-            ->assertRedirect('https://cdn-arti.invait.id/downloads/artipdf/ArtiPDFSetup-1.0.7.exe')
+            ->assertRedirect('https://cdn.arti.ai.id/downloads/artipdf/ArtiPDFSetup-1.0.7.exe')
             ->assertHeader('X-Robots-Tag', 'noindex');
         $this->get(route('artipdf.unduh'))->assertRedirect();
 
@@ -25,7 +25,7 @@ class ArtiPdfDownloadTest extends TestCase
     public function test_the_defaults_point_at_the_uploaded_installer_of_the_listed_version(): void
     {
         $this->assertSame(
-            'https://cdn-arti.invait.id/downloads/artipdf/ArtiPDFSetup-'.config('site.artipdf_version').'.exe',
+            'https://cdn.arti.ai.id/downloads/artipdf/ArtiPDFSetup-'.config('site.artipdf_version').'.exe',
             config('site.artipdf_download_url')
         );
         $this->assertMatchesRegularExpression('/^[0-9a-f]{64}$/', config('site.artipdf_sha256'));

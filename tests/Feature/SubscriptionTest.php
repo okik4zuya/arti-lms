@@ -157,11 +157,41 @@ class SubscriptionTest extends TestCase
         $subscriber = Subscriber::create(['email' => 'a@example.com', 'source' => 'baca-3', 'consented_at' => now()]);
         $subscriber->forceFill(['confirmed_at' => now()])->save();
 
-        $this->get(URL::signedRoute('subscribe.unsubscribe', ['subscriber' => $subscriber]))->assertOk()->assertSee('berhenti');
+        $url = URL::signedRoute('subscribe.unsubscribe', ['subscriber' => $subscriber]);
+
+        $this->post($url)->assertOk()->assertSee('berhenti');
         $this->assertFalse($subscriber->fresh()->isActive());
 
         $this->get(URL::temporarySignedRoute('subscribe.confirm', now()->addDay(), ['subscriber' => $subscriber]))->assertOk();
         $this->assertFalse($subscriber->fresh()->isActive());
+    }
+
+    public function test_opening_the_unsubscribe_link_only_shows_a_button_so_mail_scanners_cannot_unsubscribe_anyone(): void
+    {
+        $subscriber = Subscriber::create(['email' => 'a@example.com', 'source' => 'baca-3', 'consented_at' => now()]);
+        $subscriber->forceFill(['confirmed_at' => now()])->save();
+        $url = URL::signedRoute('subscribe.unsubscribe', ['subscriber' => $subscriber]);
+
+        $this->get($url)->assertOk()
+            ->assertSee('Ya, berhenti berlangganan')
+            ->assertSee('action="'.$url.'"', false)
+            ->assertSee('noindex', false);
+
+        $this->assertTrue($subscriber->fresh()->isActive());
+    }
+
+    public function test_the_one_click_post_needs_a_valid_signature_but_no_csrf_token(): void
+    {
+        $subscriber = Subscriber::create(['email' => 'a@example.com', 'source' => 'baca-3', 'consented_at' => now()]);
+        $subscriber->forceFill(['confirmed_at' => now()])->save();
+
+        $this->post(route('subscribe.unsubscribe', $subscriber))->assertForbidden();
+        $this->assertTrue($subscriber->fresh()->isActive());
+
+        // The test client skips CSRF checks, so state the exemption itself: a mail provider's POST has no token.
+        $exempt = (new \ReflectionProperty(\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class, 'neverVerify'))->getValue();
+        $this->assertContains('berhenti/*', $exempt);
+        $this->assertNotContains('daftar', $exempt);
     }
 
     public function test_signing_up_again_after_unsubscribing_needs_a_new_confirmation(): void

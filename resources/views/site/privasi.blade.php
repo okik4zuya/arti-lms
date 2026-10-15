@@ -36,9 +36,9 @@
         <h2>Daftar email (kabar dari ARTi)</h2>
         <ul>
             <li>Bila Anda mengisi formulir &ldquo;kabari saya&rdquo; (di halaman bab 1 gratis atau ARTi PDF), situs menyimpan alamat email Anda, dari halaman mana Anda mendaftar, dan waktu persetujuan serta konfirmasinya.</li>
-            <li>Kami mengirim email konfirmasi lebih dulu. Tanpa konfirmasi, tidak ada email lain yang dikirim.</li>
+            <li>ARTi mengirim email konfirmasi lebih dulu. Tanpa konfirmasi, tidak ada email lain yang dikirim.</li>
             <li>Isinya kabar dari ARTi: tulisan baru, pembaruan alat gratis, dan penawaran ARTi. Email dikirim lewat layanan pengiriman email pihak ketiga yang kami pakai untuk itu.</li>
-            <li>Setiap email memuat tautan untuk berhenti berlangganan. Untuk menghapus alamat Anda sepenuhnya, hubungi kami lewat halaman <a href="{{ route('kontak') }}">kontak</a>.</li>
+            <li>Setiap email memuat tautan untuk berhenti berlangganan. Untuk menghapus alamat Anda sepenuhnya, hubungi ARTi lewat halaman <a href="{{ route('kontak') }}">kontak</a>.</li>
             <li>Mengunduh ARTi PDF tidak mengharuskan Anda mendaftar. Situs hanya menambah satu hitungan unduhan per hari, tanpa mencatat siapa yang mengunduh.</li>
         </ul>
 

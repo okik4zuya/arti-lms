@@ -33,7 +33,8 @@ Route::group(array_filter(['domain' => config('app.domains.main')]), function ()
     // ---- Mailing list (double opt-in; the links in the email are signed) -------------
     Route::post('daftar', [SubscriptionController::class, 'store'])->middleware('throttle:subscribe')->name('subscribe.store');
     Route::get('daftar/konfirmasi/{subscriber}', [SubscriptionController::class, 'confirm'])->middleware('signed')->name('subscribe.confirm');
-    Route::get('berhenti/{subscriber}', [SubscriptionController::class, 'unsubscribe'])->middleware('signed')->name('subscribe.unsubscribe');
+    Route::get('berhenti/{subscriber}', [SubscriptionController::class, 'unsubscribeForm'])->middleware('signed')->name('subscribe.unsubscribe');
+    Route::post('berhenti/{subscriber}', [SubscriptionController::class, 'unsubscribe'])->middleware('signed')->name('subscribe.unsubscribe.do');
     // Pricing lives in the landing page's #harga section; the downloads page is gone (tools are in the LMS).
     Route::redirect('harga', '/#harga', 301);
     Route::redirect('unduh', '/', 301);

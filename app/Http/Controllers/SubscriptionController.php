@@ -13,7 +13,7 @@ use Illuminate\Validation\Rule;
  */
 class SubscriptionController extends Controller
 {
-    public const ANSWER = 'Hampir selesai. Kami mengirim email berisi tautan konfirmasi. Bila belum masuk dalam beberapa menit, periksa folder spam.';
+    public const ANSWER = 'Hampir selesai. ARTi mengirim email berisi tautan konfirmasi. Bila belum masuk dalam beberapa menit, periksa folder spam.';
 
     public function store(Request $request)
     {
@@ -49,7 +49,20 @@ class SubscriptionController extends Controller
 
         return view('site.subscription', [
             'heading' => 'Terima kasih, alamat Anda terkonfirmasi',
-            'body' => 'Kami hanya mengirim kabar penting: tulisan baru, pembaruan alat gratis, dan batch harga berikutnya. Setiap email memuat tautan untuk berhenti.',
+            'body' => 'ARTi hanya mengirim kabar penting: tulisan baru, pembaruan alat gratis, dan batch harga berikutnya. Setiap email memuat tautan untuk berhenti.',
+        ]);
+    }
+
+    /**
+     * The link in an email only shows a button. Mail scanners and previews open links on their own, and a
+     * GET that unsubscribed would drop people who never asked. The POST below does the work (it is also what
+     * the List-Unsubscribe-Post header of the mail providers calls, hence no CSRF token on this route).
+     */
+    public function unsubscribeForm(Request $request, Subscriber $subscriber)
+    {
+        return view('site.unsubscribe', [
+            'action' => $request->fullUrl(),
+            'already' => $subscriber->unsubscribed_at !== null,
         ]);
     }
 
@@ -59,7 +72,7 @@ class SubscriptionController extends Controller
 
         return view('site.subscription', [
             'heading' => 'Anda sudah berhenti berlangganan',
-            'body' => 'Alamat ini tidak akan menerima email dari ARTi lagi. Untuk menghapus datanya sekalian, hubungi kami lewat halaman kontak.',
+            'body' => 'Alamat ini tidak akan menerima email dari ARTi lagi. Untuk menghapus datanya sekalian, hubungi ARTi lewat halaman kontak.',
         ]);
     }
 

@@ -27,5 +27,5 @@
     <button type="submit" class="btn btn--primary" data-subscribe-button @if ($answered) hidden @endif>{{ $button }}</button>
     <p class="subscribe__status" role="status" data-subscribe-status @unless ($answered) hidden @endunless>{{ $answered ? $flash['message'] : '' }}</p>
 
-    <p class="muted subscribe__consent">Dengan menekan tombol ini Anda setuju menerima email dari ARTi. Kami meminta konfirmasi lewat email lebih dulu, dan Anda bisa berhenti kapan saja. <a href="{{ route('privasi') }}">Kebijakan privasi</a>.</p>
+    <p class="muted subscribe__consent">Dengan menekan tombol ini Anda setuju menerima email dari ARTi. ARTi meminta konfirmasi lewat email lebih dulu, dan Anda bisa berhenti kapan saja. <a href="{{ route('privasi') }}">Kebijakan privasi</a>.</p>
 </form>

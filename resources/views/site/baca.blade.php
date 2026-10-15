@@ -29,8 +29,8 @@
         $source = 'baca-'.$position;
         $card = match (true) {
             ! $next => ['Kabari saya bila ada kelanjutannya', 'Tulisan baru, pembaruan alat gratis, dan batch harga berikutnya, langsung ke email Anda. Tidak lebih dari itu, dan Anda bisa berhenti kapan saja.', 'Kabari saya'],
-            $position === 2 => ['Dua solusi, dua kelemahan baru. Lalu?', 'Ceritanya berlanjut di bagian berikutnya. Mau kami kirimi tautan bab 1 supaya bisa dilanjutkan nanti, di laptop atau kapan pun?', 'Kirim tautannya'],
-            default => ['Mau melanjutkan nanti?', 'Kami kirim tautan bab 1 ke email Anda, supaya bisa dibuka lagi kapan pun.', 'Kirim tautannya'],
+            $position === 2 => ['Dua solusi, dua kelemahan baru. Lalu?', 'Ceritanya berlanjut di bagian berikutnya. Mau dikirimi tautan bab 1 supaya bisa dilanjutkan nanti, di laptop atau kapan pun?', 'Kirim tautannya'],
+            default => ['Mau melanjutkan nanti?', 'ARTi kirim tautan bab 1 ke email Anda, supaya bisa dibuka lagi kapan pun.', 'Kirim tautannya'],
         };
     @endphp
     <aside class="panel subscribe-card" id="daftar" data-subscribe-card aria-labelledby="daftar-judul">
