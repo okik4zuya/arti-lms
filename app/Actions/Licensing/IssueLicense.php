@@ -3,6 +3,7 @@
 namespace App\Actions\Licensing;
 
 use App\Models\LicenseIssuance;
+use App\Models\Subscriber;
 use App\Services\Licensing\LicenseApi;
 use App\Services\Licensing\LicenseApiException;
 use Illuminate\Database\UniqueConstraintViolationException;
@@ -60,6 +61,8 @@ class IssueLicense
         }
         $row->save();
         $row->logEvent('issued', $request->issuedBy, $request->orderRef);
+        // A buyer must stop receiving sales mail from the mailing list.
+        Subscriber::markBuyer($row->email);
 
         return $row;
     }
@@ -137,6 +140,7 @@ class IssueLicense
         $state = $this->api->show($keyId);
         $row->applyWorkerState($state['license'], $state['activations'] ?? []);
         $row->save();
+        Subscriber::markBuyer($row->email);
 
         return $row;
     }

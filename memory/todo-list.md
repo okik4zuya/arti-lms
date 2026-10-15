@@ -62,7 +62,9 @@ metadata:
 - [x] Browser-checked the dialog and cards at 375 and 1100 px, plus confirm/unsubscribe through the Redis worker (2026-10-15); bucket-sharing throttle bug found and fixed [[list-building]]
 - [ ] Look at `/artipdf` and a `/baca` page once on a real phone, and do one real download of the installer from the CDN
 - [ ] Rotate the R2 `arti-private` token (key id and secret prefix were shown in a tool result)
-- [ ] Next phase: Filament subscribers resource, email series and scheduler, mark buyers (`buyer_at`)
+- [x] Filament subscribers resource (list, filters, CSV export, widgets, resend, delete) and buyer marking on license issue [[list-building]]
+- [ ] Run `php artisan permissions:sync` in production (adds `subscriber.manage`, admin only)
+- [ ] Next phase: email series and its scheduler, manual broadcasts that skip buyers/unconfirmed/unsubscribed
 
 ### Landing finalisation (next session), prompt in [[landing-finalisation-prompt]]
 

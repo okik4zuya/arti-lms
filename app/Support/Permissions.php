@@ -30,6 +30,8 @@ final class Permissions
         'site.manage',
         'course.manage',
         'user.manage',
+        // The mailing list holds personal data and is used for marketing, which support staff do not do.
+        'subscriber.manage',
     ];
 
     /** @return list<string> */

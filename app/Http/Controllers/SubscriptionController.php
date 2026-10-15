@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\ConfirmSubscription;
+use App\Actions\Subscribers\SendConfirmation;
 use App\Models\Subscriber;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
-use Throwable;
 
 /**
  * Mailing-list sign-up with double opt-in. The answer to a sign-up is always the same, so the form
@@ -21,7 +19,7 @@ class SubscriptionController extends Controller
     {
         $data = $request->validateWithBag('subscribe', [
             'email' => ['required', 'email:rfc', 'max:190'],
-            'source' => ['required', Rule::in(Subscriber::SOURCES)],
+            'source' => ['required', Rule::in(array_keys(Subscriber::SOURCES))],
         ], [
             'email.required' => 'Tulis alamat email Anda.',
             'email.email' => 'Alamat email tampaknya belum benar.',
@@ -85,12 +83,6 @@ class SubscriptionController extends Controller
             return;
         }
 
-        try {
-            Mail::to($subscriber->email)->queue(new ConfirmSubscription($subscriber));
-            $subscriber->forceFill(['confirmation_sent_at' => now()])->save();
-        } catch (Throwable $e) {
-            // An unreachable queue must not turn the sign-up into an error page; the row is kept and can be re-sent.
-            report($e);
-        }
+        app(SendConfirmation::class)->handle($subscriber);
     }
 }

@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Actions\Licensing\IssueLicense;
 use App\Actions\Licensing\IssueRequest;
 use App\Models\LicenseIssuance;
+use App\Models\Subscriber;
 use App\Services\Licensing\LicenseApiException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
@@ -52,6 +53,31 @@ class IssueLicenseActionTest extends TestCase
         $raw = DB::table('license_issuances')->where('id', $row->id)->value('key');
         $this->assertNotSame(self::KEY, $raw);
         $this->assertStringNotContainsString('ABCD', $raw);
+    }
+
+    public function test_issuing_marks_a_mailing_list_subscriber_with_the_same_email_as_a_buyer(): void
+    {
+        Http::fake(['worker.test/*' => Http::response($this->issued())]);
+        $match = Subscriber::create(['email' => 'Buyer@Example.test', 'source' => 'baca-2', 'consented_at' => now()]);
+        $other = Subscriber::create(['email' => 'other@example.test', 'source' => 'baca-2', 'consented_at' => now()]);
+
+        app(IssueLicense::class)->handle($this->request());
+
+        $this->assertNotNull($match->fresh()->buyer_at);
+        $this->assertNull($other->fresh()->buyer_at);
+    }
+
+    public function test_a_failed_issue_does_not_mark_anyone_as_a_buyer(): void
+    {
+        Http::fake(['worker.test/*' => Http::response(['error' => 'server_error', 'message' => 'x'], 500)]);
+        $subscriber = Subscriber::create(['email' => 'buyer@example.test', 'source' => 'baca-2', 'consented_at' => now()]);
+
+        try {
+            app(IssueLicense::class)->handle($this->request());
+        } catch (LicenseApiException) {
+        }
+
+        $this->assertNull($subscriber->fresh()->buyer_at);
     }
 
     public function test_the_key_never_appears_in_serialisation_or_the_event_log(): void

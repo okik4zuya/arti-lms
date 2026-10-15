@@ -48,8 +48,15 @@ Setup that worked (nothing in `.env` touched): Vite dev on 5600, `C:\php\php.exe
 2. Connect SMTP (Brevo or Resend) via `MAIL_*`, run `php artisan migrate` in production, `npm run build`.
 3. Consider rotating the R2 `arti-private` token: its key id and a secret prefix were printed in a tool result this session by a grep on `.env` (a slip; do not open `.env`).
 
+## Filament "Daftar email" (built 2026-10-15, admin only)
+- `SubscriberResource` at `/jamrud/subscribers`, gated by the new permission **`subscriber.manage`** (in `Permissions::ADMIN_ONLY`; support and learners get 403; run `php artisan permissions:sync` in production). List only, no create/edit. Columns: email (copyable, searchable), status badge (Aktif / Menunggu konfirmasi / Berhenti, computed by `Subscriber::status()` with scopes `active`, `pending`, `unsubscribed`), source label (`Subscriber::SOURCES` is now key => label), buyer tick, dates. Filters: status, source (multiple), buyer. Row actions: resend confirmation (pending only, respects the 10-minute window, uses the shared `App\Actions\Subscribers\SendConfirmation`, which the public sign-up now also uses) and delete (permanent, for erasure requests); bulk delete.
+- Header actions: **Ekspor CSV (aktif)** (`SubscriberCsv`: only confirmed and not unsubscribed, columns email/sumber/dikonfirmasi/pembeli, cells starting with `= + - @` get a leading quote against formula injection) and **Cocokkan dengan pembeli** (`Subscriber::syncBuyers()`, matches case-insensitively against licenses that are not pending).
+- Header widgets (in `Resources/SubscriberResource/Widgets`, so they do not land on the dashboard): stats (active, pending, unsubscribed, ARTi PDF downloads over 7 days with a sparkline) and a bar chart of active vs pending per source.
+- **Buyers**: `IssueLicense` now calls `Subscriber::markBuyer($email)` after a successful issue (and after recovering a lost response), so buyers stop being sales-mail targets; a failed issue marks nobody.
+- Tests: `FilamentSubscriberTest` (12), two additions in `IssueLicenseActionTest`; license and role tests still green. Checked in a real browser at 1280 and 390 px with throwaway data (a temporary admin user and `*@example.test` rows, all deleted): stats, chart, filters, badges, no JS errors, no horizontal overflow.
+
 ## Later (not built)
-Filament subscribers resource (filter by source/status, CSV export, per-source widget), the email series and its scheduler, manual broadcasts, filling `buyer_at` when a license is issued to the same email, an unsubscribe header for broadcasts, deleting a subscriber on request.
+The email series and its scheduler, manual broadcasts (must skip buyers, unsubscribed and unconfirmed rows, and carry an unsubscribe link/header), per-subscriber detail page if ever needed.
 
 ## Change log
 - 2026-10-15 17:35 — created after the build.
