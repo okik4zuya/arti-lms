@@ -35,7 +35,7 @@ metadata:
 - [x] Default messages (purchase, general chat) editable in Filament Pengaturan situs [[contact-whatsapp]]
 - [x] Rithah image replaced by the "benang terurai" illustration (`benang-terurai.webp`, source in `resources/media-src/landing/`) [[landing-page-concept]]
 - [ ] On a real phone: open the panel from "Beli", send, and confirm the WhatsApp app opens with the text (only headless-checked)
-- [ ] Fill `SITE_LAUNCH_SOLD`, `APP_DOMAIN_MAIN=arti.ai.id` in the prod `.env`
+- [ ] Fill `SITE_LAUNCH_SOLD` in the prod `.env` (`APP_DOMAIN_MAIN=arti.ai.id` is already set)
 - [ ] Remove or disable the unused trial path (`/trial`, `arti-license trial`, `trial` tier) in the licensing Worker before deploy (see `~/.arti` licensing plan)
 - [ ] Legal review of `/syarat` and `/privasi` including the 7-day refund line; fix README "nine skills" to ten
 - [ ] Revise ebook chapter 3 wording ("not a product, not a tool to install") to match the paid-bundle story
@@ -151,7 +151,7 @@ chapter (not the full imagined scope).
 - [x] Filament license page stage 1: issue, encrypted key, WhatsApp message, sync, tests (Http::fake, suite 140 green) [[license-admin]]
 - [x] Look at `/jamrud/license-issuances` in a browser against the real Worker (2026-10-15, local dev pointed at production)
 - [ ] `php tests/manual/verify_license.php` needs a local `wrangler dev` (RAM); optional now that the production smoke test passed
-- [x] Deploy the licensing Worker to Cloudflare: production keys, D1, secrets, `https://lisensi-arti.invait.id/v1`, smoke test passed [[license-worker-setup]]
+- [x] Deploy the licensing Worker to Cloudflare: production keys, D1, secrets, `https://lisensi.arti.ai.id/v1 (moved from lisensi-arti.invait.id)`, smoke test passed [[license-worker-setup]]
 - [x] Python clients send their own User-Agent (Cloudflare 403s `Python-urllib`): `arti_admin.py`, `~/.arti/tools/arti-license/cli.py`; client config and `pubkeys.json` are production [[license-worker-setup]]
 - [ ] Empty the `LICENSE_*` lines in the local `.env` (researcher edits it), revoke the test licenses issued from dev, delete `%TEMP%\arti-prod-client`
 - [ ] Production: cron `schedule:run` for the daily `licenses:sync`; restrict `/v1/admin/*` to the VPS IP; D1 export + restore drill [[license-worker-setup]]
@@ -183,11 +183,11 @@ chapter (not the full imagined scope).
 // ... 179 more lines (total: 272)
 - [ ] Learner change-password page (`/app/password`: current, new, confirm; link on the dashboard; one sentence in the WhatsApp template); proposed 2026-10-15, researcher has not answered
 
-### Domain migration arti.invait.id → arti.ai.id (plan: `~/.claude/plans/jadi-begini-saya-ingin-giggly-sloth.md`)
-- [x] Code/text swapped: `config/site.php`, `.env.example`, `ArtiPdfDownloadTest`, media sources, `~/.arti/tools/arti-license/config.json` + README, SciPeek extension files (version not bumped)
-- [ ] Cloudflare DNS for arti.ai.id (A → VPS, www CNAME), SSL Full (strict), bypass cache `/jamrud*`; vhost on the shared VPS
-- [ ] R2 custom domain `cdn.arti.ai.id`; Worker route `lisensi.arti.ai.id` in `wrangler.toml` + `wrangler deploy` (the deployed Worker is still on `lisensi-arti.invait.id`)
-- [ ] Brevo sender domain arti.ai.id (SPF/DKIM/DMARC), `MAIL_FROM_ADDRESS=noreply@arti.ai.id`; prod `.env`: `APP_URL`, `APP_DOMAIN_MAIN`, `LICENSE_API_URL`
-- [ ] 301 Redirect Rule arti.invait.id/* → arti.ai.id/$1
-- [ ] Re-render OG image + explainer video (URL baked in pixels); SciPeek: bump version, submit to Web Store, re-render tutorial video
-- [ ] `DomainRoutingTest::test_generated_urls_use_the_main_domain` fails on a clean stash too (pre-existing, unrelated)
+### Domain migration arti.invait.id → arti.ai.id [[domain-migration-arti-ai-id]]
+- [x] Steps 1-8 done 2026-10-15/16: DNS, shared VPS vhost, Cloudflare rules, `cdn.arti.ai.id`, `lisensi.arti.ai.id`, Brevo, prod `.env`, end-to-end tests, 301 redirect, old Worker route removed, OG image and explainer re-rendered
+- [ ] SciPeek 1.0.1 release (separate session, in the SciPeek repo): bump version, ZIP, push, submit to the Web Store
+- [ ] Remove the old R2 custom domain `cdn-arti.invait.id` from bucket `arti` once nothing links to it
+- [ ] Enable 2FA (authenticator) on the admin account of `/jamrud`; consider a Cloudflare rate limit on `/jamrud/login`
+- [ ] Re-enable Bot Fight Mode on arti.ai.id only after a WAF skip rule for `lisensi.arti.ai.id` (it can block the Python client)
+- [ ] Move arti-lms to a dedicated VPS at the first paying buyer or when the shared one hurts (1.9 GB RAM, swap in use) [[domain-migration-arti-ai-id]]
+- [ ] `DomainRoutingTest::test_generated_urls_use_the_main_domain` fails even on a clean stash (pre-existing, unrelated to the domain move)

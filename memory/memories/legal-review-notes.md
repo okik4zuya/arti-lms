@@ -28,5 +28,9 @@ Prepared in the 2026-10-15 finalisation session ([[landing-page-concept]], [[lan
 - Governing law: "Syarat ini tunduk pada hukum Republik Indonesia. Sengketa diselesaikan lebih dulu secara musyawarah." (forum to be decided).
 - Data: "Data akun disimpan selama akun aktif dan dihapus dalam [n] hari setelah permintaan penghapusan, kecuali data yang wajib disimpan menurut hukum." (period to be decided).
 
+## Finalised 2026-10-16
+The three texts (`/syarat`, `/privasi`, the software EULA in `~/.arti/LICENSE.txt`) were rewritten from research on UU 8/1999 Pasal 18, UU 27/2022, PP 80/2019 and UU 28/2014 and published without the draft banners, at the researcher's request. No lawyer reviewed them. Still open: the seller's legal identity on `/kontak`, and confirming the retention periods and the dispute forum.
+
 ## Change log
 - 2026-10-15 09:26 — created.
+- 2026-10-16 17:00 — texts finalised from research (see above).

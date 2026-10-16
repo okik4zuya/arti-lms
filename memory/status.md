@@ -5,10 +5,12 @@ metadata:
   type: project
   tier: T0
   created: 2026-09-08 21:36
-  updated: 2026-10-15 16:59
+  updated: 2026-10-16 00:11
 ---
 
 ## Current state
+
+**2026-10-16 00:11. Domain moved from invait.id to arti.ai.id (landing, `cdn.arti.ai.id`, `lisensi.arti.ai.id`, `noreply@arti.ai.id`), production runs on the shared VPS and passed the end-to-end checks.** Open: SciPeek 1.0.1 release (own repo), remove old R2 domain, admin 2FA, Bot Fight Mode. Details: [[domain-migration-arti-ai-id]].
 
 **2026-10-16. Welcome series, broadcasts and one-click unsubscribe are built and tested, uncommitted ([[list-building]]).** The 4-email series (hourly scheduler) is OFF until `MAIL_SERIES_ENABLED=true`; the copy needs the researcher's read first. Broadcasts live in Filament ("Siaran email", admin only). Unsubscribe is now a two-step page with RFC 8058 headers. The dev Redis refuses writes (`-MISCONF`), so the queue run was verified on the database queue; fix Redis, then re-test. Unrelated changes in the working tree (landing og-image, explainer files, `todo-arti-ai-id.png`) are not part of this work.
 

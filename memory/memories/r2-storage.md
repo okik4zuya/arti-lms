@@ -4,7 +4,7 @@ description: Cloudflare R2 buckets (arti public, arti-member, arti-private), whi
 metadata:
   type: reference
   created: 2026-10-15 15:17
-  updated: 2026-10-15 16:59
+  updated: 2026-10-16 00:11
 ---
 
 Context: payment proofs of [[license-admin-roadmap]] moved to Cloudflare R2 on 2026-10-15; the installer hosting decision lives in the same roadmap.
@@ -12,7 +12,7 @@ Context: payment proofs of [[license-admin-roadmap]] moved to Cloudflare R2 on 2
 ## Buckets (set up by the researcher on 2026-10-15)
 | Bucket | Access | Purpose |
 |---|---|---|
-| `arti` | **public**, custom domain `cdn-arti.invait.id` | public media: large videos, images, free installers |
+| `arti` | **public**, custom domain `cdn.arti.ai.id` | public media: large videos, images, free installers |
 | `arti-member` | not stated; assumed members-only (paid) | presumably the paid installer and member downloads, served through short-lived links; confirm before building |
 | `arti-private` | private | **payment proofs** (`license-proofs/`) and anything with personal or bank data |
 
@@ -21,7 +21,7 @@ Rule: never put personal or bank data in `arti` (anyone who knows or guesses the
 ## How the app uses R2
 - `config/filesystems.php`: disk `r2` (S3 driver, `visibility` private, path style) reads `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_BUCKET`, `R2_ENDPOINT`; `proofs_disk` reads `PROOFS_DISK` (default `local`, `r2` in production). Package `league/flysystem-aws-s3-v3` is installed.
 - Proofs are streamed through Laravel (`LicenseProofController`, signed 5-minute route, `license.view`), never via a bucket URL. One bucket per `R2_BUCKET`; today the `r2` disk is the proofs bucket, so a second purpose (member downloads) needs its own disk entry and token.
-- `R2_ENDPOINT` must be `https://<account-id>.r2.cloudflarestorage.com`. A custom domain (here `cdn-arti.invait.id`) is read-only public delivery and fails on write with a non-XML error.
+- `R2_ENDPOINT` must be `https://<account-id>.r2.cloudflarestorage.com`. A custom domain (here `cdn.arti.ai.id`) is read-only public delivery and fails on write with a non-XML error.
 - Cloudflare UI names: "Public Development URL" (r2.dev) and "Custom Domains" under bucket Settings control public access; there is no "Public access" section anymore.
 - Never open `.env`; the researcher edits the variables. Connection test used a standalone PHP script that boots Laravel (write, exists, read, delete a `_connection-test.txt` key): worked on 2026-10-15 against `arti`.
 

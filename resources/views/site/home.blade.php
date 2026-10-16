@@ -423,7 +423,7 @@
                 </details>
                 <details>
                     <summary>Apa yang terjadi setelah satu tahun?</summary>
-                    <p>Anda mendapat peringatan dan masa tenggang sebelum lisensi berakhir. Setelah berakhir, skill dan berkas Anda pada dasarnya tetap bisa dipakai lewat VS Code, tetapi dashboard ARTi tidak bisa dibuka sampai lisensi diperpanjang. Data Anda tetap milik Anda. Perpanjangan mengikuti harga normal, kecuali ada promo.</p>
+                    <p>Anda mendapat peringatan dan masa tenggang sebelum lisensi berakhir. Setelah berakhir, pembaruan berhenti sampai lisensi diperpanjang. Dashboard tetap bisa dibuka, skill dan berkas Anda tetap bisa dipakai lewat VS Code, dan data Anda tetap milik Anda. Perpanjangan mengikuti harga normal, kecuali ada promo.</p>
                 </details>
                 <details>
                     <summary>Berapa total biayanya?</summary>

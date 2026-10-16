@@ -32,7 +32,7 @@ Paper Metnum ECE (10 sessions to full Introduction+Methods, 43 tracked sources),
 3. **Audience:** dosen first, then S2/S3 (approved).
 4. **Case studies/proof:** skipped for now; landing carries no case-study numbers.
 5. **Price (confirmed):** Rp199.000 per year; launch price **Rp99.000 for the first 100 buyers** (50% discount, ends at 100 buyers, not at a date). One package replaces the five planned tiers on `/harga`. The buyer count must be tracked by the admin (issued licenses).
-6. **Domain (confirmed):** `arti.invait.id` hosts the landing page; set `APP_DOMAIN_MAIN` accordingly.
+6. **Domain (confirmed):** `arti.ai.id` hosts the landing page (moved from arti.invait.id on 2026-10-15, [[domain-migration-arti-ai-id]]); set `APP_DOMAIN_MAIN` accordingly.
 7. **Internet required:** installation must connect to the internet so the Worker can verify the license; no offline install.
 8. **Trial removed:** no trial key for the paid launch (drop the "Uji coba" tier from `/harga`; `/trial` Worker endpoint and CLI command become unused).
 9. **Ebook chapter 3 will be revised later** to match the licensed-tool story; the landing is not blocked on it.

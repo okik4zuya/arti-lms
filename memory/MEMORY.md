@@ -32,7 +32,8 @@ metadata:
 - [Page speed](memories/page-speed.md) — what was measured and optimised on the public site, the `public/hot` measuring pitfall, results, and what is still unverified
 - [Contact and WhatsApp](memories/contact-whatsapp.md) — floating button opens the contact panel (dialog), /kontak as fallback, number editable in Filament over .env, gotchas
 - [License admin page](memories/license-admin.md) — Filament license issuing (A+: Worker enforces, Laravel keeps the record + encrypted key), what is verified, MFA/backup prerequisites, path to automatic purchases
-- [License Worker setup runbook](memories/license-worker-setup.md) — Worker deployed at lisensi-arti.invait.id and smoke-tested; progress, the Python User-Agent gotcha, what is still open (Laravel production, admin IP restriction, D1 backup, MFA)
+- [License Worker setup runbook](memories/license-worker-setup.md) — Worker deployed at lisensi.arti.ai.id and smoke-tested; progress, the Python User-Agent gotcha, what is still open (Laravel production, admin IP restriction, D1 backup, MFA)
+- [Domain migration to arti.ai.id](memories/domain-migration-arti-ai-id.md) — hostnames moved 2026-10-16, shared-VPS setup, gotchas (Brevo on ai.id, admin role, trusted proxy), what is open
 - [License admin roadmap](memories/license-admin-roadmap.md) — agreed next stage: admin/support roles and permissions, payment proof and review queue, tier removed from the UI, compact issue modal, phases A-D (not built)
 - [R2 storage](memories/r2-storage.md) — Cloudflare R2 buckets (arti public, arti-member, arti-private), what goes where, how the app reaches R2, gotchas; proofs must use arti-private
 - [Legal review notes](memories/legal-review-notes.md) — what /syarat, /privasi, /kontak say, what needs a lawyer, proposed wording (not live)

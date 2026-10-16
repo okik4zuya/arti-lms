@@ -4,7 +4,7 @@ description: Runbook for the next session — verify the Laravel license page ag
 metadata:
   type: project
   created: 2026-10-15 11:57
-  updated: 2026-10-15 13:43
+  updated: 2026-10-16 00:11
 ---
 
 Written at the end of the 2026-10-15 session so a new session can pick up without re-deriving. Context: [[license-admin]] (what was built and why), `~/.arti/memory/memories/licensing-update-plan.md` (Worker plan). Nothing is deployed; the Worker lives in `C:\Users\user\arti-services\licensing-worker` (own git repo, no commits yet); run its commands in PowerShell there. **Do not commit anything unless asked** (working-preferences).
@@ -29,8 +29,8 @@ Still open from the runbook: Step 10 production Laravel (`.env`, `migrate`, cron
 3. Then open `/jamrud/license-issuances` in a browser: table, "Terbitkan lisensi" (needs `LICENSE_API_URL=http://127.0.0.1:8760/v1` and `LICENSE_ADMIN_TOKEN` = the `ADMIN_TOKEN` in `dev.vars`, local `.env` only), key modal, copy button, WhatsApp button.
 
 ## Step 1 — decisions needed from the researcher before deploying
-- **Worker domain: DECIDED 2026-10-15, `lisensi-arti.invait.id`** (final: it is baked into `tools/arti-license/config.json` shipped to every buyer; changing it later means changing installed clients). Use it wherever `<domain>` appears below. A Worker `custom_domain` needs the `invait.id` zone on Cloudflare nameservers and no existing DNS record for that hostname (wrangler creates the record and certificate on deploy; no manual DNS). Avoid `*.workers.dev` for a paid product.
-- `wrangler.toml`: `routes = [{ pattern = "lisensi-arti.invait.id", custom_domain = true }]` goes at the top level, before the first `[[d1_databases]]` header (below a table header TOML makes it part of that table and wrangler ignores it). Keep `binding = "DB"` (the code reads `env.DB`); only replace `database_id`.
+- **Worker domain: first decided 2026-10-15 as `lisensi-arti.invait.id`, MOVED the same night to `lisensi.arti.ai.id`** ([[domain-migration-arti-ai-id]]) (final: it is baked into `tools/arti-license/config.json` shipped to every buyer; changing it later means changing installed clients). Use it wherever `<domain>` appears below. A Worker `custom_domain` needs the `invait.id` zone on Cloudflare nameservers and no existing DNS record for that hostname (wrangler creates the record and certificate on deploy; no manual DNS). Avoid `*.workers.dev` for a paid product.
+- `wrangler.toml`: `routes = [{ pattern = "lisensi.arti.ai.id", custom_domain = true }]` goes at the top level, before the first `[[d1_databases]]` header (below a table header TOML makes it part of that table and wrangler ignores it). Keep `binding = "DB"` (the code reads `env.DB`); only replace `database_id`.
 - A separate Cloudflare account with 2FA (Phase 0 item, researcher doing it).
 - Permission to **remove the unused trial path** in the Worker (`/trial`, CLI `trial`, `trial` tier). It is a code change in the other repo; do not touch it unasked.
 
@@ -65,6 +65,7 @@ In `~/.arti`: `tools/arti-license/config.json` `api_base` to `https://<domain>/v
 - Then the automatic-purchase path in [[license-admin]] (needs Phase 0: gateway, email sender; Worker `extend` must become idempotent on `order_ref`; `resend` must stop emailing from the Worker).
 
 ## Change log
+- 2026-10-16 00:11 — Worker moved to `lisensi.arti.ai.id`, old route removed; see [[domain-migration-arti-ai-id]].
 - 2026-10-15 13:43 — Worker deployed and smoke-tested; recorded the progress, the User-Agent gotcha and what is still open.
 - 2026-10-15 12:28 — Worker domain decided (`lisensi-arti.invait.id`); researcher chose to skip local Step 0 (RAM ~900 MB free) and go straight to the Cloudflare steps; notes on `binding`, `routes` placement and DNS added.
 - 2026-10-15 11:57 — created from the end-of-session planning; the verification script was copied from the session scratchpad to `tests/manual/verify_license.php`.

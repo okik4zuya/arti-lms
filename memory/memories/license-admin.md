@@ -24,7 +24,7 @@ Built 2026-10-15 from the approved plan (`~/.claude/plans/mulai-mengembangkan-me
 
 ## Verified vs not
 - Verified: all of the above with `Http::fake` against the testing DB.
-- **Update 2026-10-15 afternoon:** the Worker is now deployed (`https://lisensi-arti.invait.id/v1`, see [[license-worker-setup]]) and the researcher checked the Filament page locally against it ("Tes filament berhasil"): issue and key modal work. `wrangler dev` still never ran here (RAM), so `tests/manual/verify_license.php` (which needs a local Worker) was **not** run; the remaining scenarios (CLI rotation giving a stale key, lost-response recovery, unreachable Worker then retry, key absent from logs) are covered by `Http::fake` tests only.
+- **Update 2026-10-15 afternoon:** the Worker is now deployed (`https://lisensi.arti.ai.id/v1`, see [[license-worker-setup]]) and the researcher checked the Filament page locally against it ("Tes filament berhasil"): issue and key modal work. `wrangler dev` still never ran here (RAM), so `tests/manual/verify_license.php` (which needs a local Worker) was **not** run; the remaining scenarios (CLI rotation giving a stale key, lost-response recovery, unreachable Worker then retry, key absent from logs) are covered by `Http::fake` tests only.
 - Not run: the full PHPUnit suite after the latest change (PHP ran out of memory with ~900 MB free); `php artisan test --filter=License` passed (33 tests).
 
 ## Learner account block (reworked in phase D)

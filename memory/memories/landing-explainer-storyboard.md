@@ -17,7 +17,7 @@ Concept video, labelled "ilustrasi konsep" on screen; it does not replace the re
 | 14-20 s | Solusi | `memory/` tree (MEMORY.md, todo-list.md, status.md, memories/) drawn line by line; "ARTi menyimpannya sebagai berkas." |
 | 20-26 s | Bertanda sumber | Scratchbook lines with `[OWN]`, `[LIT: key]`, `[SOURCE NEEDED]`; "Setiap klaim punya penanda asal." |
 | 26-34 s | Alur | The staircase redrawn as inline SVG (path draws, labels fade in, blue dot lands on "Submit"); "Amati. Replikasi. Tambah Inovasi." |
-| 34-40 s | Penutup | Wordmark, "Dari ide sampai publish, bersama ARTi.", arti.invait.id |
+| 34-40 s | Penutup | Wordmark, "Dari ide sampai publish, bersama ARTi.", arti.ai.id |
 
 ## Decisions (answered 2026-10-14)
 - Indonesian captions, generated upbeat music (124 bpm, C-G-Am-F), no 1080x1080 ad cut.

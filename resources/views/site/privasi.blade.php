@@ -4,18 +4,19 @@
 @section('description', 'Data apa yang disimpan situs dan aplikasi ARTi, apa yang tetap di komputer Anda, dan apa yang dikirim ke layanan lain.')
 
 {{--
-    LEGAL REVIEW (see memory/memories/legal-review-notes.md): this page states what the system does today.
-    Keep it in step with reality:
+    Basis (researched 2026-10-16): UU 27/2022 Pelindungan Data Pribadi (dasar pemrosesan Pasal 20, hak subjek data
+    Pasal 5-15, pemberitahuan kegagalan pelindungan Pasal 46, transfer lintas negara Pasal 56). Keep it in step with
+    reality:
       - If SITE_DEMO_VIDEO_EMBED_URL is set (an embedded player), the player's host sees visitors: say so below.
-      - If the licensing Worker sends more than the licence key and a hashed machine code, say so below.
+      - If the licensing Worker sends more than it does now (key, hashed machine code, OS name, computer name,
+        license file, ARTi version, hashed IP for rate limits), say so below.
 --}}
 
 @section('content')
 <div class="container container--narrow">
-    <div class="notice">Draf. Teks ini menjelaskan apa yang dilakukan situs dan aplikasi hari ini dan belum ditinjau secara hukum.</div>
-
     <article class="prose">
         <h1>Kebijakan privasi</h1>
+        <p>Kebijakan ini mengikuti UU No. 27 Tahun 2022 tentang Pelindungan Data Pribadi. Pengendali data pribadi adalah pengembang ARTi, yang dapat dihubungi lewat halaman <a href="{{ route('kontak') }}">kontak</a>.</p>
 
         <h2>Data yang disimpan di situs dan aplikasi baca</h2>
         <ul>
@@ -30,7 +31,8 @@
             <li>Pembelian berlangsung lewat WhatsApp, jadi admin menerima nomor dan isi pesan Anda. Itu dipakai untuk memproses pembayaran, mengirim kunci lisensi dan akses e-course, dan menangani permintaan uang kembali.</li>
             <li>Nama dan alamat email pembeli disimpan di server lisensi ARTi dan di aplikasi ARTi, untuk menerbitkan dan mengelola lisensi.</li>
             <li>Bukti pembayaran (tangkapan layar atau berkas transfer, yang dapat memuat data rekening) disimpan di penyimpanan privat, hanya dapat dibuka oleh admin dan petugas dukungan ARTi, dan dipakai untuk memeriksa pembayaran.</li>
-            <li>Saat instalasi, ARTi memeriksa lisensi lewat internet ke server lisensi ARTi. Yang dikirim adalah kunci lisensi dan kode perangkat yang sudah diacak (hash), bukan data mentah komputer Anda.</li>
+            <li>Saat aktivasi, ARTi mengirim ke server lisensi ARTi kunci lisensi Anda, kode perangkat yang sudah diacak (hash, bukan ID asli perangkat), nama sistem operasi, dan nama komputer Anda.</li>
+            <li>Pengecekan berkala (sekitar tiap beberapa hari, saat dashboard dibuka) mengirim berkas lisensi, kode perangkat yang sudah diacak, dan versi ARTi yang terpasang, untuk memeriksa status lisensi dan pembaruan. Data ini hanya dipakai untuk menjalankan lisensi, memberi dukungan, dan memberi tahu pembaruan.</li>
         </ul>
 
         <h2>Daftar email (kabar dari ARTi)</h2>
@@ -57,8 +59,38 @@
         </ul>
         <p>Tautan ke situs lain (YouTube, Chrome Web Store, GitHub) membawa Anda ke layanan yang punya kebijakan privasinya sendiri.</p>
 
+        <h2>Dasar dan tujuan pemrosesan</h2>
+        <ul>
+            <li>Data akun, pembelian, dan lisensi diproses untuk melaksanakan perjanjian dengan Anda: menerbitkan lisensi, memberi akses e-course, memberi dukungan, dan menangani uang kembali.</li>
+            <li>Pengecekan lisensi berkala dan hash alamat IP di server lisensi diproses atas kepentingan sah kami untuk menjaga keamanan dan mencegah penyalahgunaan kunci. Alamat IP tidak disimpan utuh.</li>
+            <li>Daftar email diproses atas persetujuan Anda, dan dapat Anda tarik kapan saja.</li>
+            <li>Data tidak dipakai untuk tujuan lain tanpa persetujuan Anda, dan tidak dijual.</li>
+        </ul>
+
+        <h2>Lama penyimpanan</h2>
+        <ul>
+            <li>Data akun dan lisensi: selama akun atau lisensi aktif, ditambah 2 tahun setelah berakhir untuk dukungan dan penyelesaian sengketa, lalu dihapus atau dianonimkan.</li>
+            <li>Bukti pembayaran dan catatan transaksi: selama kewajiban pembukuan dan perpajakan, umumnya 10 tahun.</li>
+            <li>Daftar email: sampai Anda berhenti berlangganan.</li>
+        </ul>
+
+        <h2>Hak Anda</h2>
+        <p>Anda berhak mengetahui data apa yang kami simpan dan meminta salinannya, memperbaiki data yang keliru, meminta data dihapus atau pemrosesannya dihentikan atau dibatasi, menarik persetujuan, mengajukan keberatan, dan menuntut ganti rugi sesuai UU PDP. Ajukan lewat halaman <a href="{{ route('kontak') }}">kontak</a>. Kami menanggapi tanpa penundaan yang tidak wajar. Data yang wajib kami simpan menurut hukum (misalnya catatan pembayaran) tidak dapat dihapus sebelum jangka waktunya habis.</p>
+
+        <h2>Keamanan dan kebocoran data</h2>
+        <p>Akses ke data pembeli dibatasi untuk admin dan petugas dukungan, kunci lisensi disimpan terenkripsi atau sebagai hash, bukti pembayaran disimpan di penyimpanan privat, dan sandi disimpan sebagai hash. Bila terjadi kegagalan pelindungan data pribadi, kami memberi tahu Anda secara tertulis sesuai batas waktu dan ketentuan UU PDP.</p>
+
+        <h2>Penyedia layanan dan transfer ke luar negeri</h2>
+        <p>Sebagian layanan dijalankan penyedia di luar negeri, yaitu server lisensi (Cloudflare), pengiriman email, dan Anthropic untuk pemrosesan oleh Claude Code. Kami memakai penyedia yang menerapkan pelindungan data yang memadai, dan hanya mengirim data yang dibutuhkan untuk layanan itu.</p>
+
+        <h2>Anak-anak</h2>
+        <p>ARTi ditujukan untuk peneliti dan mahasiswa dewasa. Kami tidak dengan sengaja memproses data anak.</p>
+
         <h2>Penghapusan</h2>
         <p>Untuk meminta akun dan datanya dihapus, hubungi ARTi lewat halaman <a href="{{ route('kontak') }}">kontak</a>.</p>
+
+        <h2>Perubahan</h2>
+        <p>Kebijakan ini dapat diperbarui. Versi terbaru ada di halaman ini, dan perubahan penting kami umumkan lewat email atau pesan WhatsApp.</p>
     </article>
 </div>
 @endsection
