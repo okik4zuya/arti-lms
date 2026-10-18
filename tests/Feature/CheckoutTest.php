@@ -255,14 +255,15 @@ class CheckoutTest extends TestCase
         $this->buy(['email' => 'budi@example.test']);
         $order = Order::firstOrFail();
 
-        $this->get("/beli/selesai/{$order->public_id}")->assertOk()->assertSee('Menunggu pembayaran')->assertSee('Lanjutkan pembayaran')->assertDontSee('budi@example.test');
+        $this->get("/beli/selesai/{$order->public_id}")->assertOk()->assertSee('Menunggu pembayaran')->assertSee('Lanjutkan pembayaran')->assertDontSee('budi@example.test')
+            ->assertSee('http-equiv="refresh"', false);
 
         $order->forceFill(['status' => Order::FULFILLED])->save();
         $this->get("/beli/selesai/{$order->public_id}")->assertOk()->assertSee('Cek email Anda')->assertSee('b***@example.test')
-            ->assertDontSee('ARTI-')->assertDontSee('atur-sandi');
+            ->assertDontSee('ARTI-')->assertDontSee('atur-sandi')->assertDontSee('http-equiv="refresh"', false);
 
         $order->forceFill(['status' => Order::EXPIRED])->save();
-        $this->get("/beli/selesai/{$order->public_id}")->assertSee('sudah ditutup')->assertSee('Beli lagi');
+        $this->get("/beli/selesai/{$order->public_id}")->assertSee('sudah ditutup')->assertSee('Beli lagi')->assertDontSee('http-equiv="refresh"', false);
 
         $this->get('/beli/selesai/arti-tidak-ada')->assertNotFound();
     }

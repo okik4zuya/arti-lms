@@ -71,6 +71,23 @@ class LegacyRoutesTest extends TestCase
             ->assertDontSee('Hidden Course');
     }
 
+    public function test_the_top_bar_has_an_avatar_menu_with_name_email_and_logout(): void
+    {
+        $user = User::factory()->create(['name' => 'Budi Santoso', 'email' => 'budi@example.test']);
+        $course = $this->course();
+        CourseAccess::create(['user_id' => $user->id, 'course_id' => $course->id, 'granted_at' => now()]);
+
+        foreach ([route('dashboard'), '/learn/example-course/01-intro'] as $url) {
+            $this->actingAs($user)->get($url)
+                ->assertOk()
+                ->assertSee('data-user-menu', false)
+                ->assertSee('Budi Santoso')
+                ->assertSee('budi@example.test')
+                ->assertSee('Logout')
+                ->assertSee('Ubah password');
+        }
+    }
+
     public function test_learn_route_requires_authentication(): void
     {
         $this->course();

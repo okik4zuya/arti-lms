@@ -1,4 +1,8 @@
 import './bootstrap';
+import './submit-loading';
+import './user-menu';
+import './password-field';
+import './progress-instant';
 
 const sidebar = document.querySelector('.sidebar');
 const toggle = document.querySelector('.sidebar-toggle');

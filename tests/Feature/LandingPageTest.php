@@ -118,12 +118,25 @@ class LandingPageTest extends TestCase
             ->assertSee('Tonton di YouTube');
     }
 
-    public function test_header_has_a_mobile_menu_with_a_short_buy_label(): void
+    public function test_header_has_a_mobile_menu_and_no_buy_button(): void
+    {
+        $html = $this->get('/')
+            ->assertSee('class="nav-menu"', false)
+            ->assertSee('nav-menu__account', false)
+            ->assertDontSee('header-cta', false)
+            ->getContent();
+
+        // The first "Beli sekarang" on the page is the hero button, not a header one.
+        $header = substr($html, strpos($html, '<header'), strpos($html, '</header>') - strpos($html, '<header'));
+        $this->assertStringNotContainsString('Beli sekarang', $header);
+    }
+
+    public function test_the_hero_offers_a_free_try_that_jumps_to_the_free_section(): void
     {
         $this->get('/')
-            ->assertSee('class="nav-menu"', false)
-            ->assertSee('cta-short', false)
-            ->assertSee('nav-menu__account', false);
+            ->assertSee('href="#coba-gratis"', false)
+            ->assertSee('Coba gratis')
+            ->assertSee('id="coba-gratis"', false);
     }
 
     public function test_pages_carry_a_social_preview_image_that_exists(): void
@@ -152,6 +165,22 @@ class LandingPageTest extends TestCase
             $response->assertSee('images/landing/'.$file, false);
             $this->assertFileExists(public_path('images/landing/'.$file));
         }
+    }
+
+    public function test_landing_highlights_word_with_zotero_fields_without_a_rival_claim(): void
+    {
+        $this->get('/')
+            ->assertSee('ARTi mengeluarkan berkas Word yang sudah berisi field Zotero.')
+            ->assertSee('Butuh Zotero di Word.')
+            ->assertDontSee('Tidak ada chat AI');
+    }
+
+    public function test_landing_states_the_figure_pain_and_its_limit(): void
+    {
+        $this->get('/')
+            ->assertSee('<strong>gambarnya terlalu AI</strong>, jadi ragu memasukkan ke naskah.', false)
+            ->assertSee('Gambar dari data, bukan dari imajinasi AI')
+            ->assertSee('Bukan untuk foto atau ilustrasi bebas.');
     }
 
     public function test_landing_makes_no_first_claim_and_no_fabricated_proof(): void

@@ -4,10 +4,10 @@ description: Written plan for automatic purchases (gateway, orders, webhook, Ful
 metadata:
   type: project
   created: 2026-10-18 14:15
-  updated: 2026-10-18 17:10
+  updated: 2026-10-18 19:41
 ---
 
-Plan stage of the session described in [[automatic-purchase-prompt]]. **Nothing below is built.** Builds on [[license-admin]], [[license-admin-roadmap]], [[list-building]], [[r2-storage]], [[legal-review-notes]]. Worker side: `~/.arti/memory/memories/licensing-update-plan.md`.
+Plan stage of the session described in [[automatic-purchase-prompt]]. **The sections "Verified", "Architecture" and "Decisions pending" are the original plan; what was built is under "Built 2026-10-18", "Gateway abstraction" and "Sandbox 2026-10-18 (evening)" below.** Builds on [[license-admin]], [[license-admin-roadmap]], [[list-building]], [[r2-storage]], [[legal-review-notes]]. Worker side: `~/.arti/memory/memories/licensing-update-plan.md`.
 
 ## Verified in the code (2026-10-18)
 - No password-reset routes exist; `config/auth.php` has broker `users` (table `password_reset_tokens`, expire 60, throttle 60). Login view has no "Lupa password?" link. `AuthController` only has create/store/destroy.
@@ -58,6 +58,13 @@ Replaces editing `config/site.php` (`offer.price_normal`, `price_launch`, `launc
 ## Gateway abstraction built 2026-10-18 (later the same day)
 Midtrans is the researcher's gateway (Xendit needs a NIB). `PaymentGateway` interface with two drivers, `MidtransClient` (Snap create, Status API, `signature_key` check, status normalisation) and `XenditClient`; `PaymentGateways` picks `PAYMENT_GATEWAY` (default `midtrans`) for new orders and an order's own gateway (`orders.gateway`) for reconcile; `PaymentGatewayException` base; webhook routes `/webhooks/midtrans` (new) and `/webhooks/pembayaran` (Xendit). `SettleInvoice`, quota, fulfilment, refund and reconcile are unchanged: both drivers return the same normalised invoice array. For Midtrans `orders.gateway_ref` is the order's public id (lookups are by `order_id`). Buyer-facing texts name the active gateway (`/beli`, status page, `/syarat`, `/privasi` with the company name). Tests: `MidtransGatewayTest` (21), Xendit tests pin `services.payments.driver` to `xendit`. Individual-account payment methods are in [[purchase-production-checklist]]. **Not verified:** a real Snap call and a real sandbox notification (the researcher's sandbox key), and that Snap accepts the `callbacks.pending` and `callbacks.error` fields as sent.
 
+## Sandbox 2026-10-18 (evening): first real run and the changes it caused
+- **Verified with the real Midtrans sandbox (ngrok tunnel):** Snap accepts our `callbacks`; card payment, notification, `paid` then `fulfilled`, learner account, licence (against the production Worker) and the purchase mail all worked; set-password link, login and dashboard worked. Gateway choice stays **Midtrans**; **Duitku is the recorded fallback** ([[duitku-fallback]]). Setup and findings: [[purchase-production-checklist]] section 5b.
+- **Set-password page:** one rule hint at the top ("Syarat password: ..."), no `minlength` attribute (the browser's English tooltip came first), one combined server check with the single message "Password belum memenuhi syarat di atas." (Laravel's `Password` rule reported length first and numbers later).
+- **Mails and WhatsApp:** the set-password link is also printed as copy-paste text under the button (purchase and reset mails); the terminal step (`arti-license activate`) and the direct installer link are gone: both mails and both WhatsApp templates say "open the Download section of your course, run the installer, enter the key when asked" and `{installer}` now holds the course Download page URL (`PurchaseMail::downloadPageUrl()`). Templates saved in Filament "Pengaturan situs" override the config defaults and must be edited there by hand. A manual licence without a learner account cannot open that page.
+- **Test fixes:** `FulfillOrderTest` orders now set `gateway => 'xendit'` (the column default became `midtrans`).
+- Not built, proposed: a different subject for resent purchase mails (Gmail folds the repeated body).
+
 ## Build order (after approval, kept for reference)
 b) orders + webhook + signature + idempotency + tests with `Http::fake`; c) forgot password + welcome link, then `FulfillOrder` + email; d) WhatsApp; e) checkout + success page; f) quota + amount check; g) refund + reconcile; h) Filament; i) production checklist (`.env` variables, cron `schedule:run`, queue worker supervision, Brevo DKIM/SPF, webhook URL in the gateway dashboard).
 
@@ -70,5 +77,6 @@ b) orders + webhook + signature + idempotency + tests with `Http::fake`; c) forg
 - Product direction: **one-time, lifetime purchase** instead of Rp199.000/year (product adapts later). Consequences recorded: no renewal order type, no reminder mail, Worker `extend order_ref` no longer needed (only `resend silent`), no course-access expiry question, and every "per tahun / satu tahun / Rp16.600 per bulan / setelah satu tahun" claim on the landing, `/syarat`, series mail 4 and tests must be reworded. Price and the meaning of "lifetime" still to be answered.
 
 ## Change log
+- 2026-10-18 19:41 — sandbox run, password-page UX, copy-paste links, installer link and terminal step removed from mails and WhatsApp.
 - 2026-10-18 15:40 — built (see "Built 2026-10-18").
 - 2026-10-18 14:15 — created (plan stage, no code).

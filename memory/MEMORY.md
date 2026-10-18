@@ -5,7 +5,7 @@ metadata:
   type: project
   tier: T0
   created: 2026-09-08 21:36
-  updated: 2026-10-18 16:40
+  updated: 2026-10-18 21:54
 ---
 
 # arti-lms — Memory Index
@@ -27,8 +27,8 @@ metadata:
 - [Landing page copy](memories/landing-page-copy.md) — draft v1 of the Indonesian copy, section by section, with a fact-check list
 - [ARTi PDF app facts](memories/artipdf-landing-facts.md) — standalone PDF GUI for the free section: release state (v1.0.6 public, 1.0.7 unreleased), features, unsigned installer, claims to avoid
 - [Landing: SciPeek and ARTi PDF pages](memories/landing-scipeek-artipdf.md) — concept for /scipeek and /artipdf, keyword evidence, decisions, prerequisites; both pages built
-- [Landing finalisation prompt](memories/landing-finalisation-prompt.md) — the ready-to-paste prompt for the next session (finalise every landing-related page)
-- [Redis setup](memories/redis-setup.md) — local Redis (Laragon, Predis, DBs 10/11, own prefix) for cache/session/queue, how it was checked, production still open
+- [Landing finalisation prompt](memories/landing-finalisation-prompt.md) — ready-to-paste prompt for the next session: brainstorm first, then landing copywriting evaluated with the reptilian-brain (six stimuli) concept
+- [Redis setup](memories/redis-setup.md) — Redis (Laragon, Predis, DBs 10/11, own prefix) for cache, session, queue and the course content cache; opcache benchmark; 2026-10-18 back on in dev; production still open
 - [Page speed](memories/page-speed.md) — what was measured and optimised on the public site, the `public/hot` measuring pitfall, results, and what is still unverified
 - [Contact and WhatsApp](memories/contact-whatsapp.md) — floating button opens the contact panel (dialog), /kontak as fallback, number editable in Filament over .env, gotchas
 - [License admin page](memories/license-admin.md) — Filament license issuing (A+: Worker enforces, Laravel keeps the record + encrypted key), what is verified, MFA/backup prerequisites, path to automatic purchases
@@ -41,8 +41,10 @@ metadata:
 - [Automatic purchase prompt](memories/automatic-purchase-prompt.md) — the ready-to-paste prompt for the next session: payment gateway, learner account, license key, email and WhatsApp delivery, decisions to discuss first, hard rules
 - [Automatic purchase plan](memories/automatic-purchase-plan.md) — what was built 2026-10-18 (Midtrans/Xendit gateway driver, orders, webhook, FulfillOrder, set-password link, forgot-password, quota, refund, reconcile, Filament pricing/promo), garansi mention list, decisions taken
 - [Worker changes spec](memories/worker-changes-spec.md) — hand-over for the Worker repo: silent resend, months 1000, optional idempotent extend, client "Lifetime" label
-- [Purchase production checklist](memories/purchase-production-checklist.md) — env variable names, migrations, cron, Xendit dashboard, Brevo, sandbox end-to-end steps
-- [Next-session prompt](memories/next-session-prompt.md) — ready-to-paste prompt for the follow-up session: understand the context, then brainstorm (sandbox result, WhatsApp provider, legal review, product side, production)
+- [Purchase production checklist](memories/purchase-production-checklist.md) — env variable names (mail scheme/From gotchas), migrations, cron, Midtrans dashboard (Settings, Payment), Brevo, sandbox steps and the 2026-10-18 ngrok run (5b)
+- [Next-session prompt](memories/next-session-prompt.md) — purchase brainstorm prompt, deferred behind the landing copywriting session (sandbox result, WhatsApp provider, legal review, product side, production)
 - [Duitku fallback](memories/duitku-fallback.md) — backup gateway if Midtrans rejects the account or category: individual requirements (no NIB, NPWP yes), fees, API quirks (status-check rate limit), support questions; not built
+- [Mayar fallback](memories/mayar-fallback.md) — Mayar.id vs Midtrans: fees (about 3x on QRIS), NPWP optional for individuals, API gaps (no redirect/order id/webhook signature documented), questions for support; saved, not pursued
+- [Learner app UX](memories/learner-app-ux.md) — 2026-10-18 night: empty-dashboard bug and cause, avatar menu, spinner, password UX, instant mark-complete, prev/next, resume card, Redis content cache, headless Chrome checking recipe, ideas not built
 - [PHP binary and shell notes](memories/php-binary-and-shell.md) — php path for artisan/tests, Bash heredoc and CRLF gotchas
 - [Landing explainer storyboard](memories/landing-explainer-storyboard.md) — the 40 s explainer: 7 scenes, build and render recipe, installed on the landing page

@@ -37,7 +37,7 @@
             }, true);
         })();
     </script>
-    @vite(['resources/css/site.css'])
+    @vite(['resources/css/site.css', 'resources/js/submit-loading.js'])
     @stack('head')
 </head>
 <body>

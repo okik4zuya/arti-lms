@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Support\CourseContent;
 use Illuminate\Http\Request;
-use Symfony\Component\Yaml\Yaml;
 
 class DashboardController extends Controller
 {
@@ -23,22 +23,28 @@ class DashboardController extends Controller
             ->get()
             ->pluck('course')
             ->map(function ($course) use ($request) {
-                $manifestPath = resource_path("content/{$course->slug}/manifest.yaml");
-                $subchapters = [];
-
-                if (is_file($manifestPath)) {
-                    $manifest = Yaml::parseFile($manifestPath);
-                    $subchapters = $this->flattenSubchapters($manifest);
-                }
+                $subchapters = $this->flattenSubchapters(app(CourseContent::class)->manifest($course->slug, false));
 
                 $course->firstSubchapterSlug = $subchapters[0]['slug'] ?? null;
 
-                $completedCount = $request->user()
+                $completedSlugs = $request->user()
                     ->progress()
                     ->where('course_id', $course->id)
                     ->whereNotNull('completed_at')
                     ->whereIn('subchapter_slug', array_column($subchapters, 'slug'))
-                    ->count();
+                    ->pluck('subchapter_slug');
+                $completedCount = $completedSlugs->count();
+
+                // "Lanjutkan belajar": the first subchapter, in course order, that is not marked complete yet.
+                $next = collect($subchapters)->first(fn ($subchapter) => ! $completedSlugs->contains($subchapter['slug']));
+                $course->resumeSlug = $next['slug'] ?? $course->firstSubchapterSlug;
+                $course->resumeTitle = $next['title'] ?? null;
+                $course->resumeState = match (true) {
+                    $subchapters === [] => 'empty',
+                    $next === null => 'done',
+                    $completedCount === 0 => 'start',
+                    default => 'continue',
+                };
 
                 $course->totalSubchapters = count($subchapters);
                 $course->completedSubchapters = $completedCount;

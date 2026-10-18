@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccountPasswordController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\FreeChapterController;
 use App\Http\Controllers\LicenseProofController;
@@ -75,7 +76,9 @@ Route::group(array_filter(['domain' => config('app.domains.main')]), function ()
     });
 
     // Forgot password. The reset link is signed (token + email + broker) and is also the first link of a purchase.
-    Route::middleware('guest')->group(function () {
+    // Not behind `guest`: a browser still signed in as another account would be bounced to that account's dashboard
+    // (a buyer saw an empty "My Courses" of the wrong account). The answer is the same for everyone, so it leaks nothing.
+    Route::group([], function () {
         Route::get('lupa-sandi', [PasswordResetController::class, 'request'])->name('password.request');
         Route::post('lupa-sandi', [PasswordResetController::class, 'send'])
             ->middleware(['throttle:forgot-password', 'throttle:forgot-password-email'])->name('password.email');
@@ -111,6 +114,11 @@ Route::group(array_filter(['domain' => config('app.domains.main')]), function ()
         ->middleware(['auth', AuthenticateSession::class])->name('dashboard');
 
     Route::redirect('dashboard', '/app', 301);
+
+    Route::middleware(['auth', AuthenticateSession::class])->group(function () {
+        Route::get('app/password', [AccountPasswordController::class, 'edit'])->name('password.change');
+        Route::post('app/password', [AccountPasswordController::class, 'update'])->middleware('throttle:6,1');
+    });
 
     Route::middleware(['auth', AuthenticateSession::class, 'course.access'])->prefix('learn/{course}')->group(function () {
         Route::get('{slug}', [ContentController::class, 'show'])->name('content.show');

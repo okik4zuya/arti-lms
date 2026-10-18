@@ -1,13 +1,9 @@
 @extends('layouts.site')
 
 @section('title', 'Framework Riset untuk Claude Code, dari Ide sampai Submit')
-@section('description', 'Framework riset berbahasa Indonesia untuk Claude Code: memori antar sesi, referensi asli yang bisa dilacak, dan alur dari gap sampai submit. Termasuk e-course.')
+@section('description', 'Framework riset untuk Claude Code: memori antar sesi, referensi asli yang bisa dilacak, dan alur dari gap sampai submit. Termasuk e-course.')
 
 @section('main_class', 'site-main--flush')
-
-@section('header_cta')
-    <a href="{{ route('checkout') }}" class="btn btn--primary header-cta"><span class="cta-long">Beli sekarang</span><span class="cta-short">Beli</span></a>
-@endsection
 
 @section('content')
 <div class="landing">
@@ -18,16 +14,12 @@
             <p class="hero__eyebrow">ARTi Framework</p>
             <h1>Riset dengan AI yang tidak lupa dan tidak mengarang.</h1>
             <p class="hero__lead">
-                Framework riset berbahasa Indonesia untuk Claude Code, dari ide sampai submit.
+                Framework riset untuk Claude Code, dari ide sampai submit.
                 Dilengkapi e-course untuk mempelajarinya.
             </p>
             <div class="hero__actions">
                 <a href="{{ route('checkout') }}" class="btn btn--primary btn--lg">Beli sekarang</a>
-                @if ($freeChapterUrl)
-                    <a href="{{ $freeChapterUrl }}" class="btn btn--outline btn--lg">Baca bab 1 gratis</a>
-                @else
-                    <a href="#coba-gratis" class="btn btn--outline btn--lg">Coba gratis dulu</a>
-                @endif
+                <a href="#coba-gratis" class="btn btn--outline btn--lg">Coba gratis</a>
             </div>
             <p class="trust-line">Bayar sekali &middot; Windows &middot; Butuh Claude Code</p>
         </div>
@@ -37,23 +29,11 @@
     <section class="landing-section">
         <div class="container">
             <h2>Anda pasti pernah mengalaminya.</h2>
-            <div class="grid grid--3">
-                <div class="panel pain">
-                    <span class="icon-wrap"><x-glyph name="ngawur" /></span>
-                    <h3>Ngawur, tapi yakin</h3>
-                    <p>AI menulis dengan percaya diri. Kutipan terlihat meyakinkan, padahal tidak ada di jurnal yang disebut.</p>
-                </div>
-                <div class="panel pain">
-                    <span class="icon-wrap"><x-glyph name="lupa" /></span>
-                    <h3>Sesi baru, mulai dari nol</h3>
-                    <p>Unggah ulang literatur, jelaskan ulang aturan, ingatkan ulang tujuan. Padahal kemarin sudah.</p>
-                </div>
-                <div class="panel pain">
-                    <span class="icon-wrap"><x-glyph name="ragu" /></span>
-                    <h3>Ragu di setiap tahap</h3>
-                    <p>Apakah idenya sudah dikerjakan orang? Cukup baru untuk jurnal ini? Aman dari tuduhan AI? Lolos atau ditolak?</p>
-                </div>
-            </div>
+            <p>AI menulis kutipan dengan percaya diri, kelihatan meyakinkan, tapi pas dicek ternyata <strong>referensi tidak ada di jurnal</strong> yang disebut, jadi tetap harus dicek satu per satu.</p>
+            <p>Tiap sesi baru AI <strong>mulai dari nol</strong>, jadi literatur harus diunggah ulang, aturan dijelaskan ulang, tujuan diingatkan ulang, padahal kemarin sudah.</p>
+            <p>Minta AI buat gambar, tapi <strong>gambarnya terlalu AI</strong>, jadi ragu memasukkan ke naskah.</p>
+            <p>Output AI memang "bagus", tapi harus <strong>copy paste</strong> lagi ke word, sekalinya bisa buat word, formatnya tidak sesuai, belum lagi merapikan Zotero.</p>
+            <p><strong>Saya juga merasakannya, dan saya membuat solusinya untuk Anda.</strong></p>
         </div>
     </section>
 
@@ -85,7 +65,7 @@
     {{-- 4. Solusi --}}
     <section class="landing-section">
         <div class="container">
-            <h2>Bukan alat baru. Cara kerja di atas Claude Code.</h2>
+            <h2>Solusinya: Claude diajari cara kerja riset, dan diberi alatnya.</h2>
             <p class="section__intro">Claude sudah pintar. Yang belum ia punya adalah cara kerja riset dan perkakas untuk mengerjakannya.</p>
             <figure class="figure figure--model">
                 <img src="{{ asset('images/landing/model-skill-alat.webp') }}" width="1200" height="800" loading="lazy"
@@ -114,6 +94,15 @@
                     <p>Tempat menimbun temuan dan kutipan per bagian naskah, dengan penanda asal setiap klaim. Klaim tanpa sumber tidak boleh masuk naskah.</p>
                 </div>
             </div>
+
+            <h3 class="skills-title">Gambar dari data, bukan dari imajinasi AI</h3>
+            <p>Diagram, grafik, dan tabel dibuat dari data dan spesifikasi yang Anda setujui, bukan digambar mesin. Sumbernya jelas dan hasilnya bisa Anda edit lagi, jadi tidak ada gambar yang Anda ragukan asalnya.</p>
+            <p class="muted">Untuk diagram, grafik, tabel, dan gambar gabungan. Bukan untuk foto atau ilustrasi bebas.</p>
+
+            <h3 class="skills-title">Hebatnya lagi, naskah langsung jadi Word dengan Zotero</h3>
+            <p>Naskah Anda ditulis dan diperbaiki bersama AI, lalu hasilnya langsung jadi berkas Word. Sitasinya sudah berupa field Zotero, tanpa <strong>copy paste</strong>.</p>
+            <p class="callout">ARTi mengeluarkan berkas Word yang sudah berisi field Zotero.</p>
+            <p class="muted">Satu klik Refresh di Zotero, dan format sitasi mengikuti gaya yang Anda pilih. Butuh Zotero di Word.</p>
         </div>
     </section>
 
@@ -217,7 +206,7 @@
                     <img src="{{ asset('images/landing/ecourse.webp') }}" width="1280" height="800" loading="lazy" class="panel__img"
                          alt="Tampilan e-course di aplikasi: bab Sistem Memori dengan daftar bab dan subbab di sisi kiri">
                     <h3><x-glyph name="kursus" class="icon--inline" /> E-course ARTi Framework</h3>
-                    <p>Dibaca langsung di aplikasi, berbahasa Indonesia, ditulis dari pengalaman memakai ARTi untuk naskah sendiri.</p>
+                    <p>Dibaca langsung di aplikasi, ditulis dari pengalaman memakai ARTi untuk naskah sendiri.</p>
                     <p>Bagian Pendahuluan sudah bisa dibaca. Bagian Amati, Replikasi, dan Tambah Inovasi sedang ditulis, dan bab baru yang terbit ikut Anda dapat tanpa biaya tambahan.</p>
                 </div>
                 <div class="panel">
@@ -344,6 +333,7 @@
             <ul class="checklist">
                 <li>Butuh <strong>Claude Code</strong> dan langganan Claude berbayar, dibayar terpisah dari ARTi.</li>
                 <li>Butuh <strong>VS Code</strong>.</li>
+                <li>Untuk sitasi di berkas Word, butuh <strong>Zotero</strong> di Word.</li>
                 <li>Saat ini <strong>Windows saja</strong>.</li>
                 <li><strong>Perlu internet saat instalasi</strong> untuk memeriksa lisensi. Kalau lisensi tidak valid atau sudah dipakai di perangkat lain, instalasi berhenti.</li>
                 <li><strong>E-course belum lengkap.</strong> Bagian Pendahuluan sudah ada, sisanya sedang ditulis.</li>

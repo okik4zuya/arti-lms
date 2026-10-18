@@ -37,26 +37,19 @@
                             value="{{ old('email') }}"
                             class="form-input"
                             required
-                            autofocus
+                            @if (! old('email')) autofocus @endif
                             autocomplete="email"
                         >
                         @error('email')
-                            <span class="form-error">{{ $message }}</span>
+                            <span class="form-error" role="alert">{{ $message }}</span>
                         @enderror
                     </div>
 
                     <div class="form-field">
                         <label for="password" class="form-label">Kata sandi</label>
-                        <input
-                            id="password"
-                            type="password"
-                            name="password"
-                            class="form-input"
-                            required
-                            autocomplete="current-password"
-                        >
+                        <x-password-input id="password" name="password" autocomplete="current-password" :autofocus="(bool) old('email')" />
                         @error('password')
-                            <span class="form-error">{{ $message }}</span>
+                            <span class="form-error" role="alert">{{ $message }}</span>
                         @enderror
                     </div>
 

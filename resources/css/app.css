@@ -4,6 +4,7 @@
    ========================================================================== */
 
 @import './tokens.css';
+@import './loading.css';
 
 /* ---- Reset ---------------------------------------------------------------- */
 *, *::before, *::after { box-sizing: border-box; }
@@ -166,6 +167,86 @@ button, input, select, textarea { font: inherit; color: inherit; }
     font-size: var(--font-size-sm);
 }
 
+/* Avatar menu (resources/views/components/user-menu.blade.php, resources/js/user-menu.js) */
+.user-menu { position: relative; }
+
+.user-menu__button {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    padding: 2px var(--space-1) 2px 2px;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--color-text-muted);
+    cursor: pointer;
+}
+
+.topbar--dark .user-menu__button { color: #b8b8bd; }
+
+.user-menu__button:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+.user-menu__avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    color: var(--color-text-inverse);
+    font-size: var(--font-size-sm);
+    font-weight: 700;
+    line-height: 1;
+}
+
+.user-menu__chevron { transition: transform 0.15s ease; }
+.user-menu__button[aria-expanded="true"] .user-menu__chevron { transform: rotate(180deg); }
+
+.user-menu__panel {
+    position: absolute;
+    top: calc(100% + var(--space-2));
+    right: 0;
+    z-index: 40;
+    width: 260px;
+    max-width: calc(100vw - 2 * var(--space-4));
+    background: var(--color-surface);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+}
+
+.user-menu__panel[hidden] { display: none; }
+
+.user-menu__who {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: var(--space-3) var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.user-menu__name { font-size: var(--font-size-sm); overflow-wrap: anywhere; }
+.user-menu__email { color: var(--color-text-muted); font-size: var(--font-size-xs); overflow-wrap: anywhere; }
+
+.user-menu__item {
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+    padding: var(--space-3) var(--space-4);
+    border-radius: 0;
+    background: transparent;
+    color: var(--color-text);
+    font-weight: 600;
+}
+
+.user-menu__item:hover { background: var(--color-bg); }
+
 .topbar__user small { display: block; color: var(--color-text-muted); font-size: var(--font-size-xs); }
 .topbar--dark .topbar__user small { color: #b8b8bd; }
 
@@ -321,17 +402,15 @@ button, input, select, textarea { font: inherit; color: inherit; }
     width: 100%;
     max-width: 280px;
     text-decoration: none;
-    transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+    transition: box-shadow 0.15s ease, transform 0.15s ease;
 }
 
-.card:hover {
-    background: var(--color-primary-light);
-    border-color: var(--color-primary);
+/* Only a card that is a link reacts to the pointer, and only by lifting; no colour change anywhere. */
+a.card:hover {
     box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
     text-decoration: none;
 }
-
-.card:hover .card__title { color: var(--color-primary-dark); }
 
 .card__image {
     width: 100%;
@@ -445,6 +524,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 
 .progress__fill {
+    display: block; /* a span is inline by default, and an inline box ignores width and height */
     height: 100%;
     background: var(--color-primary);
     border-radius: 999px;
@@ -585,3 +665,194 @@ button, input, select, textarea { font: inherit; color: inherit; }
     color: var(--color-primary-dark);
 }
 .auth-links { margin: var(--space-4) 0 0; font-size: var(--font-size-sm, 0.9rem); }
+
+/* ---- Password field, requirement list --------------------------------------- */
+.password-field { position: relative; }
+.password-field .form-input { padding-right: 2.75rem; }
+
+.password-field__toggle {
+    position: absolute;
+    top: 50%;
+    right: var(--space-2);
+    transform: translateY(-50%);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: none;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--color-text-muted);
+    cursor: pointer;
+}
+
+.password-field__toggle[aria-pressed="true"] { color: var(--color-primary); }
+.password-field__icon--hide,
+.password-field__toggle[aria-pressed="true"] .password-field__icon--show { display: none; }
+.password-field__toggle[aria-pressed="true"] .password-field__icon--hide { display: block; }
+
+.password-rules__title { margin: var(--space-3) 0 var(--space-1); font-size: var(--font-size-sm); }
+
+.password-rules {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+}
+
+.password-rules li::before { content: "○"; display: inline-block; width: 1.25em; }
+.password-rules li.is-met { color: var(--color-success); }
+.password-rules li.is-met::before { content: "✓"; }
+
+/* ---- Dashboard: resume line on the course card, empty state --------------- */
+.card__resume {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-top: var(--space-3);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--color-border);
+    font-size: var(--font-size-sm);
+}
+
+.card__resume-label { font-weight: 700; color: var(--color-primary); }
+.card__resume-title { color: var(--color-text-muted); }
+
+.empty-state { max-width: 560px; }
+.empty-state__title { font-size: var(--font-size-lg); }
+.empty-state__list { color: var(--color-text-muted); font-size: var(--font-size-sm); }
+
+/* ---- Menu items that are links ----------------------------------------------- */
+a.user-menu__item { align-items: center; font-size: var(--font-size-sm); text-decoration: none; }
+a.user-menu__item:hover { text-decoration: none; }
+
+/* ---- Accessibility ------------------------------------------------------------ */
+.skip-link {
+    position: absolute;
+    left: var(--space-2);
+    top: -3rem;
+    z-index: 100;
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    color: var(--color-primary-dark);
+    font-weight: 700;
+}
+.skip-link:focus { top: var(--space-2); }
+
+.btn:focus-visible,
+a.card:focus-visible,
+.password-field__toggle:focus-visible,
+.user-menu__item:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+.content:focus { outline: none; }
+
+@media (max-width: 900px) {
+    /* 44 px touch target for the avatar button */
+    .user-menu__button { padding: 6px 6px 6px 6px; }
+}
+
+/* ---- Previous / next subchapter ------------------------------------------------ */
+.chapter-nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-3);
+    margin-top: var(--space-5);
+}
+
+.chapter-nav__link {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+    padding: var(--space-3) var(--space-4);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    color: var(--color-text);
+    text-decoration: none;
+    transition: box-shadow 0.15s ease;
+}
+
+.chapter-nav__link:hover { box-shadow: var(--shadow-md); text-decoration: none; }
+.chapter-nav__link:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
+.chapter-nav__link--next { grid-column: 2; text-align: right; }
+.chapter-nav__link--next .chapter-nav__label { justify-content: flex-end; }
+
+.chapter-nav__label {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.chapter-nav__title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+}
+
+@media (max-width: 600px) {
+    .chapter-nav { grid-template-columns: 1fr; }
+    .chapter-nav__link--next { grid-column: 1; }
+}
+
+/* ---- Menu: destructive item ----------------------------------------------------- */
+.user-menu__item--danger,
+.user-menu__item--danger:hover { color: var(--color-danger); }
+.user-menu__item--danger:hover { background: #fef2f2; }
+
+/* ---- Course card: the resume line is a quiet second level ---------------------------- */
+.card__resume-label {
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-text-muted);
+}
+
+.card__resume-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--color-text);
+}
+
+/* Phone: course cards use the full width of the content area (the padding of .content stays). */
+@media (max-width: 600px) {
+    .card-grid { grid-template-columns: 1fr; }
+    .card-grid .card { max-width: none; }
+}
+
+/* Course card, slimmer: the resume line is one quiet row under the progress bar, no divider. */
+.card__resume {
+    flex-direction: row;
+    align-items: baseline;
+    gap: var(--space-2);
+    margin-top: var(--space-2);
+    padding-top: 0;
+    border-top: none;
+    font-size: var(--font-size-xs);
+    min-width: 0;
+}
+
+.card__resume-label { flex: none; font-size: 0.6875rem; }
+.card__resume-title { min-width: 0; font-size: var(--font-size-xs); color: var(--color-text-muted); }
+
+/* In a course card the bar sits tight above the resume line (the default margin is for the page-level bar). */
+.card .progress { margin-bottom: 0; }

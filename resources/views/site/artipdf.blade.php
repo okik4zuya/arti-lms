@@ -147,7 +147,7 @@
     <section class="landing-closing">
         <div class="container container--narrow">
             <h2>Bagian dari ARTi.</h2>
-            <p>ARTi PDF menyiapkan bahan bacaan. ARTi sendiri adalah framework riset berbahasa Indonesia untuk Claude Code, dari ide sampai submit, dengan memori antar sesi dan referensi yang bisa dilacak.</p>
+            <p>ARTi PDF menyiapkan bahan bacaan. ARTi sendiri adalah framework riset untuk Claude Code, dari ide sampai submit, dengan memori antar sesi dan referensi yang bisa dilacak.</p>
             <div class="hero__actions hero__actions--center">
                 <a href="{{ route('free.start') }}" class="btn btn--outline btn--lg">Baca bab 1 gratis</a>
                 <a href="{{ route('fitur') }}" class="btn btn--outline btn--lg">Lihat isi ARTi</a>

@@ -4,6 +4,10 @@
 @section('description', 'Status pembelian ARTi Anda.')
 @push('head')
     <meta name="robots" content="noindex">
+    @if ($state === 'pending' && ! $failed)
+        {{-- Re-check every few seconds while the payment is open; it stops by itself once the order is paid or closed. --}}
+        <meta http-equiv="refresh" content="8">
+    @endif
 @endpush
 
 @section('content')
@@ -16,7 +20,7 @@
         @elseif ($state === 'pending' && ! $failed)
             <p class="hero__eyebrow">Menunggu pembayaran</p>
             <h1>Pembayaran belum selesai.</h1>
-            <p class="hero__lead">Bila Anda baru membayar, tunggu beberapa saat lalu muat ulang halaman ini. Bila belum, lanjutkan pembayaran di halaman {{ $gateway->label() }}.</p>
+            <p class="hero__lead">Bila Anda baru membayar, tunggu beberapa saat: halaman ini memeriksa ulang sendiri setiap beberapa detik. Bila belum, lanjutkan pembayaran di halaman {{ $gateway->label() }}.</p>
             @if ($order->checkout_url)
                 <p><a class="btn btn--primary" href="{{ $order->checkout_url }}">Lanjutkan pembayaran</a></p>
             @endif

@@ -30,7 +30,7 @@ Still open from the runbook: Step 10 production Laravel (`.env`, `migrate`, cron
 
 ## Step 1 — decisions needed from the researcher before deploying
 - **Worker domain: first decided 2026-10-15 as `lisensi-arti.invait.id`, MOVED the same night to `lisensi.arti.ai.id`** ([[domain-migration-arti-ai-id]]) (final: it is baked into `tools/arti-license/config.json` shipped to every buyer; changing it later means changing installed clients). Use it wherever `<domain>` appears below. A Worker `custom_domain` needs the `invait.id` zone on Cloudflare nameservers and no existing DNS record for that hostname (wrangler creates the record and certificate on deploy; no manual DNS). Avoid `*.workers.dev` for a paid product.
-- `wrangler.toml`: `routes = [{ pattern = "lisensi.arti.ai.id", custom_domain = true }]` goes at the top level, before the first `[[d1_databases]]` header (below a table header TOML makes it part of that table and wrangler ignores it). Keep `binding = "DB"` (the code reads `env.DB`); only replace `database_id`.
+- `wrangler.toml`: `routes = [{ pattern = "lisensi.arti.ai.id", custom_domain = true }]` goes at the top level, before the first the `d1_databases` table header (below a table header TOML makes it part of that table and wrangler ignores it). Keep `binding = "DB"` (the code reads `env.DB`); only replace `database_id`.
 - A separate Cloudflare account with 2FA (Phase 0 item, researcher doing it).
 - Permission to **remove the unused trial path** in the Worker (`/trial`, CLI `trial`, `trial` tier). It is a code change in the other repo; do not touch it unasked.
 
@@ -38,7 +38,7 @@ Still open from the runbook: Step 10 production Laravel (`.env`, `migrate`, cron
 `~/.arti/python/python.exe C:\Users\user\arti-services\release\gen_keys.py --out C:\Users\user\arti-secrets\prod --pubkeys C:\Users\user\arti-secrets\prod\pubkeys.prod.json --license-kid license-1 --release-kid release-1`. The script refuses repo paths, and **overwrites the `--pubkeys` file**, so never point it at the live `pubkeys.json`. It writes `dev.vars`: rename to `prod.vars`. Keep PEMs + `prod.vars` in a password manager plus an offline copy. Never change `PEPPER` after the first license is issued (all key HMACs would stop matching). Never print these values into chat.
 
 ## Step 3 to 7 — Cloudflare (researcher's terminal, in `licensing-worker`)
-1. `npx wrangler login`; `npx wrangler d1 create arti-licensing`; put the returned `database_id` into `[[d1_databases]]` in `wrangler.toml`.
+1. `npx wrangler login`; `npx wrangler d1 create arti-licensing`; put the returned `database_id` into the `d1_databases` table in `wrangler.toml`.
 2. Add a route to `wrangler.toml`: `routes = [{ pattern = "<domain>", custom_domain = true }]`. Keep `EMAIL_PROVIDER = "outbox"`: stage 1 needs no email (`issue` sends nothing, Laravel reads the key from the response).
 3. `npx wrangler d1 migrations apply DB --remote`.
 4. `npx wrangler secret put ADMIN_TOKEN`, `PEPPER`, `LICENSE_SIGNING_KEY`, `LICENSE_KID` (values from `prod.vars`, pasted at the prompt).

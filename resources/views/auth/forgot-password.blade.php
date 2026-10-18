@@ -17,7 +17,7 @@
             <label for="email" class="form-label">Email</label>
             <input id="email" type="email" name="email" value="{{ old('email') }}" class="form-input" required autofocus autocomplete="email">
             @error('email')
-                <span class="form-error">{{ $message }}</span>
+                <span class="form-error" role="alert">{{ $message }}</span>
             @enderror
         </div>
 

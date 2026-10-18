@@ -92,6 +92,7 @@ class FreeChapterTest extends TestCase
     {
         $this->get('/sitemap.xml')->assertSee(url('/baca/01-2-masalah-utama'), false);
 
-        $this->get('/')->assertSee('Baca bab 1 gratis')->assertSee(route('free.start'), false);
+        // The hero button now jumps to the free section, whose first card links to the chapter.
+        $this->get('/')->assertSee('Baca bab 1')->assertSee(route('free.start'), false);
     }
 }

@@ -5,12 +5,44 @@ metadata:
   type: project
   tier: T0
   created: 2026-09-08 21:36
-  updated: 2026-10-18 16:40
+  updated: 2026-10-18 22:37
 ---
 
+### Learner app UX, content cache and landing tweaks (2026-10-18 night), see [[learner-app-ux]]
+
+- [x] Empty dashboard bug explained (browser signed in as another account) and fixed: `/lupa-sandi` no longer guest-only, set-password signs the browser out, the email is prefilled on login, the dead-link page offers login or logout
+- [x] Avatar menu (name, email, Ubah password, red Logout), spinner on pressed buttons, password eye and live rules, `/app/password`, prev/next subchapter, instant "Tandai selesai", "Lanjutkan belajar" on the card, slim card and working progress bar, empty-state help, status page auto-refresh, skip link, Indonesian labels
+- [x] Rendered course pages, manifests and meta cached in Redis (`CourseContent`, `CONTENT_CACHE_STORE`); tests pin `array`
+- [x] Redis for cache, session and queue switched on in dev ([[redis-setup]])
+- [x] Landing: "Free" badge on the ARTi PDF and SciPeek menu links, header buy button removed, hero "Coba gratis", SciPeek "Lihat demo" and title, "berbahasa Indonesia" dropped, problem section as three narrative paragraphs ([[landing-page-concept]])
+- [x] Mayar.id researched and saved ([[mayar-fallback]]); not pursued
+- [ ] Researcher: look at all of the above in a real browser (dashboard, avatar menu, `/app/password`, course page prev/next and instant mark, `/beli` spinner, set-password page, landing header badge, phone menu); the JavaScript was only covered by markup tests
+- [ ] Researcher: `npm run build` before any deploy; decide Redis for production (own instance, or leave `CONTENT_CACHE_STORE` empty)
+- [ ] Researcher: `php artisan queue:clear redis` if the 2 waiting `SeriesMail` jobs must not be sent before `queue:work` is started
+- [ ] Optional UX, not built: undo "Tandai selesai", highlight "Selanjutnya" after marking, prefetch the next subchapter, SPA-style navigation (Turbo/htmx); the dashboard "Download ARTi" and licence block was declined for now
+- [ ] Align the other "Baca bab 1 gratis" buttons (`/scipeek`, `/artipdf`, `/fitur`, 404, series mail 4) and the "wujud" wording (home `#wujud`, `/fitur` link, series mail 2) if wanted
+- [x] 2026-10-18 22:15: pain 3 replaced (researcher's "copy paste" sentence), arti-docx/Zotero highlight block in section 4 with callout, section 4 title changed, Zotero line in requirements and `/fitur` ([[landing-page-concept]])
+- [x] 2026-10-18 22:30: fourth pain (figures "terlalu AI") and section-4 block "Gambar dari data, bukan dari imajinasi AI" added; optional image of a real ARTi-figure diagram still undecided
+- [x] 2026-10-18 22:37: problem section rewritten in the researcher's voice, closing line "Saya juga merasakannya, ..." added (bold)
+- [ ] Decide: casual replacement for the h2 "Anda pasti pernah mengalaminya."; unify "kutipan" vs "referensi" in pain 1
+- [ ] Researcher: look at the new section-4 block and problem section in a real browser and on a phone
+- [ ] Image of a Word file with Zotero fields for the new block (LibreOffice preview hides fields, may be composed by hand); show it to the researcher before building
+- [ ] Check the compare-table row "Menulis dan mengedit berkas naskah" (Claude AI: "Tidak, harus disalin") against current Claude AI abilities; no rival claims without evidence
+- [ ] Answer the persona question (dosen new to Claude Code vs disappointed AI user; default assumed: disappointed) before the reptilian-brain table
+- [ ] **Next session:** continue landing finalisation from step 1: ethics boundaries, then the six-stimulus table per section (hero first), one section per round ([[landing-finalisation-prompt]])
+- [ ] **Deferred:** the purchase brainstorm (agenda items 1 to 6) in [[next-session-prompt]]
 ### Automatic purchase (built 2026-10-18, all uncommitted), see [[automatic-purchase-plan]]
 
-- [ ] Next session: paste the prompt in [[next-session-prompt]] (understand the context, then brainstorm; build nothing until agreed)
+- [x] Understand-then-brainstorm session done 2026-10-18 ([[next-session-prompt]]); sandbox run, UX fixes and Duitku fallback came out of it ([[automatic-purchase-plan]])
+- [x] Midtrans sandbox end to end (card payment, notification, fulfilment, mail, set-password, login) worked 2026-10-18; recipe and gotchas in [[purchase-production-checklist]] 5b
+- [x] Set-password page: rules stated once, one combined error; copy-paste link under the button in purchase and reset mails; terminal step and installer link removed from the purchase mail and WhatsApp templates
+- [ ] Researcher: finish the sandbox steps (replay a notification, stopped queue then `orders:reconcile`, real forgot-password, Download page after login), then revoke every test licence with "Kembalikan dana" (they are on the production Worker) and delete test orders/users
+- [ ] Researcher: restart the queue worker after any `.env` change; set `MAIL_FROM_ADDRESS` on `arti.ai.id`, `MAIL_SCHEME` empty on port 587
+- [ ] Researcher: if the WhatsApp templates were ever edited in Filament "Pengaturan situs", update them by hand (they override the new defaults that dropped the terminal step and installer link)
+- [ ] Researcher: check the merchant name shown on Snap (Midtrans dashboard, Snap Checkout / General Settings; the old name still showed in the sandbox)
+- [ ] Researcher: add `permissions.deny` rules for `.env` in `.claude/settings.json` (`.claudeignore` exists but Claude Code ignores it)
+- [ ] Decide: different subject for resent purchase mails (Gmail folds the repeated body behind "•••"); also add the copy-paste link to the `confirm-subscription` mail if wanted
+- [ ] Backup gateway: Duitku researched, not built ([[duitku-fallback]]); ask support the five questions there only if Midtrans refuses the account
 
 - [x] Orders, Xendit checkout (`/beli`), signed idempotent webhook, `FulfillOrder`, purchase mail, WhatsApp stage (driver `none`), atomic launch quota, refund, `orders:reconcile`, Filament "Pesanan"
 - [x] Forgot password (`/lupa-sandi`, `/atur-sandi`), one-time set-password links (60 min / 48 h), admin and support excluded, `admin:reset-password` and `admin:reset-mfa`
@@ -26,13 +58,14 @@ metadata:
 - [ ] Researcher: confirm the lifetime prices (kept Rp99.000 then Rp199.000, one-time) and read the new copy on `/`, `/fitur`, series mail 4 and the purchase mail
 - [ ] WhatsApp provider: brainstorm in a separate session (Cloud API with a dedicated number, or a third-party gateway); then a driver replaces `none`
 - [x] Midtrans driver built and tested with `Http::fake` (gateway interface, Snap, Status API, signature check); Xendit kept as a second driver
-- [ ] Researcher: Midtrans sandbox server key into `.env` (`MIDTRANS_SERVER_KEY`, `MIDTRANS_IS_PRODUCTION=false`), Payment Notification URL `<tunnel>/webhooks/midtrans` in the sandbox dashboard; ask Midtrans support whether an individual account may sell an e-course and software licences and whether NPWP is needed for QRIS/VA/e-wallet; production activation needs KTP and NPWP ([[purchase-production-checklist]])
-- [ ] Researcher: run the Midtrans sandbox end-to-end steps and the real-mail forgot-password test ([[purchase-production-checklist]] section 5); check that Snap accepts the redirect `callbacks` we send
+- [x] Midtrans sandbox server key and notification URL set (sandbox run 2026-10-18)
+- [ ] Researcher: ask Midtrans support whether an individual account may sell an e-course and software licences and whether NPWP is needed for QRIS/VA/e-wallet; production activation needs KTP and NPWP ([[purchase-production-checklist]])
+- [x] Midtrans sandbox end to end ran 2026-10-18 and Snap accepts the redirect `callbacks`; the replay, reconcile and real forgot-password steps are the open item at the top of this section
 - [ ] Researcher, Worker repo: silent `resend`, check `months: 1000`, optional idempotent `extend`; client shows "Lifetime" ([[worker-changes-spec]])
 - [ ] Researcher, production: migrate, `permissions:sync`, env variables, Xendit callback URL, Cloudflare skip rule, `ADMIN_MFA_REQUIRED=true` ([[purchase-production-checklist]])
 - [ ] Look at the new pages in a real browser: `/beli`, `/beli/selesai/...`, `/lupa-sandi`, `/atur-sandi/...`, Filament Pesanan, Harga, Promo (only HTTP/Livewire tested)
 - [ ] Review `LicenseIssuanceResource` row action labels after the switch to links; `README` mentions
-- [ ] Learner change-password page for signed-in users (`/app/password`) still not built; "Lupa password?" covers the need
+- [x] Learner change-password page for signed-in users (`/app/password`) still not built; "Lupa password?" covers the need — built 2026-10-18 ([[learner-app-ux]])
 - [x] "Download" section in `resources/content/arti-framework` (`download-installer`, behind login and course access, link to the installer on the public CDN); deployed by the researcher 2026-10-18; its version, link, size and SHA-256 are updated per release
 
 ### Landing page (arti.ai.id), see [[landing-page-concept]]
@@ -94,7 +127,8 @@ metadata:
 - [x] Welcome series (4 emails, hourly scheduler, off by default), broadcasts in Filament, one-click unsubscribe headers and the two-step unsubscribe page, all tested [[list-building]]
 - [ ] Read the four series emails in `resources/views/mail/series/` (or send yourself a test) and edit the copy; only then set `MAIL_SERIES_ENABLED=true` in production
 - [ ] Production: run `php artisan migrate` (two new migrations), make sure `php artisan schedule:run` is on cron (hourly series, daily license sync) and a queue worker is supervised
-- [ ] Fix the dev Redis (`-MISCONF`, see [[list-building]]), then `php artisan queue:clear redis` and re-test the series/broadcast through the Redis queue
+- [x] Dev Redis writes work again (checked 2026-10-18, no `-MISCONF`)
+- [ ] `php artisan queue:clear redis` (2 `SeriesMail` jobs waiting), then re-test the series and a broadcast through the Redis queue and Brevo
 - [ ] Send a real test of a series email and a broadcast through Brevo and look at it in Gmail (and a phone)
 
 ### Landing finalisation (next session), prompt in [[landing-finalisation-prompt]]
@@ -208,7 +242,7 @@ chapter (not the full imagined scope).
     // ... 180 lines omitted
   from `resources/inbox/260906_OK_narasi-ai-bar-bar-dan-analogi-alzheimer.md`. Renumbered every
 // ... 179 more lines (total: 272)
-- [ ] Learner change-password page (`/app/password`: current, new, confirm; link on the dashboard; one sentence in the WhatsApp template); proposed 2026-10-15, researcher has not answered
+- [x] Learner change-password page (`/app/password`: current, new, confirm; link on the dashboard; one sentence in the WhatsApp template); proposed 2026-10-15, researcher has not answered — built 2026-10-18 ([[learner-app-ux]])
 
 ### Domain migration arti.invait.id → arti.ai.id [[domain-migration-arti-ai-id]]
 - [x] Steps 1-8 done 2026-10-15/16: DNS, shared VPS vhost, Cloudflare rules, `cdn.arti.ai.id`, `lisensi.arti.ai.id`, Brevo, prod `.env`, end-to-end tests, 301 redirect, old Worker route removed, OG image and explainer re-rendered

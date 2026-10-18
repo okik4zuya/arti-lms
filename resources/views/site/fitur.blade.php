@@ -6,10 +6,6 @@
 @section('description', 'Memori per topik, referensi asli, scratchbook, 10 skill per tahap riset, dan alat pendukungnya: apa saja isi ARTi dan seperti apa kerjanya di atas Claude Code.')
 @section('main_class', 'site-main--flush')
 
-@section('header_cta')
-    <a href="{{ route('checkout') }}" class="btn btn--primary header-cta"><span class="cta-long">Beli sekarang</span><span class="cta-short">Beli</span></a>
-@endsection
-
 @section('content')
 <div class="landing">
 
@@ -173,7 +169,7 @@
                         ['arti-jfinder', 'Basis data Scimago SJR untuk mencari dan membandingkan jurnal.'],
                     ],
                     'Penulisan dan penyuntingan' => [
-                        ['arti-docx', 'Naskah Markdown jadi berkas Word <code>.docx</code> yang rapi.'],
+                        ['arti-docx', 'Naskah Markdown jadi berkas Word <code>.docx</code> yang rapi, dengan sitasi berupa field Zotero. Klik Refresh di Zotero agar format sitasi mengikuti gaya yang Anda pilih. Butuh Zotero di Word.'],
                         ['arti-pdf', 'Markdown jadi PDF ukuran A4, dipakai skill untuk menyiapkan dokumen. Berbeda dari aplikasi ARTi PDF di bagian "Kenalan dulu" halaman utama.'],
                         ['arti-annotate', 'Komentar dan saran suntingan langsung di berkas Markdown: baca, terapkan, terima, batalkan, atau bersihkan.'],
                     ],
@@ -242,7 +238,7 @@
             <h2>E-course pendampingnya.</h2>
             <div class="panel panel--muted">
                 <span class="icon-wrap"><x-glyph name="kursus" /></span>
-                <p>Seluruh alur ini dijelaskan dalam e-course berbahasa Indonesia yang dibaca langsung di aplikasi.</p>
+                <p>Seluruh alur ini dijelaskan dalam e-course yang dibaca langsung di aplikasi.</p>
                 <p><strong>Statusnya belum lengkap.</strong> Bagian Pendahuluan sudah bisa dibaca. Bagian Amati, Replikasi, dan Tambah Inovasi sedang ditulis, dan bab baru yang terbit ikut Anda dapat tanpa biaya tambahan.</p>
             </div>
         </div>

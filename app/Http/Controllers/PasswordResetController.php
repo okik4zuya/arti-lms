@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Actions\Account\IssueSetPasswordLink;
 use App\Mail\ResetPasswordMail;
 use App\Models\User;
+use App\Rules\StrongPassword;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Password;
@@ -75,11 +77,7 @@ class PasswordResetController extends Controller
         $request->validate([
             'password' => [
                 'required', 'confirmed',
-                function (string $attribute, mixed $value, \Closure $fail) {
-                    if (mb_strlen((string) $value) < 10 || ! preg_match('/\pL/u', (string) $value) || ! preg_match('/\pN/u', (string) $value)) {
-                        $fail('Password belum memenuhi syarat di atas.');
-                    }
-                },
+                new StrongPassword,
                 'not_in:'.$user->email,
             ],
         ], [
@@ -105,7 +103,16 @@ class PasswordResetController extends Controller
             return redirect()->route('password.request')->withErrors(['email' => 'Tautan tidak berlaku lagi. Minta tautan baru di bawah.']);
         }
 
-        return redirect()->route('login')->with('status', 'Password sudah diatur. Silakan masuk dengan password baru.');
+        // Whoever is signed in in this browser (the same account or another one) is signed out, so the login page
+        // is shown instead of being bounced to a dashboard.
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        // The address is filled in on the login page, so only the new password has to be typed (no automatic sign-in).
+        return redirect()->route('login')
+            ->with('status', 'Password sudah diatur. Silakan masuk dengan password baru.')
+            ->withInput(['email' => $user->email]);
     }
 
     /** The account the link is for, or null when the token is wrong, used, expired, or the account may not use links. */

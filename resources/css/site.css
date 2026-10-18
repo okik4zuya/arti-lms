@@ -4,6 +4,7 @@
    ========================================================================== */
 
 @import './tokens.css';
+@import './loading.css';
 
 *, *::before, *::after { box-sizing: border-box; }
 
@@ -76,7 +77,6 @@ ul, ol { margin: 0 0 var(--space-4); padding-left: 1.25em; }
 .site-nav a:not(.btn):hover { color: var(--color-primary); text-decoration: none; }
 .site-nav a[aria-current="page"] { color: var(--color-text); border-bottom: 2px solid var(--color-primary); }
 
-.header-cta .cta-short { display: none; }
 
 /* Mobile menu: a <details> element, no JavaScript. Hidden on wide screens. */
 .nav-menu { display: none; }
@@ -142,11 +142,6 @@ ul, ol { margin: 0 0 var(--space-4); padding-left: 1.25em; }
     .site-header__account { display: none; }
     .nav-menu { display: block; }
     .site-header__right { gap: var(--space-2); }
-}
-
-@media (max-width: 560px) {
-    .header-cta .cta-long { display: none; }
-    .header-cta .cta-short { display: inline; }
 }
 
 /* ---- Buttons (same look as the LMS buttons) --------------------------------- */
@@ -354,6 +349,17 @@ ul, ol { margin: 0 0 var(--space-4); padding-left: 1.25em; }
     border-left: 3px solid var(--color-primary);
     background: var(--color-primary-light);
     border-radius: var(--radius-sm);
+}
+
+.callout {
+    margin: var(--space-4) 0;
+    padding: var(--space-3) var(--space-4);
+    border-left: 3px solid var(--color-primary);
+    background: var(--color-primary-light);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-lg, 1.125rem);
+    font-weight: 700;
+    color: var(--color-primary-dark);
 }
 
 .tagline { margin: var(--space-5) 0 0; font-size: var(--font-size-xl); font-weight: 700; color: var(--color-primary-dark); }
@@ -634,3 +640,38 @@ form[data-subscribe] [hidden] { display: none !important; }
 .thanks-dialog__offer { margin: 0 0 var(--space-3); font-weight: 600; }
 .thanks-dialog__close { margin-top: var(--space-3); }
 .sha { word-break: break-all; font-size: var(--font-size-sm); }
+
+/* ---- "Free" badge on the ARTi PDF and ARTi SciPeek menu links ----------------------------- */
+/* A small pill pinned to the top right corner of the link text, overlapping its last letters from above. */
+.nav-badge {
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+    padding: 1px 6px;
+    border-radius: 999px;
+    background: #25d366; /* the same green as the floating WhatsApp button (.wa-float) */
+    color: #fff;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    line-height: 1.4;
+    text-transform: uppercase;
+}
+
+.site-nav a:has(> .nav-badge) { position: relative; margin-right: var(--space-3); }
+.site-nav .nav-badge { position: absolute; top: -9px; right: -20px; }
+
+/* In the phone menu the links are full-width rows, so the badge follows the text instead. */
+.nav-menu__panel .nav-badge { margin-left: var(--space-2); }
+
+/* One soft sweep of light shortly after the page opens; the reduced-motion rule above shortens it to nothing. */
+.nav-badge::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(105deg, transparent 30%, rgba(255, 255, 255, 0.7) 50%, transparent 70%);
+    transform: translateX(-120%);
+    animation: nav-badge-shine 1.1s ease-out 1.2s 1 both;
+}
+
+@keyframes nav-badge-shine { to { transform: translateX(120%); } }

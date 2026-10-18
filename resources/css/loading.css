@@ -1,0 +1,25 @@
+/* Busy state for a pressed submit button (set by resources/js/submit-loading.js). Shared by the LMS and the public site. */
+.btn.is-loading {
+    position: relative;
+    cursor: progress;
+    pointer-events: none;
+    opacity: 0.85;
+}
+
+.btn.is-loading::before {
+    content: "";
+    flex: none;
+    width: 1em;
+    height: 1em;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: btn-spin 0.7s linear infinite;
+}
+
+@keyframes btn-spin { to { transform: rotate(360deg); } }
+
+/* A slower spin instead of none: a frozen ring would look like a hung page. */
+@media (prefers-reduced-motion: reduce) {
+    .btn.is-loading::before { animation-duration: 2s; }
+}

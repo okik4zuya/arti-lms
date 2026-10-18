@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="id">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,6 +9,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
+    <a class="skip-link" href="#main-content">Lewati ke konten</a>
     <div class="app-shell">
         <aside class="sidebar" id="sidebar">
             <div class="sidebar__header">
@@ -53,27 +54,41 @@
         <main class="main">
             <div class="topbar topbar--dark">
                 <div class="topbar__left">
-                    <button type="button" class="sidebar-toggle" aria-controls="sidebar" aria-expanded="false" aria-label="Toggle course menu">☰</button>
-                    <a href="{{ route('dashboard') }}" class="btn btn--outline topbar__back">&larr; Courses</a>
+                    <button type="button" class="sidebar-toggle" aria-controls="sidebar" aria-expanded="false" aria-label="Buka menu course">☰</button>
+                    <a href="{{ route('dashboard') }}" class="btn btn--outline topbar__back"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true" focusable="false"><path d="M8.5 3 4.5 7l4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Course Saya</a>
                 </div>
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="btn btn--outline">Log out</button>
-                </form>
+                <x-user-menu :user="auth()->user()" />
             </div>
-            <div class="content">
+            <div class="content" id="main-content" tabindex="-1">
                 {!! $html !!}
 
-                <div class="chapter-complete">
+                <div class="chapter-complete" aria-live="polite">
                     @if ($isCompleted)
-                        <span class="tree-item__check tree-item__check--done">&check;</span> Completed
+                        <span class="tree-item__check tree-item__check--done">&check;</span> Selesai
                     @else
-                        <form method="POST" action="{{ route('progress.store', ['course' => $course, 'slug' => $slug]) }}">
+                        <form method="POST" action="{{ route('progress.store', ['course' => $course, 'slug' => $slug]) }}" data-progress-form data-slug="{{ $slug }}">
                             @csrf
-                            <button type="submit" class="btn btn--outline">Mark as complete</button>
+                            <button type="submit" class="btn btn--outline">Tandai selesai</button>
                         </form>
                     @endif
                 </div>
+
+                @if ($previous || $next)
+                    <nav class="chapter-nav" aria-label="Navigasi subbab">
+                        @if ($previous)
+                            <a class="chapter-nav__link chapter-nav__link--prev" href="{{ route('content.show', ['course' => $course, 'slug' => $previous['slug']]) }}" rel="prev">
+                                <span class="chapter-nav__label"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true" focusable="false"><path d="M8.5 3 4.5 7l4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Sebelumnya</span>
+                                <span class="chapter-nav__title">{{ $previous['title'] }}</span>
+                            </a>
+                        @endif
+                        @if ($next)
+                            <a class="chapter-nav__link chapter-nav__link--next" href="{{ route('content.show', ['course' => $course, 'slug' => $next['slug']]) }}" rel="next">
+                                <span class="chapter-nav__label">Selanjutnya <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true" focusable="false"><path d="M5.5 3l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                                <span class="chapter-nav__title">{{ $next['title'] }}</span>
+                            </a>
+                        @endif
+                    </nav>
+                @endif
             </div>
         </main>
     </div>

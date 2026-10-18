@@ -150,6 +150,36 @@ class PasswordResetTest extends TestCase
         $this->assertTrue(Hash::check(self::STRONG, User::first()->password));
     }
 
+    public function test_a_browser_signed_in_as_someone_else_still_reaches_the_forgot_password_form(): void
+    {
+        $this->learner();
+        $other = $this->learner(['email' => 'other@example.test']);
+
+        $this->actingAs($other)->get('/lupa-sandi')->assertOk()->assertSee('Kirim tautan');
+    }
+
+    public function test_a_dead_link_tells_who_is_signed_in_or_offers_login(): void
+    {
+        $this->learner();
+        $other = $this->learner(['email' => 'other@example.test']);
+        $url = $this->requestLink();
+        $this->post($url, ['password' => self::STRONG, 'password_confirmation' => self::STRONG]);
+
+        $this->get($url)->assertSee('Masuk di sini')->assertDontSee('Keluar dari akun ini');
+        $this->actingAs($other)->get($url)->assertSee('other@example.test')->assertSee('Keluar dari akun ini');
+    }
+
+    public function test_setting_a_password_signs_the_browser_out_so_the_login_page_shows(): void
+    {
+        $this->learner();
+        $other = $this->learner(['email' => 'other@example.test']);
+        $url = $this->requestLink();
+
+        $this->actingAs($other)->post($url, ['password' => self::STRONG, 'password_confirmation' => self::STRONG])
+            ->assertRedirect(route('login'));
+        $this->assertGuest();
+    }
+
     public function test_an_expired_link_is_refused(): void
     {
         $this->learner();
@@ -208,7 +238,7 @@ class PasswordResetTest extends TestCase
 
         $response = $this->post($url, ['password' => 'pendek', 'password_confirmation' => 'pendek']);
         $response->assertSessionHasErrors('password');
-        $this->assertSame(['Password belum memenuhi syarat di atas.'], session('errors')->get('password'));
+        $this->assertSame(['Password belum memenuhi syarat.'], session('errors')->get('password'));
     }
 
     public function test_the_password_may_not_equal_the_email(): void

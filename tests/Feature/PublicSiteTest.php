@@ -68,8 +68,8 @@ class PublicSiteTest extends TestCase
         $this->assertStringNotContainsString('Baca bab 1 gratis', $nav[0]);
         $this->assertStringNotContainsString(route('free.start'), $nav[0]);
         $this->assertStringContainsString('>Beranda</a>', $html);
-        $this->assertStringContainsString('>ARTi PDF</a>', $html);
-        $this->assertStringContainsString('>ARTi SciPeek</a>', $html);
+        $this->assertStringContainsString('ARTi PDF<span class="nav-badge">Free</span></a>', $html);
+        $this->assertStringContainsString('ARTi SciPeek<span class="nav-badge">Free</span></a>', $html);
         // Kontak left the top menu (it stays in the footer and the floating button).
         $this->assertStringNotContainsString('<a href="'.route('kontak').'" >Kontak</a>', $html);
         $this->assertSame(1, substr_count($html, '>Kontak</a>'));

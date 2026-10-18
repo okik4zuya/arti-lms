@@ -15,7 +15,7 @@
             <p class="hero__lead">Ekstensi Chrome gratis. Di samping nama jurnal pada hasil pencarian muncul lencana kuartil (Q1 sampai Q4), SJR, dan H-index dari Scimago.</p>
             <div class="hero__actions">
                 <a href="{{ config('site.scipeek_url') }}" class="btn btn--primary btn--lg" rel="noopener">Pasang dari Chrome Web Store</a>
-                <a href="#wujud" class="btn btn--outline btn--lg">Lihat wujudnya</a>
+                <a href="#demo" class="btn btn--outline btn--lg">Lihat demo</a>
             </div>
             <p class="trust-line">Gratis &middot; Offline &middot; Tanpa akun &middot; Chrome</p>
         </div>
@@ -30,10 +30,10 @@
         </div>
     </section>
 
-    {{-- 3. Wujudnya --}}
-    <section class="landing-section landing-section--alt" id="wujud">
+    {{-- 3. Demo --}}
+    <section class="landing-section landing-section--alt" id="demo">
         <div class="container">
-            <h2>Seperti apa wujudnya?</h2>
+            <h2>Begini cara kerjanya.</h2>
             <div class="video video--file">
                 <video controls preload="none" playsinline width="1280" height="720"
                        poster="{{ asset('images/landing/scipeek-poster.webp') }}">
@@ -179,7 +179,7 @@
     <section class="landing-closing">
         <div class="container container--narrow">
             <h2>Bagian dari ARTi.</h2>
-            <p>SciPeek membantu satu langkah kecil, yaitu menilai jurnal. ARTi sendiri adalah framework riset berbahasa Indonesia untuk Claude Code, dari ide sampai submit, dengan memori antar sesi dan referensi yang bisa dilacak.</p>
+            <p>SciPeek membantu satu langkah kecil, yaitu menilai jurnal. ARTi sendiri adalah framework riset untuk Claude Code, dari ide sampai submit, dengan memori antar sesi dan referensi yang bisa dilacak.</p>
             <div class="hero__actions hero__actions--center">
                 <a href="{{ route('free.start') }}" class="btn btn--outline btn--lg">Baca bab 1 gratis</a>
                 <a href="{{ route('fitur') }}" class="btn btn--outline btn--lg">Lihat isi ARTi</a>

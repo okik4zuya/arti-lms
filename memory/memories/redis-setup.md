@@ -4,7 +4,7 @@ description: How Redis is wired for local dev (Laragon Redis, Predis, own DBs an
 metadata:
   type: project
   created: 2026-10-15 08:40
-  updated: 2026-10-15 09:04
+  updated: 2026-10-18 21:54
 ---
 
 Set up 2026-10-15 08:40. Local only: `.env` is gitignored, so each environment needs its own.
@@ -16,6 +16,9 @@ Set up 2026-10-15 08:40. Local only: `.env` is gitignored, so each environment n
 ## Configuration (`.env`)
 `CACHE_STORE=redis`, `SESSION_DRIVER=redis`, `QUEUE_CONNECTION=redis`, `REDIS_CLIENT=predis`, `REDIS_PREFIX=arti_lms_database_`, `CACHE_PREFIX=arti_lms_cache_`, **`REDIS_DB=10`** (default connection: sessions, queue) and **`REDIS_CACHE_DB=11`** (cache). `.env.example` documents the Redis block (Predis, prefix, DB numbers) but keeps the `database` drivers as defaults. `phpunit.xml` forces `array`/`sync`, so tests never touch Redis (checked: key counts unchanged after a test run).
 - Switching the session driver logged the dev session out once. Nothing in the app dispatches jobs or mail yet, so the queue has no worker and none is needed until something is queued.
+
+## Update 2026-10-18 (night)
+The dev `.env` had fallen back to the `database` drivers; the researcher switched cache, session and queue to Redis again (`CACHE_STORE`, `SESSION_DRIVER`, `QUEUE_CONNECTION` = `redis`) and added `CONTENT_CACHE_STORE=redis` for the course content cache ([[learner-app-ux]]). Checked through a fresh PHP process: both connections (db10, db11) write and read, so the earlier `-MISCONF` is gone; the Redis queue held 2 waiting `SeriesMail` jobs (left from the 2026-10-15 tests; `php artisan queue:clear redis` before `queue:work` if they should not be sent); the `jobs` table was empty. `phpunit.xml` now also pins `CONTENT_CACHE_STORE=array`. Production Redis is still undecided (own instance, or leave `CONTENT_CACHE_STORE` empty and the drivers on `database`).
 
 ## Verified
 Scripted check (standalone PHP booting Laravel): PING, a cache round trip into db11, queue size 0. A real HTTP request to `/login` created one session key in db10 with a 120-minute TTL, and the landing page rendered. Not verified: the Filament `/jamrud` login and the LMS pages under Redis sessions, and any behaviour under load.
@@ -36,5 +39,6 @@ Only **session** is touched by the landing (no app cache on `/`). 160 sequential
 - `composer audit` reports 4 advisories on `laravel/framework` (low, medium and high, e.g. temporary signed URL path confusion, debug-page XSS). Pre-existing, not from Predis; the app is on 11.x. Worth a framework upgrade pass.
 
 ## Change log
+- 2026-10-18 21:54 — Redis for cache, session and queue back on in dev, content cache store, test pin.
 - 2026-10-15 09:04 — added the with/without Redis landing benchmark.
 - 2026-10-15 08:40 — created after wiring Redis for cache, session and queue.

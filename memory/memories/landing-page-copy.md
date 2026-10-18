@@ -4,7 +4,7 @@ description: Draft v1 of the ARTi landing page copy in Indonesian, section by se
 metadata:
   type: project
   created: 2026-10-14 23:05
-  updated: 2026-10-15 09:09
+  updated: 2026-10-18 22:37
 ---
 
 Synced to the Blade views on 2026-10-15 (finalisation session). **The Blade views stay the source of truth**; this file is a readable mirror, and later edits go to the views first. Outline and rules: [[landing-page-concept]]. Facts: [[landing-page-info]]. Pain wording: [[landing-page-keywords]]. Voice: "saya/Anda", short sentences, honest passages (`Jujur:`), no hype; the site says "ARTi" rather than "kami". Sections 4, 4b, 6, 7, 9 and 13 below changed since draft v1; the fact-check list at the bottom is updated.
@@ -12,28 +12,32 @@ Synced to the Blade views on 2026-10-15 (finalisation session). **The Blade view
 ---
 
 ## 0. Top bar
-Logo ARTi · Fitur · Harga (`/#harga`) · Baca bab 1 gratis · Kontak · **[Beli lewat WhatsApp]** ("Beli" on phones) · Masuk. A skip link ("Lewati ke isi") comes first.
+Logo ARTi · Beranda · Fitur · Harga (`/#harga`) · ARTi PDF **[Free]** · ARTi SciPeek **[Free]** · Masuk (Buka aplikasi when signed in). 2026-10-18: no buy button in the header any more; the "Free" badge is a small pill pinned to the top right of the link text, `#25d366` with white text (same green as the floating WhatsApp button). A skip link ("Lewati ke isi") comes first.
 
 ## 1. Hero
 **Eyebrow:** ARTi Framework
 
 **Judul:** Riset dengan AI yang tidak lupa dan tidak mengarang.
 
-**Sub-judul:** Framework riset berbahasa Indonesia untuk Claude Code, dari ide sampai submit. Dilengkapi e-course untuk mempelajarinya.
+**Sub-judul:** Framework riset untuk Claude Code, dari ide sampai submit. Dilengkapi e-course untuk mempelajarinya.
 
 **Tombol utama:** Beli sekarang (ke `/beli`, bayar lewat Xendit; bila gateway belum aktif `/beli` meneruskan ke WhatsApp). Cadangan: tautan "beli lewat WhatsApp" di bagian penawaran *(pesan terisi: "Halo, saya ingin membeli ARTi paket perintis.")*
-**Tombol kedua:** Baca bab 1 gratis
+**Tombol kedua:** Coba gratis (2026-10-18; jumps to `#coba-gratis`, whose first card links to chapter 1)
 
 **Baris kepercayaan:** Bayar sekali · Windows · Butuh Claude Code *(2026-10-18: klaim garansi dihapus dari halaman pemasaran; mekanisme refund tetap ada di sistem)*
 
 ## 2. Masalah
 **Judul:** Anda pasti pernah mengalaminya.
 
-**Satu.** AI menulis dengan yakin, tapi isinya ngawur. Kutipan terlihat meyakinkan, padahal tidak ada di jurnal yang disebut.
+AI menulis kutipan dengan percaya diri, kelihatan meyakinkan, tapi pas dicek ternyata **referensi tidak ada di jurnal** yang disebut, jadi tetap harus dicek satu per satu.
 
-**Dua.** Sesi baru, mulai dari nol. Unggah ulang literatur, jelaskan ulang aturan, ingatkan ulang tujuan. Padahal kemarin sudah.
+Tiap sesi baru AI **mulai dari nol**, jadi literatur harus diunggah ulang, aturan dijelaskan ulang, tujuan diingatkan ulang, padahal kemarin sudah. *(2026-10-18: pains 1 and 2 rewritten in the researcher's voice, one "tapi ... jadi ..." sentence each, no opener word or question.)*
 
-**Tiga.** Ragu di setiap tahap. Apakah idenya sudah dikerjakan orang? Cukup baru untuk jurnal ini? Aman dari tuduhan AI? Naskah akan ditolak, atau lolos?
+Output AI memang "bagus", tapi harus **copy paste** lagi ke word, sekalinya bisa buat word, formatnya tidak sesuai, belum lagi merapikan Zotero. *(ending changed 2026-10-18 to avoid repeating "copy paste", the researcher's wording)*
+
+**Saya juga merasakannya, dan saya membuat solusinya untuk Anda.** *(closing line of the problem section, added 2026-10-18; "membuat" not "memberikan" so it does not read as free)* *(2026-10-18: the researcher's own sentence, verbatim; replaces the "Bingung" paragraph.)*
+
+*(2026-10-18: three narrative paragraphs with a relatable opening word each; no cards, icons or per-point headings.)*
 
 ## 3. Agitasi
 **Judul:** Kesalahan kecil yang tidak berhenti.
@@ -49,7 +53,7 @@ Itu baru soal kredibilitas. Soal tenaga, ada cerita lama tentang Rithah yang mem
 *Bukan berarti AI-nya buruk. Alatnya hebat, tapi belum jadi sistem.*
 
 ## 4. Solusi
-**Judul:** Bukan alat baru. Cara kerja di atas Claude Code.
+**Judul:** Solusinya: Claude diajari cara kerja riset, dan diberi alatnya. *(2026-10-18, the researcher's pick; replaces "Bukan alat baru. Cara kerja di atas Claude Code.")*
 
 Claude sudah pintar. Yang belum ia punya adalah cara kerja riset dan perkakas untuk mengerjakannya.
 
@@ -62,6 +66,11 @@ Itu yang ARTi beri. Di atasnya ada tiga fondasi yang menjaga kerjanya tetap bena
 **Referensi asli dan bisa dilacak.** Satu basis data rujukan per proyek. Setiap kutipan menunjuk ke sumber yang benar-benar ada, dan teks lengkap PDF diubah ke Markdown agar bisa dicari.
 
 **Scratchbook.** Tempat menimbun temuan dan kutipan per bagian naskah, dengan penanda asal setiap klaim. Klaim tanpa sumber tidak boleh masuk naskah.
+
+**Hebatnya lagi, naskah langsung jadi Word dengan Zotero** *(h3, added 2026-10-18)*
+Naskah Anda ditulis dan diperbaiki bersama AI, lalu hasilnya langsung jadi berkas Word. Sitasinya sudah berupa field Zotero, tanpa **copy paste**.
+> **ARTi mengeluarkan berkas Word yang sudah berisi field Zotero.** (callout)
+*Satu klik Refresh di Zotero, dan format sitasi mengikuti gaya yang Anda pilih. Butuh Zotero di Word.*
 
 ## 4b. Seperti apa wujudnya? (`#wujud`)
 Bukan kotak hitam. Semuanya berkas biasa di komputer Anda.
@@ -91,7 +100,7 @@ Bukan kotak hitam. Semuanya berkas biasa di komputer Anda.
 ## 7. Isi paket
 **Judul:** Satu paket: e-course dan lisensi.
 
-**E-course ARTi Framework.** Dibaca langsung di aplikasi, berbahasa Indonesia, ditulis dari pengalaman memakai ARTi untuk naskah sendiri. Bagian Pendahuluan sudah bisa dibaca. Bagian Amati, Replikasi, dan Tambah Inovasi sedang ditulis, dan bab baru yang terbit selama masa langganan Anda ikut Anda dapat.
+**E-course ARTi Framework.** Dibaca langsung di aplikasi, ditulis dari pengalaman memakai ARTi untuk naskah sendiri. Bagian Pendahuluan sudah bisa dibaca. Bagian Amati, Replikasi, dan Tambah Inovasi sedang ditulis, dan bab baru yang terbit selama masa langganan Anda ikut Anda dapat.
 
 **Lisensi ARTi Framework**, satu tahun. 10 skill, dashboard lokal, dan alat pendukung.
 
@@ -142,6 +151,7 @@ Dibanding alat lain:
 
 - Butuh **Claude Code** dan langganan Claude berbayar, dibayar terpisah dari ARTi.
 - Butuh **VS Code**.
+- Untuk sitasi di berkas Word, butuh **Zotero** di Word. *(added 2026-10-18)*
 - Saat ini **Windows saja**.
 - **Perlu internet saat instalasi** untuk memeriksa lisensi. Kalau lisensi tidak valid atau sudah dipakai di perangkat lain, instalasi berhenti.
 - **E-course belum lengkap.** Bagian Pendahuluan sudah ada, sisanya sedang ditulis.
@@ -198,7 +208,7 @@ Footer: Kontak · Privasi · Syarat · Umpan artikel (the last one still shown; 
 
 ## SEO
 - **Title (as rendered):** Framework Riset untuk Claude Code, dari Ide sampai Submit — ARTi Framework (every page: `<title> — ARTi Framework`)
-- **Meta description:** Framework riset berbahasa Indonesia untuk Claude Code: memori antar sesi, referensi asli yang bisa dilacak, dan alur dari gap sampai submit. Termasuk e-course.
+- **Meta description:** Framework riset untuk Claude Code: memori antar sesi, referensi asli yang bisa dilacak, dan alur dari gap sampai submit. Termasuk e-course.
 - Kata kunci untuk H2/FAQ: referensi asli, novelty penelitian, research gap ai, systematic literature review prisma, claude code indonesia, jurnal predator.
 
 ## Catatan cek fakta (updated 2026-10-15)
@@ -208,5 +218,9 @@ Footer: Kontak · Privasi · Syarat · Umpan artikel (the last one still shown; 
 - `/syarat` and `/privasi` now restate the offer, refund, Anthropic data flow and cookies, but still need legal review: see [[legal-review-notes]].
 
 ## Change log
+- 2026-10-18 22:37 — problem section rewritten in the researcher's voice (pains 1 and 2, bold on pain 3, pain 4 ending "belum lagi merapikan Zotero", bold closing line "Saya juga merasakannya, ..."); section 4 title is the researcher's pick. Blade is the source for exact text.
+- 2026-10-18 22:30 — fourth pain paragraph (figures "terlalu AI") and the section-4 block "Gambar dari data, bukan dari imajinasi AI" added; Blade is the source for the exact text.
+- 2026-10-18 22:15 — section 2 third pain replaced by the researcher's own sentence; section 4 title changed and the Word-with-Zotero block added; Zotero line in section 10; `/fitur` arti-docx description mentions Zotero. Note: section 7's "Lisensi ... satu tahun" line above is stale (the Blade says "Bayar sekali, berlaku selamanya").
+- 2026-10-18 21:54 — header (no buy button, Free badges), hero second button "Coba gratis", section 2 as narrative, "berbahasa Indonesia" dropped from the framework and e-course lines and the meta description. `/scipeek`: "Lihat demo", section title "Begini cara kerjanya." (anchor `#demo`).
 - 2026-10-15 09:25 — synced to the Blade views (menu, sections 4/4b/6/7/9/10/11/12/13, SEO, fact-check list).
 - 2026-10-14 23:05 — draft v1 written from outline v2.

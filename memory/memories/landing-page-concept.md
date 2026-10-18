@@ -4,14 +4,14 @@ description: Agreed concept and build record for the ARTi landing page (position
 metadata:
   type: project
   created: 2026-10-14 22:11
-  updated: 2026-10-15 09:28
+  updated: 2026-10-18 22:37
 ---
 
 Concept from the 2026-10-14 brainstorm. Facts and decisions it rests on: [[landing-page-info]]. Built and committed (see Build status and the finalisation section below). Page language: Indonesian, voice "saya/Anda", short sentences, honest "Jujur: ..." passages (see [[content-authoring-workflow]]).
 
 ## Positioning
 - Product: e-course (LMS) + ARTi Framework license, one package. Audience: dosen first, then S2/S3.
-- Sub-headline claim: **"framework riset berbahasa Indonesia untuk Claude Code, dari ide sampai submit"**. Do **not** claim "pertama" (unverifiable, contradicts the "no fabrication" brand) until a web/GitHub check is done; if kept, only as "pertama yang kami ketahui". The researcher's idea of "first AI research framework on Claude Code" was reviewed and deferred, not accepted.
+- Sub-headline claim: **"framework riset untuk Claude Code, dari ide sampai submit"** ("berbahasa Indonesia" dropped 2026-10-18 by the researcher). Do **not** claim "pertama" (unverifiable, contradicts the "no fabrication" brand) until a web/GitHub check is done; if kept, only as "pertama yang kami ketahui". The researcher's idea of "first AI research framework on Claude Code" was reviewed and deferred, not accepted.
 - "Claude Code" is the engine (line 2 and SEO title/description), not the hero headline; the hero leads with the outcome.
 - Tagline **"Dari ide sampai publish, bersama ARTi"** (channel tagline) stays verbatim as a brand line in the logo lockup/footer and before the final CTA, **not** as the main claim: "publish" is an outcome ARTi cannot promise. Product claims say "submit". One honest line near how-it-works: ARTi helps the process, acceptance is the journal's decision. "Publish" may rise to the hero only once real acceptances exist.
 
@@ -130,6 +130,9 @@ Concept from the 2026-10-14 brainstorm. Facts and decisions it rests on: [[landi
 Record the real demo and its poster; real hero screenshot; decide the author section; check the new sections at true 375px; fill the prod `.env` values. Checklist in `todo-list.md`.
 
 ## Change log
+- 2026-10-18 22:37 — figure pain and block, problem section final wording and closing line (see the 22:15 "Changes" section).
+- 2026-10-18 22:15 — pain 3 replaced, arti-docx/Zotero highlight block, section 4 title, claim rule (see "Changes 2026-10-18 (22:15 ...)").
+- 2026-10-18 21:54 — header, hero button, narrative problem section, SciPeek wording, "berbahasa Indonesia" removal (see "Changes 2026-10-18" at the bottom).
 - 2026-10-15 10:37 — Rithah image replaced by `benang-terurai.webp` (concept A, three panels); `rithah.webp` deleted (still in git history).
 - 2026-10-15 09:28 — finalisation pass recorded.
 - 2026-10-15 08:10 — ARTi PDF card added to the free section (Windows only).
@@ -144,3 +147,21 @@ Record the real demo and its poster; real hero screenshot; decide the author sec
 ## Top menu update (2026-10-15, researcher's decision)
 Menu is now **Fitur, Harga, Baca bab 1 gratis, ARTi PDF, ARTi SciPeek** (`layouts/partials/site-links.blade.php`). "Kontak" left the top menu; it stays in the footer, the floating WhatsApp button and every "Beli" button. The hamburger breakpoint moved from 760px to 900px because five links wrapped to two lines at 768px. Test: `PublicSiteTest::test_top_menu_has_fitur_harga_free_chapter_and_the_two_free_tools`.
 - Later the same day: **Beranda** added as first item and **Baca bab 1 gratis** removed from the top menu (the free chapter stays reachable from the landing hero, `#coba-gratis` and the closing cards of `/scipeek` and `/artipdf`). Menu: Beranda, Fitur, Harga, ARTi PDF, ARTi SciPeek.
+
+## Changes 2026-10-18 (night, researcher's decisions)
+- Header: the buy button is gone from the header of `/` and `/fitur` (the hero "Beli sekarang" stays); ARTi PDF and ARTi SciPeek menu links carry a "Free" badge (green `#25d366` like the floating WhatsApp button, white text about 2:1 contrast, a conscious trade-off; pinned top right of the text; one soft shine after 1.2 s, off for reduced motion). Colour options were shown first (orange, amber, green, gradient) and green was chosen.
+- Hero second button "Coba gratis" goes to `#coba-gratis`.
+- "berbahasa Indonesia" removed from every description of the framework and the e-course (home hero, meta description, `/scipeek`, `/artipdf`, `/fitur`); the OCR limitation on `/artipdf` keeps its wording.
+- Problem section rewritten as three narrative paragraphs opening with "Pernah", "Capek", "Bingung" (no cards, no icons, no headings, normal paragraph size); the three glyphs were deleted.
+- `/scipeek`: button "Lihat demo", section id `#demo`, title "Begini cara kerjanya.". "Wujud" still appears on the home `#wujud` section, a `/fitur` link and series mail 2.
+- Next: copywriting finalisation and a reptilian-brain evaluation, brainstorm first ([[landing-finalisation-prompt]]).
+
+## Changes 2026-10-18 (22:15, finalisation brainstorm, researcher's decisions)
+- **Pain 3 replaced.** "Bingung di setiap tahap?" (novelty, AI accusation, accept or reject) is gone from the problem section; the researcher's own sentence, verbatim: Output AI memang "bagus", tapi harus **copy paste** lagi ke word, sekalinya bisa buat word, formatnya tidak sesuai, jadi tetap harus **copy paste**. The novelty and AI-detector worries are still answered by the "Cara kerja" section and the FAQ.
+- **New feature highlight: arti-docx (Word with Zotero fields).** Block in section 4 after the three foundations: h3 "Hebatnya lagi, naskah langsung jadi Word dengan Zotero", two sentences ending "tanpa **copy paste**", a `.callout` (new CSS class, same look as `.honest`, bold): "ARTi mengeluarkan berkas Word yang sudah berisi field Zotero.", and a muted note "Satu klik Refresh di Zotero ... Butuh Zotero di Word." Also: `/fitur` arti-docx description now names Zotero, Refresh and the requirement; the requirements list got a Zotero line.
+- **Claim rule:** no comparative claim about other products ("tidak ada chat AI biasa yang mengeluarkan .docx berisi field Zotero" was proposed, flagged as unverified and rejected by the researcher in favour of the ARTi-only fact). A test asserts the rival sentence never appears. The compare-table row "Menulis dan mengedit berkas naskah" (Claude AI: "Tidak, harus disalin") is **unchecked** against current Claude AI file-creation abilities.
+- **Honest wording of the feature** (from the arti-docx README): the text inside each Zotero field is an author-year placeholder until the user clicks Refresh in Word; no CSL engine; default style APA; default template Arial, A4, three-line tables; do not promise "format sesuai jurnal Anda". The feature needs Zotero in Word.
+- **Section 4 title** "Bukan alat baru. Cara kerja di atas Claude Code." replaced by "Solusinya: Claude diajari cara kerja riset, dan diberi alatnya." (the researcher's pick among alternatives; a first version "Solusinya, bekali Claude dengan cara kerja riset." was superseded). Voice: casual, direct ("Hebatnya lagi", "Pernah", "Capek").
+- **Figure pain added (2026-10-18 22:30).** Fourth paragraph of the problem section, in the order kutipan, capek, gambar, copy paste: the researcher's sentence verbatim, "Minta AI buat gambar, tapi gambarnya terlalu AI, jadi ragu memasukkan ke naskah." Solution block in section 4 before the Word block: h3 "Gambar dari data, bukan dari imajinasi AI", two sentences plus a muted limit "Untuk diagram, grafik, tabel, dan gambar gabungan. Bukan untuk foto atau ilustrasi bebas." (ARTi-figure makes diagrams, plots, tables, composites, not photos or free illustration). No "not detected as AI" promise. Image of a real ARTi-figure diagram offered, not built; the researcher has not answered.
+- **Problem section final wording (2026-10-18 22:37, researcher's voice).** Four paragraphs, each one sentence in the pattern "... tapi ... jadi ...", no opener word and no question, bold only on the key phrase: (1) AI writes citations with confidence but "**referensi tidak ada di jurnal**"; (2) every new session AI "**mulai dari nol**"; (3) "**gambarnya terlalu AI**"; (4) Word: "**copy paste**" once, ending "belum lagi merapikan Zotero." Closing line, fully bold: "Saya juga merasakannya, dan saya membuat solusinya untuk Anda." ("membuat", not "memberikan", so it does not read as free; it also makes the missing "Tentang penulis" section more noticeable). The h2 "Anda pasti pernah mengalaminya." is still the formal one; a more casual replacement was offered, not answered. "kutipan" (start of 1) and "referensi" (bold part) sit side by side; unifying was offered, not answered.
+- **Not done:** the image of a Word file with Zotero fields for the new block (LibreOffice preview does not show fields, so it may have to be composed by hand; show it before building); the reptilian-brain evaluation table and the ethics boundaries were proposed (ethics first, then the six-stimulus table per section, then one section per round starting with hero) but not started; the persona question (dosen new to Claude Code vs disappointed AI user) is unanswered, default assumed: the second.
