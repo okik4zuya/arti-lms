@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\LicenseIssuanceResource\Pages;
 
+use App\Actions\Account\IssueSetPasswordLink;
 use App\Actions\Learners\CreateLearner;
 use App\Actions\Licensing\IssueLicense;
 use App\Actions\Licensing\IssueRequest;
@@ -128,39 +129,37 @@ class ListLicenseIssuances extends ListRecords
                         return;
                     }
 
-                    // The password exists only in this request and in the modal opened next; it is never stored.
-                    $accountPassword = ! empty($data['create_learner']) ? $this->attachLearner($row, $data) : null;
+                    // The set-password link exists only in this request and in the modal opened next; it is never stored.
+                    $setPasswordUrl = ! empty($data['create_learner']) ? $this->attachLearner($row, $data) : null;
 
                     Notification::make()->title('Lisensi terbit')->success()->send();
 
-                    $this->replaceMountedTableAction('sendKey', (string) $row->getKey(), ['account_password' => $accountPassword]);
+                    $this->replaceMountedTableAction('sendKey', (string) $row->getKey(), ['set_password_url' => $setPasswordUrl]);
                 }),
         ];
     }
 
-    /** Launch price while buyers are below the quota, then the normal price. */
+    /** The price a buyer would pay right now: promotion, then launch, then normal. */
     private function suggestedPrice(): int
     {
-        $offer = app(Offer::class);
-
-        return LicenseIssuance::sold()->count() < $offer->quota() ? $offer->launchPrice() : $offer->normalPrice();
+        return app(Offer::class)->currentPrice();
     }
 
     /**
      * Link the license to a learner account (created if the email has none) and grant the chosen courses.
      *
-     * @return ?string the new password when the account was created here, null for an existing account
+     * @return ?string the one-time set-password link when the account was created here, null for an existing account
      */
     private function attachLearner(LicenseIssuance $row, array $data): ?string
     {
         $courses = Course::query()->whereKey($data['courses'] ?? [])->get();
         $user = User::where('email', $data['email'])->first();
-        $newPassword = null;
+        $setPasswordUrl = null;
 
         if ($user === null) {
-            // Generated here, never typed into the form; it reaches the buyer only through the key message.
-            $newPassword = Str::password(12);
-            $user = app(CreateLearner::class)->handle($data['name'], $data['email'], $newPassword, $courses);
+            // A random password nobody sees: the buyer chooses their own through the one-time link in the key message.
+            $user = app(CreateLearner::class)->handle($data['name'], $data['email'], Str::random(64), $courses);
+            $setPasswordUrl = app(IssueSetPasswordLink::class)->handle($user, IssueSetPasswordLink::WELCOME);
 
             Notification::make()->title('Akun learner dibuat')->body($user->email)->success()->send();
         } else {
@@ -171,6 +170,6 @@ class ListLicenseIssuances extends ListRecords
 
         $row->forceFill(['user_id' => $user->id])->save();
 
-        return $newPassword;
+        return $setPasswordUrl;
     }
 }

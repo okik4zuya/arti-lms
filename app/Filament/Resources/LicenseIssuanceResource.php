@@ -268,8 +268,8 @@ class LicenseIssuanceResource extends Resource
 
                 return [
                     'key' => $record->key,
-                    // A learner password only exists in the arguments of the modal opened right after issuing or resetting.
-                    'message' => LicenseMessage::for($record, $arguments['account_password'] ?? null),
+                    // The set-password link only exists in the arguments of the modal opened right after issuing or requesting it.
+                    'message' => LicenseMessage::for($record, $arguments['set_password_url'] ?? null),
                 ];
             })
             ->schema([
@@ -288,7 +288,7 @@ class LicenseIssuanceResource extends Resource
                     ->label('Buka WhatsApp')
                     ->icon('heroicon-o-chat-bubble-left-right')
                     ->color('success')
-                    ->url(fn (LicenseIssuance $record, $livewire) => LicenseMessage::url($record, $livewire->mountedActions[0]['arguments']['account_password'] ?? null))
+                    ->url(fn (LicenseIssuance $record, $livewire) => LicenseMessage::url($record, $livewire->mountedActions[0]['arguments']['set_password_url'] ?? null))
                     ->openUrlInNewTab()
                     ->visible(fn (LicenseIssuance $record) => filled($record->buyer_whatsapp)),
             ])
@@ -445,45 +445,45 @@ class LicenseIssuanceResource extends Resource
      * only stacks a table action on top of another table action, and Filament cannot resolve that, so the
      * stack is cleared and the modal mounted afresh.
      */
-    private static function openKeyModal($livewire, LicenseIssuance $record, ?string $accountPassword = null): void
+    private static function openKeyModal($livewire, LicenseIssuance $record, ?string $setPasswordUrl = null): void
     {
         $livewire->replaceMountedAction(
             'sendKey',
-            $accountPassword === null ? [] : ['account_password' => $accountPassword],
+            $setPasswordUrl === null ? [] : ['set_password_url' => $setPasswordUrl],
             ['table' => true, 'recordKey' => (string) $record->getKey()],
         );
     }
 
-    /** New random password for the buyer's learner account; shown once in the key message, never stored. */
+    /** A one-time link for the buyer to choose a new password; shown once in the key message, never stored. */
     public static function resetAccountPasswordAction(): Actions\Action
     {
         return Actions\Action::make('resetAccountPassword')
-            ->label('Reset password akun')
+            ->label('Kirim tautan atur password')
             ->icon('heroicon-o-lock-closed')
             ->authorize('account.reset_password')
             ->visible(fn (LicenseIssuance $record) => $record->user_id !== null)
             ->requiresConfirmation()
-            ->modalHeading(fn (LicenseIssuance $record) => 'Reset password akun: '.$record->email)
-            ->modalDescription('Password lama diganti dan sesi lama diputus. Password baru hanya tampil sekali, di pesan yang terbuka sesudahnya; tidak disimpan.')
-            ->modalSubmitActionLabel('Reset password')
+            ->modalHeading(fn (LicenseIssuance $record) => 'Tautan atur password: '.$record->email)
+            ->modalDescription('Dibuat tautan sekali pakai (tanpa batas waktu, berlaku sampai password diatur) supaya pembeli memilih password sendiri. Tautan hanya tampil sekali, di pesan yang terbuka sesudahnya; tidak disimpan. Password lama tetap berlaku sampai pembeli memakai tautan. Tautan sebelumnya berhenti berlaku.')
+            ->modalSubmitActionLabel('Buat tautan')
             ->action(function (LicenseIssuance $record, Actions\Action $action, $livewire): void {
-                $password = null;
+                $url = null;
 
-                if (! static::attempt($action, function () use ($record, &$password) {
-                    $password = app(ResetAccountPassword::class)->handle($record, auth()->user());
+                if (! static::attempt($action, function () use ($record, &$url) {
+                    $url = app(ResetAccountPassword::class)->handle($record, auth()->user());
                 })) {
                     return;
                 }
 
                 if ($record->hasUsableKey()) {
-                    Notification::make()->title('Password direset. Kirim pesan berisi password baru.')->success()->send();
-                    static::openKeyModal($livewire, $record, $password);
+                    Notification::make()->title('Tautan dibuat. Kirim pesan yang berisi tautan itu.')->success()->send();
+                    static::openKeyModal($livewire, $record, $url);
 
                     return;
                 }
 
-                // No usable key to build the message around: show the password once, in a notification only.
-                Notification::make()->title('Password baru: '.$password)->body('Salin sekarang, tidak ditampilkan lagi.')->success()->persistent()->send();
+                // No usable key to build the message around: show the link once, in a notification only.
+                Notification::make()->title('Tautan atur password')->body($url.' (salin sekarang, tidak ditampilkan lagi)')->success()->persistent()->send();
             });
     }
 

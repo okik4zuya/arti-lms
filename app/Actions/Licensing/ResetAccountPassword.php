@@ -2,18 +2,22 @@
 
 namespace App\Actions\Licensing;
 
+use App\Actions\Account\IssueSetPasswordLink;
 use App\Models\LicenseIssuance;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Support\Str;
 use InvalidArgumentException;
 
 /**
- * Sets a new random password on the buyer's learner account and returns it. The password is returned to the
- * caller only: it is not stored, logged or put in the event detail. Never usable on an admin or support account.
+ * Gives the buyer a one-time link to choose a new password for their learner account and returns it. No password
+ * is generated, stored or logged here; the link is returned to the caller only and never put in the event detail.
+ * The current password keeps working until the buyer sets a new one. Never usable on an admin or support account.
  */
 class ResetAccountPassword
 {
+    public function __construct(private readonly IssueSetPasswordLink $links) {}
+
+    /** @return string the signed one-time link (no time limit; dies when the password is set or changed) */
     public function handle(LicenseIssuance $row, User $actor): string
     {
         if (! $actor->can('account.reset_password')) {
@@ -30,11 +34,9 @@ class ResetAccountPassword
             throw new InvalidArgumentException('Akun admin atau support tidak bisa direset dari sini.');
         }
 
-        $password = Str::password(12);
+        $url = $this->links->handle($account, IssueSetPasswordLink::WELCOME);
+        $row->logEvent('account_password_link', $actor->getKey());
 
-        $account->forceFill(['password' => $password, 'remember_token' => Str::random(60)])->save();
-        $row->logEvent('account_password_reset', $actor->getKey());
-
-        return $password;
+        return $url;
     }
 }

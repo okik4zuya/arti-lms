@@ -21,7 +21,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         // One-click unsubscribe (RFC 8058): the mail provider POSTs here with no session, so no CSRF token.
         // The signed URL is what authorises it.
-        $middleware->validateCsrfTokens(except: ['berhenti/*']);
+        $middleware->validateCsrfTokens(except: ['berhenti/*', 'webhooks/*']);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

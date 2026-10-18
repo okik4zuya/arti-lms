@@ -21,10 +21,10 @@ Logo ARTi · Fitur · Harga (`/#harga`) · Baca bab 1 gratis · Kontak · **[Bel
 
 **Sub-judul:** Framework riset berbahasa Indonesia untuk Claude Code, dari ide sampai submit. Dilengkapi e-course untuk mempelajarinya.
 
-**Tombol utama:** Beli lewat WhatsApp *(pesan terisi: "Halo, saya ingin membeli ARTi paket perintis.")*
+**Tombol utama:** Beli sekarang (ke `/beli`, bayar lewat Xendit; bila gateway belum aktif `/beli` meneruskan ke WhatsApp). Cadangan: tautan "beli lewat WhatsApp" di bagian penawaran *(pesan terisi: "Halo, saya ingin membeli ARTi paket perintis.")*
 **Tombol kedua:** Baca bab 1 gratis
 
-**Baris kepercayaan:** Garansi uang kembali 7 hari · Windows · Butuh Claude Code
+**Baris kepercayaan:** Bayar sekali · Windows · Butuh Claude Code *(2026-10-18: klaim garansi dihapus dari halaman pemasaran; mekanisme refund tetap ada di sistem)*
 
 ## 2. Masalah
 **Judul:** Anda pasti pernah mengalaminya.
@@ -150,20 +150,18 @@ Dibanding alat lain:
 ## 11. Penawaran
 **Judul:** Harga perintis untuk 100 pembeli pertama.
 
-~~Rp199.000~~ **Rp99.000** per tahun
-Tersisa **[N] dari 100**.
+~~Rp199.000~~ **Rp99.000** bayar sekali
+Tersisa **[N] dari 100** (hitungan nyata: pesanan situs + hitungan manual).
 
-Setelah 100 pembeli, harganya Rp199.000 per tahun, sekitar Rp16.600 per bulan. Perpanjangan juga mengikuti harga normal, kecuali sedang ada promo.
+Setelah 100 pembeli, harganya Rp199.000, tetap bayar sekali. Saat ada promo event, yang tampil adalah nama promo, harga promo, dan tanggal berakhirnya.
 
-**Kenapa murah sekarang?** E-course masih ditulis. Anda membeli lebih awal dengan harga lebih rendah, dan bab baru ikut Anda dapat selama masa langganan.
+**Kenapa murah sekarang?** E-course masih ditulis. Anda membeli lebih awal dengan harga lebih rendah, dan bab baru ikut Anda dapat.
 
-**Yang Anda dapat:** e-course ARTi Framework · lisensi ARTi Framework satu tahun · pembaruan selama masa langganan.
+**Yang Anda dapat:** e-course ARTi Framework · lisensi ARTi Framework · pembaruan ARTi tanpa biaya tambahan.
 
-**Garansi 7 hari.** Tidak puas, uang kembali penuh dalam 7 hari sejak pembelian, tanpa perlu alasan. Kalau instalasi gagal karena sisi ARTi, uang kembali kapan pun selama masa langganan.
+**Cara membeli:** tekan tombol, isi nama dan email, lalu bayar dengan QRIS, virtual account, atau e-wallet. Akun belajar, kunci lisensi, dan tautan unduhan dikirim ke email Anda.
 
-**Cara membeli:** tekan tombol, kirim pesan WhatsApp, lakukan pembayaran, lalu kunci lisensi dan akses e-course dikirim oleh admin.
-
-**[Beli lewat WhatsApp]**
+**[Beli sekarang]** · atau beli lewat WhatsApp
 
 ## 12. Pertanyaan yang sering muncul
 **Perlu bisa coding?**
@@ -179,16 +177,13 @@ Tidak. ARTi membantu menyusun, mencari, dan memeriksa. Gagasan dan tanggung jawa
 Berkas dan basis data ARTi ada di komputer Anda. Tidak ada server ARTi yang menyimpan naskah. Tapi isi yang Anda minta Claude proses tetap dikirim ke Anthropic sesuai layanan Claude Code. Baca kebijakan mereka bila naskah Anda sensitif.
 
 **Bagaimana kalau Claude berubah?**
-ARTi bergantung pada Claude Code. Kalau aturan atau harganya berubah, ARTi harus menyesuaikan, dan itu risiko yang nyata. Karena itu garansi 7 hari ada.
+ARTi bergantung pada Claude Code. Kalau aturan atau harganya berubah, ARTi harus menyesuaikan, dan itu risiko yang nyata.
 
-**Apa yang terjadi setelah satu tahun?**
-Anda mendapat peringatan dan masa tenggang sebelum lisensi berakhir. Setelah berakhir, skill dan berkas Anda pada dasarnya tetap bisa dipakai lewat VS Code, tetapi dashboard ARTi tidak bisa dibuka sampai lisensi diperpanjang. Data Anda tetap milik Anda. Perpanjangan mengikuti harga normal, kecuali ada promo.
+**Apakah ada biaya tahunan?**
+Tidak. Anda membayar sekali. Skill dan berkas Anda berjalan di komputer Anda sendiri, dan data Anda tetap milik Anda. *(2026-10-18: pembelian diubah dari per tahun menjadi sekali bayar; teks "lifetime" di `/syarat` menunggu keputusan dan tinjauan hukum.)*
 
 **Berapa total biayanya?**
-Rp99.000 (perintis) atau Rp199.000 per tahun untuk ARTi, ditambah langganan Claude Anda sendiri.
-
-**Bagaimana cara minta uang kembali?**
-Kirim pesan ke WhatsApp admin dalam 7 hari sejak pembelian. Kunci dicabut dan uang dikembalikan.
+Rp99.000 (perintis) atau Rp199.000 sekali bayar untuk ARTi, ditambah langganan Claude Anda sendiri.
 
 ## 13. Penutup
 > **Dari ide sampai publish, bersama ARTi.**

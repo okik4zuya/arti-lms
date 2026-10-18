@@ -26,7 +26,7 @@ Concept from the 2026-10-14 brainstorm. Facts and decisions it rests on: [[landi
 
 ## Section outline (v2, 2026-10-14; copy draft in [[landing-page-copy]])
 0. Top bar: logo, links (Fitur, Harga, Bab 1 gratis), WhatsApp button.
-1. Hero: outcome headline, Claude Code sub-headline, CTA WhatsApp + "Baca bab 1 gratis", one trust line (garansi 7 hari, Windows).
+1. Hero: outcome headline, Claude Code sub-headline, CTA "Beli sekarang" (gateway, WhatsApp as fallback) + "Baca bab 1 gratis", one trust line (bayar sekali, Windows).
 2. Problem: three pains in everyday words (ngawur/referensi tidak asli, lupa antar sesi, takut ditolak atau terdeteksi).
 3. Agitate: the credibility chain ("dosa jariyah") and the Rithah thread; no invented incidents.
 4. Solution: memori per topik, referensi asli dan terlacak, scratchbook.
@@ -36,28 +36,28 @@ Concept from the 2026-10-14 brainstorm. Facts and decisions it rests on: [[landi
 8. Comparison: ARTi vs Claude Code polos, Claude AI, NotebookLM, other chat LLMs (from ebook ch. 3 subchapter 17), plus the honest trade-off.
 9. Free entry: chapter 1 free and SciPeek (live on the Web Store).
 10. Honest requirements: Claude plan, Claude Code, VS Code, Windows only, internet to install, ebook progress.
-11. Offer: Rp99.000 perintis (first 100 buyers, live quota), normal Rp199.000/year, renewal rule, garansi 7 hari, why the price is low now.
-12. FAQ: coding needed, AI detector and ethics, data safety, Claude changes, after one year, total cost, refund.
+11. Offer: Rp99.000 perintis (first 100 buyers, live quota), normal Rp199.000 one-time, promo event shown with name and real end date, why the price is low now. (Garansi removed from the page 2026-10-18.)
+12. FAQ: coding needed, AI detector and ethics, data safety, Claude changes, annual fee (none), total cost. (Refund question removed 2026-10-18.)
 13. Closing CTA with tagline and "tidak berafiliasi dengan Anthropic". Footer: privasi, syarat, kontak.
 
 ## Skills and tools placement
 - Three layers. Page: skills grouped by stage inside "cara kerja", benefit language, skill name as a small label. Tools almost invisible: one "di balik layar" line (PDF to Markdown, Word/PDF export, literature search via OpenAlex/Semantic Scholar/Scholar, local dashboard, runs locally). Full list of 10 skills and tools only on `/fitur`, linked from the page. Say "10 skill" only after the README's "nine skills" is fixed.
 
 ## Marketing rules (honest persuasion only)
-- **Use:** real scarcity (live quota), one price step (99rb to 199rb after 100 buyers), crossed-out Rp199.000, "Rp16.600/bulan" comparison, real bonuses only (chapter updates during the subscription; **not SciPeek**, its Scimago data is non-commercial, see [[landing-scipeek-artipdf]]), total-cost transparency (Claude plan is extra), risk reversal if a refund policy is decided.
+- **Use:** real scarcity (live quota), one price step (99rb to 199rb after 100 buyers), crossed-out Rp199.000, "Rp16.600/bulan" comparison, real bonuses only (chapter updates during the subscription; **not SciPeek**, its Scimago data is non-commercial, see [[landing-scipeek-artipdf]]), total-cost transparency (Claude plan is extra), risk reversal was a 7-day refund, removed from the marketing pages 2026-10-18 (the refund mechanism stays in the system).
 - **Avoid:** countdown timers or deadlines (quota is the only limiter), invented "value" prices for the course or bonuses, fake-urgency wording, selling unwritten BONUS chapters (Toolkit, Panduan Instalasi, Prompt Guide) as bonuses.
 
 ## Decided 2026-10-14 (researcher)
-- **Renewal** follows the normal price (Rp199.000) unless a promo is running; the page states this.
+- **Renewal:** superseded 2026-10-18, the purchase is one-time and lifetime (licenses issued for 1000 months); there is no renewal.
 - **Quota:** the 100-buyer Rp99.000 price is **one batch only**. Promos at specific events may come later; they must be named differently, carry a real end date, and never be presented as the perintis price again.
 - **CTA:** WhatsApp directly. **Chapter 1:** free to read. **Demo:** a 1-2 minute recording of real ARTi use will be made.
 
-- **Guarantee:** 7-day full refund counted from the **purchase date** (researcher's choice, for clear counting), no reason required, requested by WhatsApp; see below.
+- **Guarantee:** superseded 2026-10-18: the claim is removed from the landing page, `/fitur` and the series mail; `/syarat`, `/kontak`, `/privasi` and the contact topic still mention it and wait for the researcher's decision (list in [[automatic-purchase-plan]]).
 
 ## Open decisions
 - Name "ARTi Workflow" vs "ARTi Framework" outside the ebook; offline grace after activation.
 
-## Guarantee (decided 2026-10-14)
+## Guarantee (decided 2026-10-14, claim removed from marketing pages 2026-10-18)
 7-day full refund counted from the purchase date, no reason required, requested by WhatsApp. On refund the admin revokes the license (`arti-admin revoke`) and removes LMS access. Separate promise kept: if installation fails because of ARTi's side, refund at any time within the subscription. Needs a line in the terms/EULA (`/syarat` is still an unreviewed draft). Operational notes: "purchase date" should be the payment-confirmation date shown in the WhatsApp chat; send the key promptly so the window is not spent waiting. Limited exposure at Rp99.000.
 
 ## Build status (2026-10-14, uncommitted)

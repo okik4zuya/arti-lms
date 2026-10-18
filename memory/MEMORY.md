@@ -5,7 +5,7 @@ metadata:
   type: project
   tier: T0
   created: 2026-09-08 21:36
-  updated: 2026-10-15 16:59
+  updated: 2026-10-18 16:40
 ---
 
 # arti-lms — Memory Index
@@ -38,4 +38,11 @@ metadata:
 - [R2 storage](memories/r2-storage.md) — Cloudflare R2 buckets (arti public, arti-member, arti-private), what goes where, how the app reaches R2, gotchas; proofs must use arti-private
 - [Legal review notes](memories/legal-review-notes.md) — what /syarat, /privasi, /kontak say, what needs a lawyer, proposed wording (not live)
 - [List building](memories/list-building.md) — double opt-in mailing list; ARTi PDF download via R2 with thank-you dialog; sign-up cards on every free-chapter page; plus Filament "Daftar email" admin (filters, CSV, widgets, buyer marking), the 4-email welcome series (off by default), broadcasts, one-click unsubscribe; dev Redis -MISCONF gotcha
+- [Automatic purchase prompt](memories/automatic-purchase-prompt.md) — the ready-to-paste prompt for the next session: payment gateway, learner account, license key, email and WhatsApp delivery, decisions to discuss first, hard rules
+- [Automatic purchase plan](memories/automatic-purchase-plan.md) — what was built 2026-10-18 (Midtrans/Xendit gateway driver, orders, webhook, FulfillOrder, set-password link, forgot-password, quota, refund, reconcile, Filament pricing/promo), garansi mention list, decisions taken
+- [Worker changes spec](memories/worker-changes-spec.md) — hand-over for the Worker repo: silent resend, months 1000, optional idempotent extend, client "Lifetime" label
+- [Purchase production checklist](memories/purchase-production-checklist.md) — env variable names, migrations, cron, Xendit dashboard, Brevo, sandbox end-to-end steps
+- [Next-session prompt](memories/next-session-prompt.md) — ready-to-paste prompt for the follow-up session: understand the context, then brainstorm (sandbox result, WhatsApp provider, legal review, product side, production)
+- [Duitku fallback](memories/duitku-fallback.md) — backup gateway if Midtrans rejects the account or category: individual requirements (no NIB, NPWP yes), fees, API quirks (status-check rate limit), support questions; not built
+- [PHP binary and shell notes](memories/php-binary-and-shell.md) — php path for artisan/tests, Bash heredoc and CRLF gotchas
 - [Landing explainer storyboard](memories/landing-explainer-storyboard.md) — the 40 s explainer: 7 scenes, build and render recipe, installed on the landing page

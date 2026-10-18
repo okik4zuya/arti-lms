@@ -98,6 +98,16 @@ class LicenseIssuance extends Model
         };
     }
 
+    /** "berlaku selamanya" for a lifetime license (issued for about 83 years), otherwise "berlaku sampai <date>". */
+    public function validityLabel(): string
+    {
+        return match (true) {
+            $this->expires_at === null => 'masa berlaku belum diketahui',
+            $this->expires_at->greaterThan(now()->addYears(50)) => 'berlaku selamanya',
+            default => 'berlaku sampai '.$this->expires_at->locale('id')->translatedFormat('j F Y'),
+        };
+    }
+
     public function isPending(): bool
     {
         return $this->status === self::PENDING;

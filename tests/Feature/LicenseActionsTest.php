@@ -403,24 +403,27 @@ class LicenseActionsTest extends TestCase
 
     // ---- Reset account password -----------------------------------------------------------
 
-    public function test_support_resets_a_learner_password_which_is_returned_once_and_not_stored(): void
+    public function test_support_gets_a_one_time_link_that_is_returned_once_and_not_stored(): void
     {
-        $learner = User::factory()->create(['email' => 'buyer@example.test']);
+        $learner = User::factory()->create(['email' => 'buyer@example.test', 'password' => 'lama-sandi-1']);
         $learner->assignRole('learner');
         $oldHash = $learner->password;
         $row = $this->row(['user_id' => $learner->id]);
 
-        $password = app(ResetAccountPassword::class)->handle($row, $this->support);
+        $url = app(ResetAccountPassword::class)->handle($row, $this->support);
 
-        $this->assertSame(12, strlen($password));
-        $fresh = $learner->fresh();
-        $this->assertNotSame($oldHash, $fresh->password);
-        $this->assertTrue(Hash::check($password, $fresh->password));
+        $this->assertStringContainsString('b=welcome', $url);
+        // The current password is untouched until the buyer uses the link; no password is generated anywhere.
+        $this->assertSame($oldHash, $learner->fresh()->password);
 
-        $event = $row->events()->where('event', 'account_password_reset')->firstOrFail();
+        $event = $row->events()->where('event', 'account_password_link')->firstOrFail();
         $this->assertSame($this->support->id, $event->user_id);
-        $this->assertStringNotContainsString($password, json_encode($event->toArray()));
-        $this->assertStringNotContainsString($password, json_encode(\DB::table('license_issuances')->get()));
+        $token = basename(parse_url($url, PHP_URL_PATH));
+        $this->assertStringNotContainsString($token, json_encode($event->toArray()));
+        $this->assertStringNotContainsString($token, json_encode(\DB::table('license_issuances')->get()));
+        $this->assertStringNotContainsString($token, json_encode(\DB::table('license_issuance_events')->get()));
+
+        $this->get($url)->assertOk()->assertSee('Atur password akun belajar');
     }
 
     public function test_an_admin_or_support_account_can_never_be_reset_from_here(): void
@@ -456,7 +459,7 @@ class LicenseActionsTest extends TestCase
         app(ResetAccountPassword::class)->handle($this->row(['user_id' => $learner->id]), User::factory()->create());
     }
 
-    public function test_the_reset_action_changes_the_password_and_points_to_the_key_message(): void
+    public function test_the_link_action_leaves_the_password_alone_and_points_to_the_key_message(): void
     {
         $learner = User::factory()->create(['email' => 'buyer@example.test']);
         $learner->assignRole('learner');
@@ -466,13 +469,13 @@ class LicenseActionsTest extends TestCase
 
         Livewire::actingAs($this->support)->test(ListLicenseIssuances::class)
             ->callAction(TestAction::make('resetAccountPassword')->table($row))
-            ->assertNotified('Password direset. Kirim pesan berisi password baru.');
+            ->assertNotified('Tautan dibuat. Kirim pesan yang berisi tautan itu.');
 
-        $this->assertNotSame($oldHash, $learner->fresh()->password);
-        $this->assertDatabaseHas('license_issuance_events', ['license_issuance_id' => $row->id, 'event' => 'account_password_reset', 'user_id' => $this->support->id]);
+        $this->assertSame($oldHash, $learner->fresh()->password);
+        $this->assertDatabaseHas('license_issuance_events', ['license_issuance_id' => $row->id, 'event' => 'account_password_link', 'user_id' => $this->support->id]);
     }
 
-    public function test_after_a_reset_the_key_modal_replaces_the_confirmation_and_carries_the_password(): void
+    public function test_after_requesting_a_link_the_key_modal_replaces_the_confirmation_and_carries_it(): void
     {
         $learner = User::factory()->create(['email' => 'buyer@example.test']);
         $learner->assignRole('learner');
@@ -486,10 +489,10 @@ class LicenseActionsTest extends TestCase
         $mounted = $component->instance()->mountedActions;
         $this->assertCount(1, $mounted);
         $this->assertSame('sendKey', $mounted[0]['name']);
-        $password = $mounted[0]['arguments']['account_password'] ?? null;
-        $this->assertSame(12, strlen((string) $password));
-        $this->assertTrue(Hash::check($password, $learner->fresh()->password));
-        $this->assertStringContainsString("Password sementara: {$password}", $mounted[0]['data']['message'] ?? '');
+        $url = $mounted[0]['arguments']['set_password_url'] ?? null;
+        $this->assertStringContainsString('b=welcome', (string) $url);
+        $this->assertStringContainsString((string) $url, $mounted[0]['data']['message'] ?? '');
+        $this->assertStringNotContainsString('Password sementara', $mounted[0]['data']['message'] ?? '');
     }
 
     public function test_after_rotating_the_key_the_key_modal_opens_with_the_new_key(): void

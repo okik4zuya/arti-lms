@@ -168,7 +168,9 @@ class EmailSeriesTest extends TestCase
         $this->assertStringContainsString('Rp99.000', $html);
         $this->assertStringContainsString('tersisa 60 dari 100', $html);
         $this->assertStringContainsString('Rp199.000', $html);
-        $this->assertStringContainsString('7 hari', $html);
+        $this->assertStringContainsString('bayar sekali', $html);
+        $this->assertStringNotContainsString('Garansi', $html);
+        $this->assertStringNotContainsString('per tahun', $html);
         $this->assertStringContainsString('tidak menjamin naskah diterima', $html);
 
         config(['site.offer.launch_sold' => 100]);
@@ -176,9 +178,10 @@ class EmailSeriesTest extends TestCase
         $this->assertStringNotContainsString('Rp99.000', $html);
         $this->assertStringContainsString('Harga perintis sudah berakhir', $html);
 
+        // The count is real now: places held by orders count too, so there is no "hidden counter" state.
         config(['site.offer.launch_sold' => null]);
         $html = (new SeriesMail($person, 4))->render();
-        $this->assertStringNotContainsString('tersisa', $html);   // no invented counter when none is set
+        $this->assertStringContainsString('tersisa 100 dari 100', $html);
     }
 
     public function test_the_only_email_with_a_sales_pitch_is_the_last_one(): void

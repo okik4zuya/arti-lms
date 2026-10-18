@@ -10,6 +10,15 @@ return [
     'contact_whatsapp' => env('SITE_CONTACT_WHATSAPP'),
 
     /*
+    | Who sells ARTi, shown on /kontak (electronic trade rules ask for the seller's identity). Left empty until the
+    | owner fills it; nothing is invented. Name and the city of domicile are enough for an individual seller.
+    */
+    'seller' => [
+        'name' => env('SITE_SELLER_NAME'),
+        'city' => env('SITE_SELLER_CITY'),
+    ],
+
+    /*
     | Admin panel (/jamrud). `mfa_required`: admin and support must set up an authenticator app before they
     | can use the panel. OFF for now (decision 2026-10-15, MFA postponed); the code is built and tested, so
     | set ADMIN_MFA_REQUIRED=true before the panel is used in production.
@@ -27,7 +36,12 @@ return [
         'price_launch' => 99000,
         'launch_quota' => 100,
         'launch_sold' => env('SITE_LAUNCH_SOLD'),
-        'guarantee_days' => 7,
+        // Lifetime purchase: the Worker has no "no expiry", so a license is issued for this many months (about 83 years).
+        'license_months' => 1000,
+        // The e-course every buyer gets access to.
+        'course_slug' => 'arti-framework',
+        // How long a payment page stays open; a pending order holds its launch place for this long.
+        'payment_window_minutes' => 60,
         'whatsapp_message' => 'Halo, saya ingin membeli ARTi paket perintis.',
         'chat_message' => 'Halo, saya ingin bertanya tentang ARTi.',
     ],
@@ -39,13 +53,23 @@ return [
     */
     'license' => [
         'whatsapp_template' => "Halo {name}, terima kasih sudah membeli ARTi.\n\n"
-            ."Kunci lisensi Anda ({seats} perangkat, berlaku sampai {expires}):\n\n{key}\n\n"
-            ."1. Unduh dan jalankan installer: {installer}\n"
-            ."2. Buka terminal lalu jalankan: arti-license activate {key}\n\n"
+            ."Kunci lisensi Anda ({seats} perangkat, {expires}):\n\n{key}\n\n"
+            ."1. Masuk ke e-course Anda, buka bagian Download, lalu unduh installer: {installer}\n"
+            ."2. Jalankan installer dan masukkan kunci lisensi di atas saat diminta.\n\n"
             .'{account}'
             .'Simpan kunci ini dan jangan dibagikan. Balas pesan ini bila butuh bantuan atau ingin memindahkan lisensi ke komputer lain.',
-        // Placeholders: {email} {password} {login_url}. Used when the account was created with the license.
-        'account_template' => "Akun belajar Anda:\nEmail: {email}\nPassword sementara: {password}\nMasuk di: {login_url}\nSimpan password ini baik-baik.\n\n",
+        // Automatic purchases (WhatsApp copy of the purchase mail). Placeholders: {name} {email} {password_link}
+        // {key} {seats} {validity} {installer}. {password_link} already carries its own sentence and the URL.
+        'whatsapp_purchase_template' => "Halo {name}, terima kasih sudah membeli ARTi. Pembayaran Anda sudah kami terima.\n\n"
+            ."Akun belajar: {email}\n"
+            ."{password_link}"
+            ."Kunci lisensi ({seats} perangkat, {validity}):\n{key}\n\n"
+            ."1. Masuk ke e-course Anda, buka bagian Download, lalu unduh installer: {installer}\n"
+            ."2. Jalankan installer dan masukkan kunci lisensi di atas saat diminta.\n\n"
+            .'Password tidak pernah dikirim; Anda memilihnya sendiri lewat tautan. Simpan kunci ini dan jangan dibagikan. Balas pesan ini bila butuh bantuan.',
+        // Placeholders: {email} {password_link} {login_url}. Used when a one-time set-password link was just made.
+        // No password is ever sent: the buyer chooses their own through the link.
+        'account_template' => "Akun belajar Anda:\nEmail: {email}\nAtur password Anda lewat tautan sekali pakai ini (tanpa batas waktu, berlaku sampai password diatur):\n{password_link}\nSesudah itu masuk di: {login_url}\n\n",
         // Used when the email already had an account (the password is not known here).
         'account_existing_template' => "Akun belajar Anda memakai email {email} (password lama Anda tetap berlaku). Masuk di: {login_url}\n\n",
     ],

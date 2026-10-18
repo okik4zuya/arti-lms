@@ -6,7 +6,7 @@
 @section('main_class', 'site-main--flush')
 
 @section('header_cta')
-    <a href="{{ $offer->buyUrl() }}" class="btn btn--primary header-cta" data-kontak="pembelian"><span class="cta-long">Beli lewat WhatsApp</span><span class="cta-short">Beli</span></a>
+    <a href="{{ route('checkout') }}" class="btn btn--primary header-cta"><span class="cta-long">Beli sekarang</span><span class="cta-short">Beli</span></a>
 @endsection
 
 @section('content')
@@ -22,14 +22,14 @@
                 Dilengkapi e-course untuk mempelajarinya.
             </p>
             <div class="hero__actions">
-                <a href="{{ $offer->buyUrl() }}" class="btn btn--primary btn--lg" data-kontak="pembelian">Beli lewat WhatsApp</a>
+                <a href="{{ route('checkout') }}" class="btn btn--primary btn--lg">Beli sekarang</a>
                 @if ($freeChapterUrl)
                     <a href="{{ $freeChapterUrl }}" class="btn btn--outline btn--lg">Baca bab 1 gratis</a>
                 @else
                     <a href="#coba-gratis" class="btn btn--outline btn--lg">Coba gratis dulu</a>
                 @endif
             </div>
-            <p class="trust-line">Garansi uang kembali {{ $offer->guaranteeDays() }} hari &middot; Windows &middot; Butuh Claude Code</p>
+            <p class="trust-line">Bayar sekali &middot; Windows &middot; Butuh Claude Code</p>
         </div>
     </section>
 
@@ -218,13 +218,13 @@
                          alt="Tampilan e-course di aplikasi: bab Sistem Memori dengan daftar bab dan subbab di sisi kiri">
                     <h3><x-glyph name="kursus" class="icon--inline" /> E-course ARTi Framework</h3>
                     <p>Dibaca langsung di aplikasi, berbahasa Indonesia, ditulis dari pengalaman memakai ARTi untuk naskah sendiri.</p>
-                    <p>Bagian Pendahuluan sudah bisa dibaca. Bagian Amati, Replikasi, dan Tambah Inovasi sedang ditulis, dan bab baru yang terbit selama masa langganan Anda ikut Anda dapat.</p>
+                    <p>Bagian Pendahuluan sudah bisa dibaca. Bagian Amati, Replikasi, dan Tambah Inovasi sedang ditulis, dan bab baru yang terbit ikut Anda dapat tanpa biaya tambahan.</p>
                 </div>
                 <div class="panel">
                     <img src="{{ asset('images/landing/dashboard.webp') }}" width="1366" height="738" loading="lazy" class="panel__img"
                          alt="Dashboard ARTi di komputer: daftar berkas proyek di kiri, daftar rujukan dengan kuartil jurnal di tengah, dan naskah di kanan (isi naskah diburamkan)">
                     <h3><x-glyph name="lisensi" class="icon--inline" /> Lisensi ARTi Framework</h3>
-                    <p>Satu tahun. 10 skill, dashboard lokal, dan alat pendukung. Berjalan di komputer Anda.</p>
+                    <p>Bayar sekali, berlaku selamanya. 10 skill, dashboard lokal, dan alat pendukung. Berjalan di komputer Anda.</p>
                     <p class="muted">Tampilan dashboard dari proyek sungguhan, isi naskah sengaja diburamkan.</p>
                     <p class="muted">Di balik layar: PDF jadi Markdown yang bisa dicari, ekspor ke Word dan PDF, pencarian literatur lewat OpenAlex, Semantic Scholar, dan Google Scholar.</p>
                 </div>
@@ -355,43 +355,44 @@
     {{-- 11. Penawaran --}}
     <section class="landing-section landing-section--alt" id="harga">
         <div class="container container--narrow">
-            @if ($offer->launchActive())
+            @if ($offer->promotion())
+                <h2>{{ $offer->promotion()->label }}</h2>
+            @elseif ($offer->launchActive())
                 <h2>Harga perintis untuk {{ $offer->quota() }} pembeli pertama.</h2>
             @else
                 <h2>Satu paket, satu harga.</h2>
             @endif
 
             <div class="panel offer">
-                @if ($offer->launchActive())
+                @if ($offer->promotion())
+                    <p class="offer__price">
+                        <s>{{ $offer->format($offer->normalPrice()) }}</s>
+                        <strong>{{ $offer->format($offer->promotion()->price) }}</strong>
+                        <span>bayar sekali</span>
+                    </p>
+                    <p class="offer__quota">Promo sampai <strong>{{ $offer->promotion()->ends_at->locale('id')->translatedFormat('j F Y, H.i') }}</strong>. Setelah itu harganya kembali normal.</p>
+                @elseif ($offer->launchActive())
                     <p class="offer__price">
                         <s>{{ $offer->format($offer->normalPrice()) }}</s>
                         <strong>{{ $offer->format($offer->launchPrice()) }}</strong>
-                        <span>per tahun</span>
+                        <span>bayar sekali</span>
                     </p>
-                    <p class="offer__quota">
-                        @if ($offer->remaining() !== null)
-                            Tersisa <strong>{{ $offer->remaining() }} dari {{ $offer->quota() }}</strong>.
-                        @else
-                            Untuk {{ $offer->quota() }} pembeli pertama.
-                        @endif
-                    </p>
-                    <p>Setelah itu harganya {{ $offer->format($offer->normalPrice()) }} per tahun, sekitar {{ $offer->format($offer->perMonthNormal()) }} per bulan. Perpanjangan juga mengikuti harga normal, kecuali sedang ada promo.</p>
-                    <p><strong>Kenapa murah sekarang?</strong> E-course masih ditulis. Anda membeli lebih awal dengan harga lebih rendah, dan bab baru ikut Anda dapat selama masa langganan.</p>
+                    <p class="offer__quota">Tersisa <strong>{{ $offer->remaining() }} dari {{ $offer->quota() }}</strong>.</p>
+                    <p>Setelah itu harganya {{ $offer->format($offer->normalPrice()) }}, tetap bayar sekali.</p>
+                    <p><strong>Kenapa murah sekarang?</strong> E-course masih ditulis. Anda membeli lebih awal dengan harga lebih rendah, dan bab baru ikut Anda dapat.</p>
                 @else
                     <p class="offer__price">
                         <strong>{{ $offer->format($offer->normalPrice()) }}</strong>
-                        <span>per tahun</span>
+                        <span>bayar sekali</span>
                     </p>
-                    <p>Sekitar {{ $offer->format($offer->perMonthNormal()) }} per bulan. Perpanjangan mengikuti harga normal, kecuali sedang ada promo.</p>
                 @endif
 
-                <p><strong>Yang Anda dapat:</strong> e-course ARTi Framework &middot; lisensi ARTi Framework satu tahun &middot; pembaruan selama masa langganan.</p>
+                <p><strong>Yang Anda dapat:</strong> e-course ARTi Framework &middot; lisensi ARTi Framework &middot; pembaruan ARTi tanpa biaya tambahan.</p>
 
-                <p><strong>Garansi {{ $offer->guaranteeDays() }} hari.</strong> Tidak puas, uang kembali penuh dalam {{ $offer->guaranteeDays() }} hari sejak pembelian, tanpa perlu alasan. Kalau instalasi gagal karena sisi ARTi, uang kembali kapan pun selama masa langganan.</p>
+                <p><strong>Cara membeli:</strong> tekan tombol, isi nama dan email, lalu bayar dengan QRIS, virtual account, atau e-wallet. Akun belajar, kunci lisensi, dan tautan unduhan dikirim ke email Anda.</p>
 
-                <p><strong>Cara membeli:</strong> tekan tombol, kirim pesan WhatsApp, lakukan pembayaran, lalu kunci lisensi dan akses e-course dikirim oleh admin.</p>
-
-                <a href="{{ $offer->buyUrl() }}" class="btn btn--primary btn--lg" data-kontak="pembelian">Beli lewat WhatsApp</a>
+                <a href="{{ route('checkout') }}" class="btn btn--primary btn--lg">Beli sekarang</a>
+                <p class="muted">Atau <a href="{{ $offer->buyUrl() }}" data-kontak="pembelian">beli lewat WhatsApp</a>.</p>
             </div>
         </div>
     </section>
@@ -419,19 +420,15 @@
                 </details>
                 <details>
                     <summary>Bagaimana kalau Claude berubah?</summary>
-                    <p>ARTi bergantung pada Claude Code. Kalau aturan atau harganya berubah, ARTi harus menyesuaikan, dan itu risiko yang nyata. Karena itu garansi {{ $offer->guaranteeDays() }} hari ada.</p>
+                    <p>ARTi bergantung pada Claude Code. Kalau aturan atau harganya berubah, ARTi harus menyesuaikan, dan itu risiko yang nyata.</p>
                 </details>
                 <details>
-                    <summary>Apa yang terjadi setelah satu tahun?</summary>
-                    <p>Anda mendapat peringatan dan masa tenggang sebelum lisensi berakhir. Setelah berakhir, pembaruan berhenti sampai lisensi diperpanjang. Dashboard tetap bisa dibuka, skill dan berkas Anda tetap bisa dipakai lewat VS Code, dan data Anda tetap milik Anda. Perpanjangan mengikuti harga normal, kecuali ada promo.</p>
+                    <summary>Apakah ada biaya tahunan?</summary>
+                    <p>Tidak. Anda membayar sekali. Skill dan berkas Anda berjalan di komputer Anda sendiri, dan data Anda tetap milik Anda.</p>
                 </details>
                 <details>
                     <summary>Berapa total biayanya?</summary>
-                    <p>{{ $offer->format($offer->currentPrice()) }} per tahun untuk ARTi, ditambah langganan Claude Anda sendiri.</p>
-                </details>
-                <details>
-                    <summary>Bagaimana cara minta uang kembali?</summary>
-                    <p>Kirim pesan ke WhatsApp admin dalam {{ $offer->guaranteeDays() }} hari sejak pembelian. Kunci dicabut dan uang dikembalikan.</p>
+                    <p>{{ $offer->format($offer->currentPrice()) }} sekali bayar untuk ARTi, ditambah langganan Claude Anda sendiri.</p>
                 </details>
             </div>
         </div>
@@ -442,7 +439,7 @@
         <div class="container container--narrow">
             <p class="tagline tagline--lg">Dari ide sampai publish, bersama ARTi.</p>
             <div class="hero__actions hero__actions--center">
-                <a href="{{ $offer->buyUrl() }}" class="btn btn--primary btn--lg" data-kontak="pembelian">Beli lewat WhatsApp</a>
+                <a href="{{ route('checkout') }}" class="btn btn--primary btn--lg">Beli sekarang</a>
                 <a href="#coba-gratis" class="btn btn--outline btn--lg">Coba gratis dulu</a>
             </div>
             <p class="disclaimer">ARTi tidak berafiliasi dengan Anthropic. Claude dan Claude Code adalah produk Anthropic.</p>

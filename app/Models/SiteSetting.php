@@ -20,6 +20,17 @@ class SiteSetting extends Model
         'chat_message' => 'site.offer.chat_message',
     ];
 
+    /**
+     * Prices and quotas, edited on their own page ("Harga & promo"). Kept apart from CONFIG_KEYS on purpose: the
+     * site-settings page saves every key in CONFIG_KEYS and would blank these.
+     */
+    public const PRICING_KEYS = [
+        'price_normal' => 'site.offer.price_normal',
+        'price_launch' => 'site.offer.price_launch',
+        'launch_quota' => 'site.offer.launch_quota',
+        'launch_sold' => 'site.offer.launch_sold',
+    ];
+
     protected $primaryKey = 'key';
 
     public $incrementing = false;

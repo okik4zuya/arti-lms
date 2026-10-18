@@ -122,19 +122,23 @@ class FilamentLicenseIssuanceTest extends TestCase
         $this->assertNotEmpty($learner->password);
     }
 
-    public function test_the_key_modal_message_carries_the_password_only_when_it_is_passed_in(): void
+    public function test_the_key_modal_message_carries_the_set_password_link_only_when_it_is_passed_in(): void
     {
         $learner = User::factory()->create(['email' => 'new@example.test']);
         $row = $this->row(['user_id' => $learner->id]);
+        $link = 'https://arti.test/atur-sandi/tok123?email=new%40example.test&b=welcome&signature=abc';
 
         $with = Livewire::test(ListLicenseIssuances::class)
-            ->mountAction(TestAction::make('sendKey')->table($row)->arguments(['account_password' => 'pw-Abc-123456']));
+            ->mountAction(TestAction::make('sendKey')->table($row)->arguments(['set_password_url' => $link]));
 
-        $this->assertStringContainsString('Password sementara: pw-Abc-123456', $with->instance()->mountedActions[0]['data']['message']);
+        $message = $with->instance()->mountedActions[0]['data']['message'];
+        $this->assertStringContainsString($link, $message);
+        $this->assertStringContainsString('lewat tautan sekali pakai ini (tanpa batas waktu', $message);
+        $this->assertStringNotContainsString('Password sementara', $message);
 
         $without = Livewire::test(ListLicenseIssuances::class)->mountAction(TestAction::make('sendKey')->table($row));
 
-        $this->assertStringNotContainsString('pw-Abc-123456', $without->instance()->mountedActions[0]['data']['message']);
+        $this->assertStringNotContainsString('atur-sandi', $without->instance()->mountedActions[0]['data']['message']);
         $this->assertStringNotContainsString('Password sementara', $without->instance()->mountedActions[0]['data']['message']);
     }
 
@@ -152,24 +156,41 @@ class FilamentLicenseIssuanceTest extends TestCase
         }
 
         $this->assertStringNotContainsString('Password sementara', LicenseMessage::for($row));
+        $this->assertStringNotContainsString('atur-sandi', LicenseMessage::for($row));
     }
 
-    public function test_the_message_carries_the_login_when_a_password_was_just_set(): void
+    public function test_issuing_with_a_new_account_makes_a_one_time_link_and_stores_no_password(): void
+    {
+        $this->workerIssues();
+
+        Livewire::test(ListLicenseIssuances::class)
+            ->callAction('issue', $this->issueData(['create_learner' => true]))
+            ->assertHasNoFormErrors();
+
+        $learner = User::where('email', 'new@example.test')->firstOrFail();
+        // The link itself is shown only in the key modal; what is stored is the hashed token the link opens.
+        $this->assertDatabaseHas('password_reset_tokens', ['email' => 'new@example.test']);
+        $this->assertTrue(\Hash::check('password', $learner->password) === false);
+        $this->assertStringNotContainsString('atur-sandi', json_encode(\DB::table('license_issuance_events')->get()));
+    }
+
+    public function test_the_message_carries_the_login_and_the_link_when_one_was_just_made(): void
     {
         $learner = User::factory()->create(['email' => 'new@example.test']);
         $row = $this->row(['user_id' => $learner->id]);
 
-        $message = LicenseMessage::for($row, 'temp-pass-123');
+        $message = LicenseMessage::for($row, 'https://arti.test/atur-sandi/temp-token');
 
         $this->assertStringContainsString('Email: new@example.test', $message);
-        $this->assertStringContainsString('Password sementara: temp-pass-123', $message);
+        $this->assertStringContainsString('https://arti.test/atur-sandi/temp-token', $message);
+        $this->assertStringNotContainsString('Password sementara', $message);
         $this->assertStringContainsString(route('login'), $message);
         $this->assertStringNotContainsString('Segera ganti password', $message);
         $this->assertStringNotContainsString('{', $message);
 
-        // Opened later without the argument, the same row carries no password.
+        // Opened later without the argument, the same row carries no link.
         $later = LicenseMessage::for($row->fresh());
-        $this->assertStringNotContainsString('temp-pass-123', $later);
+        $this->assertStringNotContainsString('temp-token', $later);
         $this->assertStringNotContainsString('Password sementara', $later);
     }
 

@@ -1,15 +1,23 @@
 @extends('layouts.site')
 
+@inject('gateways', 'App\Services\Payments\PaymentGateways')
+
 @section('title', 'Kebijakan privasi')
 @section('description', 'Data apa yang disimpan situs dan aplikasi ARTi, apa yang tetap di komputer Anda, dan apa yang dikirim ke layanan lain.')
 
 {{--
-    Basis (researched 2026-10-16): UU 27/2022 Pelindungan Data Pribadi (dasar pemrosesan Pasal 20, hak subjek data
-    Pasal 5-15, pemberitahuan kegagalan pelindungan Pasal 46, transfer lintas negara Pasal 56). Keep it in step with
-    reality:
+    Basis (researched 2026-10-16, purchase flow re-checked 2026-10-18): UU 27/2022 Pelindungan Data Pribadi (dasar
+    pemrosesan Pasal 20, hak subjek data Pasal 5-15, pemberitahuan kegagalan pelindungan Pasal 46, transfer lintas
+    negara Pasal 56). Keep it in step with reality:
       - If SITE_DEMO_VIDEO_EMBED_URL is set (an embedded player), the player's host sees visitors: say so below.
       - If the licensing Worker sends more than it does now (key, hashed machine code, OS name, computer name,
         license file, ARTi version, hashed IP for rate limits), say so below.
+      - The payment gateway (Midtrans or Xendit, see PaymentGateways) receives the buyer's name, email and optional phone
+        with the payment request (App\Services\Payments\MidtransClient / XenditClient);
+        Brevo sends the purchase, reset and list mails; the WhatsApp copy of the purchase mail is sent only when a
+        provider is configured (WHATSAPP_DRIVER). If any of that changes, change this page.
+    NOT reviewed by a lawyer. Points for a lawyer: the legal basis wording, the cross-border paragraph (Pasal 56 was the
+    subject of a Constitutional Court review decided in January 2026; read the ruling), and the retention periods.
 --}}
 
 @section('content')
@@ -20,7 +28,7 @@
 
         <h2>Data yang disimpan di situs dan aplikasi baca</h2>
         <ul>
-            <li>Akun: nama, alamat email, dan sandi (disimpan dalam bentuk hash, bukan teks asli).</li>
+            <li>Akun: nama, alamat email, dan password (disimpan dalam bentuk hash, bukan teks asli). ARTi tidak pernah mengetahui password Anda: Anda memilihnya sendiri.</li>
             <li>Akses: kursus mana yang dapat Anda buka.</li>
             <li>Kemajuan belajar: subbab yang sudah Anda tandai selesai.</li>
             <li>Cookie: <code>laravel_session</code> menjaga Anda tetap masuk, dan <code>XSRF-TOKEN</code> melindungi formulir dari permintaan palsu. Keduanya dipasang saat Anda membuka situs, juga sebelum masuk, dan bukan pelacak.</li>
@@ -28,9 +36,14 @@
 
         <h2>Pembelian dan lisensi</h2>
         <ul>
-            <li>Pembelian berlangsung lewat WhatsApp, jadi admin menerima nomor dan isi pesan Anda. Itu dipakai untuk memproses pembayaran, mengirim kunci lisensi dan akses e-course, dan menangani permintaan uang kembali.</li>
+            <li>Bila Anda membeli lewat situs, nama, alamat email, dan nomor WhatsApp (opsional) yang Anda isi disimpan sebagai pesanan, bersama jumlah, harga yang berlaku, status, metode pembayaran, dan waktunya. Dari sini dibuat akun belajar dan lisensi Anda.</li>
+            <li>Pembayaran diproses oleh {{ $gateways->current()->label() }} ({{ $gateways->current()->company() }}) menurut kebijakan privasi {{ $gateways->current()->label() }} sendiri. {{ $gateways->current()->label() }} menerima nama, email, dan nomor telepon yang Anda isi serta jumlah pesanan, dan Anda mengisi data pembayaran Anda langsung di halaman {{ $gateways->current()->label() }}. ARTi hanya menerima status pembayaran, metode pembayaran, dan nomor invoice. ARTi tidak menerima dan tidak menyimpan nomor kartu atau rekening Anda.</li>
+            <li>Bila Anda membeli lewat WhatsApp, admin menerima nomor dan isi pesan Anda. Itu dipakai untuk memproses pembayaran, mengirim kunci lisensi dan akses e-course, dan menangani permintaan pengembalian dana.</li>
+            <li>Email pembelian (akun, tautan untuk memilih password, kunci lisensi, tautan unduhan) dan email &ldquo;Lupa password?&rdquo; dikirim lewat layanan pengiriman email Brevo. Tautan untuk memilih password disimpan di server hanya sebagai hash dan dihapus begitu dipakai.</li>
+            <li>Nomor WhatsApp yang Anda isi dipakai untuk bantuan dan, bila layanan pengiriman WhatsApp ARTi sedang aktif, untuk mengirim ringkasan pembelian yang sama dengan email. Ringkasan itu memuat kunci lisensi Anda, jadi isi nomor yang hanya Anda pakai.</li>
+            <li>Halaman status pesanan hanya menampilkan status dan alamat email yang disamarkan, dan hanya dapat dibuka oleh yang memegang nomor pesanan.</li>
             <li>Nama dan alamat email pembeli disimpan di server lisensi ARTi dan di aplikasi ARTi, untuk menerbitkan dan mengelola lisensi.</li>
-            <li>Bukti pembayaran (tangkapan layar atau berkas transfer, yang dapat memuat data rekening) disimpan di penyimpanan privat, hanya dapat dibuka oleh admin dan petugas dukungan ARTi, dan dipakai untuk memeriksa pembayaran.</li>
+            <li>Bukti pembayaran manual (tangkapan layar atau berkas transfer, yang dapat memuat data rekening) disimpan di penyimpanan privat, hanya dapat dibuka oleh admin dan petugas dukungan ARTi, dan dipakai untuk memeriksa pembayaran.</li>
             <li>Saat aktivasi, ARTi mengirim ke server lisensi ARTi kunci lisensi Anda, kode perangkat yang sudah diacak (hash, bukan ID asli perangkat), nama sistem operasi, dan nama komputer Anda.</li>
             <li>Pengecekan berkala (sekitar tiap beberapa hari, saat dashboard dibuka) mengirim berkas lisensi, kode perangkat yang sudah diacak, dan versi ARTi yang terpasang, untuk memeriksa status lisensi dan pembaruan. Data ini hanya dipakai untuk menjalankan lisensi, memberi dukungan, dan memberi tahu pembaruan.</li>
         </ul>
@@ -56,13 +69,14 @@
             <li>Halaman publik (beranda, fitur, bab gratis) tidak memasang pelacak iklan atau analitik pihak ketiga.</li>
             <li>Font dihosting di situs ini sendiri, jadi membuka halaman tidak memanggil Google Fonts atau layanan font lain.</li>
             <li>Data tidak dijual.</li>
+            <li>Password tidak pernah dikirim, disimpan dalam bentuk asli, atau dicatat di log.</li>
         </ul>
         <p>Tautan ke situs lain (YouTube, Chrome Web Store, GitHub) membawa Anda ke layanan yang punya kebijakan privasinya sendiri.</p>
 
         <h2>Dasar dan tujuan pemrosesan</h2>
         <ul>
-            <li>Data akun, pembelian, dan lisensi diproses untuk melaksanakan perjanjian dengan Anda: menerbitkan lisensi, memberi akses e-course, memberi dukungan, dan menangani uang kembali.</li>
-            <li>Pengecekan lisensi berkala dan hash alamat IP di server lisensi diproses atas kepentingan sah kami untuk menjaga keamanan dan mencegah penyalahgunaan kunci. Alamat IP tidak disimpan utuh.</li>
+            <li>Data akun, pesanan, pembayaran, dan lisensi diproses untuk melaksanakan perjanjian dengan Anda: menerbitkan lisensi, memberi akses e-course, mengirim email pembelian, memberi dukungan, dan menangani pengembalian dana.</li>
+            <li>Pengecekan lisensi berkala dan hash alamat IP di server lisensi diproses atas kepentingan sah kami untuk menjaga keamanan dan mencegah penyalahgunaan kunci. Alamat IP tidak disimpan utuh. Alamat IP juga dipakai sementara untuk membatasi percobaan berulang pada formulir (misalnya masuk, lupa password, dan pemesanan).</li>
             <li>Daftar email diproses atas persetujuan Anda, dan dapat Anda tarik kapan saja.</li>
             <li>Data tidak dipakai untuk tujuan lain tanpa persetujuan Anda, dan tidak dijual.</li>
         </ul>
@@ -70,7 +84,8 @@
         <h2>Lama penyimpanan</h2>
         <ul>
             <li>Data akun dan lisensi: selama akun atau lisensi aktif, ditambah 2 tahun setelah berakhir untuk dukungan dan penyelesaian sengketa, lalu dihapus atau dianonimkan.</li>
-            <li>Bukti pembayaran dan catatan transaksi: selama kewajiban pembukuan dan perpajakan, umumnya 10 tahun.</li>
+            <li>Pesanan, bukti pembayaran, dan catatan transaksi: selama kewajiban pembukuan dan perpajakan, umumnya 10 tahun.</li>
+            <li>Pesanan yang tidak pernah dibayar dan kedaluwarsa: dihapus atau dianonimkan dalam 1 tahun.</li>
             <li>Daftar email: sampai Anda berhenti berlangganan.</li>
         </ul>
 
@@ -78,10 +93,10 @@
         <p>Anda berhak mengetahui data apa yang kami simpan dan meminta salinannya, memperbaiki data yang keliru, meminta data dihapus atau pemrosesannya dihentikan atau dibatasi, menarik persetujuan, mengajukan keberatan, dan menuntut ganti rugi sesuai UU PDP. Ajukan lewat halaman <a href="{{ route('kontak') }}">kontak</a>. Kami menanggapi tanpa penundaan yang tidak wajar. Data yang wajib kami simpan menurut hukum (misalnya catatan pembayaran) tidak dapat dihapus sebelum jangka waktunya habis.</p>
 
         <h2>Keamanan dan kebocoran data</h2>
-        <p>Akses ke data pembeli dibatasi untuk admin dan petugas dukungan, kunci lisensi disimpan terenkripsi atau sebagai hash, bukti pembayaran disimpan di penyimpanan privat, dan sandi disimpan sebagai hash. Bila terjadi kegagalan pelindungan data pribadi, kami memberi tahu Anda secara tertulis sesuai batas waktu dan ketentuan UU PDP.</p>
+        <p>Akses ke data pembeli dibatasi untuk admin dan petugas dukungan, kunci lisensi disimpan terenkripsi atau sebagai hash, bukti pembayaran disimpan di penyimpanan privat, dan password serta tautan pengaturan password disimpan sebagai hash. Bila terjadi kegagalan pelindungan data pribadi, kami memberi tahu Anda secara tertulis sesuai batas waktu dan ketentuan UU PDP.</p>
 
         <h2>Penyedia layanan dan transfer ke luar negeri</h2>
-        <p>Sebagian layanan dijalankan penyedia di luar negeri, yaitu server lisensi (Cloudflare), pengiriman email, dan Anthropic untuk pemrosesan oleh Claude Code. Kami memakai penyedia yang menerapkan pelindungan data yang memadai, dan hanya mengirim data yang dibutuhkan untuk layanan itu.</p>
+        <p>Pemrosesan pembayaran dilakukan {{ $gateways->current()->label() }}, penyedia di Indonesia. Sebagian layanan lain dijalankan penyedia di luar negeri, yaitu server lisensi dan jaringan situs (Cloudflare), pengiriman email (Brevo), dan Anthropic untuk pemrosesan oleh Claude Code. Kami memilih penyedia yang menerapkan pelindungan data yang memadai, dan hanya mengirim data yang dibutuhkan untuk layanan itu.</p>
 
         <h2>Anak-anak</h2>
         <p>ARTi ditujukan untuk peneliti dan mahasiswa dewasa. Kami tidak dengan sengaja memproses data anak.</p>

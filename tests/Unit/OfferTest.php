@@ -3,15 +3,18 @@
 namespace Tests\Unit;
 
 use App\Support\Offer;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class OfferTest extends TestCase
 {
-    public function test_launch_price_is_active_while_quota_remains_or_counter_is_unset(): void
+    use RefreshDatabase;
+
+    public function test_launch_price_is_active_while_quota_remains(): void
     {
         config(['site.offer.launch_sold' => null]);
         $offer = new Offer;
-        $this->assertNull($offer->remaining());
+        $this->assertSame(100, $offer->remaining());
         $this->assertTrue($offer->launchActive());
         $this->assertSame(99000, $offer->currentPrice());
 

@@ -2,6 +2,8 @@
 
 namespace App\Support;
 
+use App\Models\Promotion;
+
 /**
  * The landing page offer: launch price for the first buyers, then the normal price.
  * Reads config('site.offer'); the sold counter is whatever the admin entered, never estimated.
@@ -23,37 +25,59 @@ class Offer
         return (int) config('site.offer.launch_quota');
     }
 
-    public function guaranteeDays(): int
+    /**
+     * Places already used in the launch batch: sales made outside the gateway (the admin's own count in
+     * `launch_sold`, e.g. earlier WhatsApp sales) plus every order that holds a launch place right now.
+     */
+    public function sold(): int
     {
-        return (int) config('site.offer.guarantee_days');
+        return $this->manualSold() + Quota::launchHeld();
     }
 
-    /** Sold count, or null when the admin has not set it (counter hidden). */
-    public function sold(): ?int
+    /** Sales made outside the gateway, entered by the admin. */
+    public function manualSold(): int
     {
-        $sold = config('site.offer.launch_sold');
+        $manual = config('site.offer.launch_sold');
 
-        return is_numeric($sold) ? max(0, (int) $sold) : null;
+        return is_numeric($manual) ? max(0, (int) $manual) : 0;
     }
 
-    public function remaining(): ?int
+    public function remaining(): int
     {
-        $sold = $this->sold();
-
-        return $sold === null ? null : max(0, $this->quota() - $sold);
+        return max(0, $this->quota() - $this->sold());
     }
 
-    /** The launch price is on unless the counter says the quota is used up. */
+    /** The launch price is on while places are left. */
     public function launchActive(): bool
     {
-        return $this->remaining() !== 0;
+        return $this->remaining() > 0;
+    }
+
+    /** The running promotion with a place left (the cheapest one if several overlap), or null. */
+    public function promotion(): ?Promotion
+    {
+        return Promotion::running()->orderBy('price')->get()
+            ->first(fn (Promotion $p) => $p->quota === null || Quota::promoHeld($p) < $p->quota);
+    }
+
+    /** promo | launch | normal: promotion beats the launch batch, which beats the normal price. */
+    public function tier(): string
+    {
+        return match (true) {
+            $this->promotion() !== null => 'promo',
+            $this->launchActive() => 'launch',
+            default => 'normal',
+        };
     }
 
     public function currentPrice(): int
     {
-        return $this->launchActive() ? $this->launchPrice() : $this->normalPrice();
+        return match ($this->tier()) {
+            'promo' => (int) $this->promotion()->price,
+            'launch' => $this->launchPrice(),
+            default => $this->normalPrice(),
+        };
     }
-
     public function perMonthNormal(): int
     {
         return (int) (round($this->normalPrice() / 12 / 100) * 100);

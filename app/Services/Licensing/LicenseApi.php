@@ -42,7 +42,9 @@ class LicenseApi
      */
     public function resend(string $keyId, ?string $reason = null): array
     {
-        return $this->post('admin/resend', ['key_id' => $keyId, 'show' => true, 'reason' => $reason]);
+        // `silent`: Laravel is the only sender of email, so the Worker must not mail the new key itself. Workers
+        // that do not know the flag yet ignore it (see the spec handed over for the Worker repo).
+        return $this->post('admin/resend', ['key_id' => $keyId, 'show' => true, 'silent' => true, 'reason' => $reason]);
     }
 
     /**

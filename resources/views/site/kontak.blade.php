@@ -1,15 +1,21 @@
 @extends('layouts.site')
 
 @section('title', 'Kontak')
-@section('description', 'Hubungi ARTi lewat WhatsApp untuk pembelian, bantuan instalasi, dan permintaan uang kembali dalam garansi 7 hari.')
+@section('description', 'Hubungi ARTi untuk pembelian, bantuan instalasi, pengajuan pengembalian dana, dan permintaan penghapusan akun.')
 
 @section('content')
 <div class="container container--narrow">
     <section class="hero">
         <p class="hero__eyebrow">Kontak</p>
         <h1>Hubungi ARTi.</h1>
-        <p class="hero__lead">Untuk pembelian, bantuan instalasi, permintaan uang kembali (garansi {{ config('site.offer.guarantee_days') }} hari sejak pembelian), dan permintaan penghapusan akun.</p>
+        <p class="hero__lead">Untuk pembelian, bantuan instalasi, <a href="{{ route('syarat') }}#pengembalian">pengajuan pengembalian dana</a>, dan permintaan penghapusan akun.</p>
     </section>
+
+    @if (filled(config('site.seller.name')))
+        <div class="panel">
+            <p><strong>Penyelenggara:</strong> {{ config('site.seller.name') }}@if (filled(config('site.seller.city'))), {{ config('site.seller.city') }}@endif. ARTi dikelola dan dijual oleh pengembangnya sendiri.</p>
+        </div>
+    @endif
 
     <div class="panel">
         @if ($hasWhatsapp)

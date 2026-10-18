@@ -133,3 +133,10 @@ sections:
         subchapters:
           - slug: prompt-guide-01
             title: Prompt Guide
+  - title: Download
+    chapters:
+      - slug: download
+        title: Download
+        subchapters:
+          - slug: download-installer
+            title: Download ARTi Framework

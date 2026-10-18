@@ -20,6 +20,9 @@ final class Permissions
         'license.rotate_key',
         'payment.attach',
         'account.reset_password',
+        // Orders from the payment gateway: support can look and re-send the purchase mail, not refund.
+        'order.view',
+        'order.resend',
     ];
 
     public const ADMIN_ONLY = [
@@ -32,6 +35,9 @@ final class Permissions
         'user.manage',
         // The mailing list holds personal data and is used for marketing, which support staff do not do.
         'subscriber.manage',
+        // Money: refunds and orders parked for a decision.
+        'order.refund',
+        'order.resolve',
     ];
 
     /** @return list<string> */

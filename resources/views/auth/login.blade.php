@@ -21,6 +21,10 @@
             <div class="card__body">
                 <h1>Masuk</h1>
 
+                @if (session('status'))
+                    <p class="form-status" role="status">{{ session('status') }}</p>
+                @endif
+
                 <form method="POST" action="{{ route('login') }}" class="stack">
                     @csrf
 
@@ -65,6 +69,8 @@
 
                     <button type="submit" class="btn btn--primary btn--block">Masuk</button>
                 </form>
+
+                <p class="auth-links"><a href="{{ route('password.request') }}">Lupa password?</a></p>
             </div>
         </div>
     </div>

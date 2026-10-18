@@ -91,9 +91,13 @@ class ContactFormTest extends TestCase
     {
         config(['site.contact_whatsapp' => '081234567890']);
 
-        foreach (['/', '/fitur', '/baca/04-hilang-memori-tak-berarti'] as $path) {
+        // The main buy buttons go to the checkout (which falls back to WhatsApp when the gateway is off);
+        // the WhatsApp fallback links keep opening the panel.
+        foreach (['/', '/beli'] as $path) {
+            config(['services.midtrans.server_key' => 'SB-Mid-server-test']);
             $this->get($path)->assertSee('data-kontak="pembelian"', false);
         }
+        $this->get('/fitur')->assertSee(route('checkout'), false)->assertDontSee('data-kontak="pembelian"', false);
         $this->get('/')->assertSee('href="https://wa.me/6281234567890?text=', false);
     }
 

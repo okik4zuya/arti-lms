@@ -11,7 +11,7 @@ class ContactController extends Controller
     public const TOPICS = [
         'pembelian' => 'Pembelian',
         'instalasi' => 'Bantuan instalasi',
-        'uang-kembali' => 'Uang kembali (garansi)',
+        'uang-kembali' => 'Pengembalian dana',
         'lainnya' => 'Lainnya',
     ];
 

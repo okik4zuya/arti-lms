@@ -4,14 +4,19 @@ use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\FreeChapterController;
 use App\Http\Controllers\LicenseProofController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ContentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DownloadController;
+use App\Http\Controllers\MidtransWebhookController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\PasswordResetController;
+use App\Http\Controllers\PaymentWebhookController;
 use App\Http\Controllers\ProgressController;
 use App\Http\Controllers\SeoController;
 use App\Http\Controllers\SubscriptionController;
+use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -69,20 +74,45 @@ Route::group(array_filter(['domain' => config('app.domains.main')]), function ()
         Route::post('login', [AuthController::class, 'store']);
     });
 
+    // Forgot password. The reset link is signed (token + email + broker) and is also the first link of a purchase.
+    Route::middleware('guest')->group(function () {
+        Route::get('lupa-sandi', [PasswordResetController::class, 'request'])->name('password.request');
+        Route::post('lupa-sandi', [PasswordResetController::class, 'send'])
+            ->middleware(['throttle:forgot-password', 'throttle:forgot-password-email'])->name('password.email');
+    });
+    // Not behind `guest`: the first link of a purchase may be opened in a browser that is already signed in.
+    Route::middleware('signed')->group(function () {
+        Route::get('atur-sandi/{token}', [PasswordResetController::class, 'show'])->name('password.reset');
+        Route::post('atur-sandi/{token}', [PasswordResetController::class, 'update'])
+            ->middleware('throttle:reset-password')->name('password.update');
+    });
+
     Route::post('logout', [AuthController::class, 'destroy'])
         ->middleware('auth')->name('logout');
+
+    // ---- Buying through the gateway (WhatsApp stays as the fallback on every buy button)
+    Route::get('beli', [CheckoutController::class, 'show'])->name('checkout');
+    Route::post('beli', [CheckoutController::class, 'store'])->middleware('throttle:checkout')->name('checkout.store');
+    Route::get('beli/selesai/{order}', [CheckoutController::class, 'done'])->middleware('throttle:checkout-status')
+        ->where('order', '[a-z0-9-]+')->name('checkout.done');
+
+    // ---- Payment gateway callback (Xendit). No session or CSRF: the callback token and a re-read of the invoice authorise it.
+    Route::post('webhooks/pembayaran', PaymentWebhookController::class)->middleware('throttle:webhook')->name('webhooks.payment');
+    // Midtrans: signature_key in the body plus a re-read of the transaction from Midtrans' Status API.
+    Route::post('webhooks/midtrans', MidtransWebhookController::class)->middleware('throttle:webhook')->name('webhooks.midtrans');
 
     // ---- Payment proofs: signed, short-lived link, opened from the admin panel -------
     Route::get('bukti-pembayaran/{issuance}', LicenseProofController::class)
         ->middleware(['auth', 'signed'])->name('license.proof');
 
     // ---- Learner app ------------------------------------------------------------
+    // AuthenticateSession ends a session whose password hash changed (after a reset, on any session driver).
     Route::get('app', [DashboardController::class, 'index'])
-        ->middleware('auth')->name('dashboard');
+        ->middleware(['auth', AuthenticateSession::class])->name('dashboard');
 
     Route::redirect('dashboard', '/app', 301);
 
-    Route::middleware(['auth', 'course.access'])->prefix('learn/{course}')->group(function () {
+    Route::middleware(['auth', AuthenticateSession::class, 'course.access'])->prefix('learn/{course}')->group(function () {
         Route::get('{slug}', [ContentController::class, 'show'])->name('content.show');
         Route::get('{slug}/images/{file}', [ContentController::class, 'image'])->name('content.image');
         Route::post('{slug}/progress', [ProgressController::class, 'store'])->name('progress.store');

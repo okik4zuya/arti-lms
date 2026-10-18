@@ -30,17 +30,19 @@ class SeriesMail extends ListMailable
     protected function bodyData(): array
     {
         $offer = app(Offer::class);
+        $promotion = $offer->promotion();
 
         return [
             'subject' => EmailSeries::subject($this->step),
             'launchActive' => $offer->launchActive(),
             'launchPrice' => $offer->format($offer->launchPrice()),
             'normalPrice' => $offer->format($offer->normalPrice()),
-            'perMonth' => $offer->format($offer->perMonthNormal()),
+            'promotionLabel' => $promotion?->label,
+            'promotionPrice' => $promotion ? $offer->format($promotion->price) : null,
+            'promotionEnds' => $promotion?->ends_at->locale('id')->translatedFormat('j F Y, H.i'),
             'quota' => $offer->quota(),
             'remaining' => $offer->remaining(),
-            'guaranteeDays' => $offer->guaranteeDays(),
-            'buyUrl' => $offer->buyUrl(),
+            'buyUrl' => route('checkout'),
         ];
     }
 }

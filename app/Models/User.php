@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 use SensitiveParameter;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -19,6 +20,17 @@ class User extends Authenticatable implements FilamentUser, HasAppAuthentication
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, HasRoles, HasVersion7Uuids, Notifiable;
+
+    protected static function booted(): void
+    {
+        // A set-password link that never expires must not outlive the password it was meant to set: whichever route
+        // changes the password (the link itself, "Lupa password?", the admin console), pending links are deleted.
+        static::updated(function (User $user) {
+            if ($user->wasChanged('password')) {
+                DB::table(config('auth.passwords.users.table', 'password_reset_tokens'))->where('email', $user->email)->delete();
+            }
+        });
+    }
 
     /**
      * The attributes that are mass assignable.

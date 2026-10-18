@@ -123,7 +123,7 @@ class PublicPageQualityTest extends TestCase
         $this->get('/syarat')
             ->assertSee('Rp199.000')
             ->assertSee('Rp99.000')
-            ->assertSee('7 hari sejak tanggal pembelian')
+            ->assertSee('Anda membayar sekali, tanpa biaya tahunan')
             ->assertSee('tidak berafiliasi dengan Anthropic');
 
         $this->get('/privasi')

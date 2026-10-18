@@ -47,7 +47,7 @@
             <h3>Sampai di sini bab 1 gratis.</h3>
             <p>Bab-bab berikutnya, kerangka kerja ARTi, dan alat-alatnya ada di paket e-course dan lisensi.</p>
             <p>
-                <a href="{{ $offer->buyUrl() }}" class="btn btn--primary" data-kontak="pembelian">Beli lewat WhatsApp</a>
+                <a href="{{ route('checkout') }}" class="btn btn--primary">Beli sekarang</a>
                 <a href="{{ route('home') }}#harga" class="btn btn--outline">Lihat harga</a>
             </p>
         </div>

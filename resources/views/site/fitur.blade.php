@@ -7,7 +7,7 @@
 @section('main_class', 'site-main--flush')
 
 @section('header_cta')
-    <a href="{{ $offer->buyUrl() }}" class="btn btn--primary header-cta" data-kontak="pembelian"><span class="cta-long">Beli lewat WhatsApp</span><span class="cta-short">Beli</span></a>
+    <a href="{{ route('checkout') }}" class="btn btn--primary header-cta"><span class="cta-long">Beli sekarang</span><span class="cta-short">Beli</span></a>
 @endsection
 
 @section('content')
@@ -243,7 +243,7 @@
             <div class="panel panel--muted">
                 <span class="icon-wrap"><x-glyph name="kursus" /></span>
                 <p>Seluruh alur ini dijelaskan dalam e-course berbahasa Indonesia yang dibaca langsung di aplikasi.</p>
-                <p><strong>Statusnya belum lengkap.</strong> Bagian Pendahuluan sudah bisa dibaca. Bagian Amati, Replikasi, dan Tambah Inovasi sedang ditulis, dan bab baru yang terbit selama masa langganan Anda ikut Anda dapat.</p>
+                <p><strong>Statusnya belum lengkap.</strong> Bagian Pendahuluan sudah bisa dibaca. Bagian Amati, Replikasi, dan Tambah Inovasi sedang ditulis, dan bab baru yang terbit ikut Anda dapat tanpa biaya tambahan.</p>
             </div>
         </div>
     </section>
@@ -253,10 +253,10 @@
         <div class="container container--narrow">
             <p class="tagline tagline--lg">Dari ide sampai publish, bersama ARTi.</p>
             <div class="hero__actions hero__actions--center">
-                <a href="{{ $offer->buyUrl() }}" class="btn btn--primary btn--lg" data-kontak="pembelian">Beli lewat WhatsApp</a>
+                <a href="{{ route('checkout') }}" class="btn btn--primary btn--lg">Beli sekarang</a>
                 <a href="{{ route('free.start') }}" class="btn btn--outline btn--lg">Baca bab 1 gratis</a>
             </div>
-            <p class="trust-line"><a href="{{ route('home') }}#harga">Lihat harga</a> &middot; Garansi uang kembali {{ $offer->guaranteeDays() }} hari</p>
+            <p class="trust-line"><a href="{{ route('home') }}#harga">Lihat harga</a> &middot; Bayar sekali</p>
             <p class="disclaimer">ARTi tidak berafiliasi dengan Anthropic. Claude dan Claude Code adalah produk Anthropic.</p>
         </div>
     </section>

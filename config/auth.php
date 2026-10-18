@@ -97,6 +97,15 @@ return [
             'expire' => 60,
             'throttle' => 60,
         ],
+        // First set-password link, sent with the purchase. Decision 2026-10-18: it has no time limit, so a buyer can
+        // start whenever they like. It dies only when used or when the account's password changes by any route
+        // (User::booted deletes the token). The value below is only the broker's own ceiling: about 20 years.
+        'welcome' => [
+            'provider' => 'users',
+            'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
+            'expire' => 10512000,
+            'throttle' => 0,
+        ],
     ],
 
     /*

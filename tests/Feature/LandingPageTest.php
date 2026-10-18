@@ -15,17 +15,19 @@ class LandingPageTest extends TestCase
             ->assertSee('Rp99.000')
             ->assertSee('Tersisa')
             ->assertSee('63 dari 100')
-            ->assertSee('Garansi 7 hari')
+            ->assertSee('bayar sekali', false)
+            ->assertDontSee('Garansi')
+            ->assertDontSee('uang kembali')
             ->assertSee('Windows saja')
             ->assertSee('tidak berafiliasi dengan Anthropic')
             ->assertSee('Dari ide sampai publish, bersama ARTi.');
     }
 
-    public function test_landing_hides_the_counter_when_it_is_not_set(): void
+    public function test_landing_counts_places_held_by_orders_even_without_a_manual_count(): void
     {
         config(['site.offer.launch_sold' => null]);
 
-        $this->get('/')->assertDontSee('Tersisa')->assertSee('100 pembeli pertama');
+        $this->get('/')->assertSee('Tersisa')->assertSee('100 dari 100')->assertSee('100 pembeli pertama');
     }
 
     public function test_landing_falls_back_to_normal_price_when_quota_is_used_up(): void

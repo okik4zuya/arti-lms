@@ -5,8 +5,35 @@ metadata:
   type: project
   tier: T0
   created: 2026-09-08 21:36
-  updated: 2026-10-15 16:59
+  updated: 2026-10-18 16:40
 ---
+
+### Automatic purchase (built 2026-10-18, all uncommitted), see [[automatic-purchase-plan]]
+
+- [ ] Next session: paste the prompt in [[next-session-prompt]] (understand the context, then brainstorm; build nothing until agreed)
+
+- [x] Orders, Xendit checkout (`/beli`), signed idempotent webhook, `FulfillOrder`, purchase mail, WhatsApp stage (driver `none`), atomic launch quota, refund, `orders:reconcile`, Filament "Pesanan"
+- [x] Forgot password (`/lupa-sandi`, `/atur-sandi`), one-time set-password links (60 min / 48 h), admin and support excluded, `admin:reset-password` and `admin:reset-mfa`
+- [x] Filament manual flow switched to one-time links (no password anywhere)
+- [x] Prices and promo events editable in Filament ("Harga", "Promo"), audited, `Offer` is the single source
+- [x] Garansi claim removed from `/`, `/fitur`, series mail 4 (mechanism kept); lifetime wording on those pages
+- [x] `/syarat`, `/kontak`, `/privasi` researched and rewritten 2026-10-18 (refund policy, lifetime clause, Xendit and Brevo disclosures, seller block), see [[legal-review-notes]]
+- [x] First set-password link has no time limit; dies when used or when the password changes (decision 2026-10-18)
+- [ ] Researcher: read the rewritten `/syarat`, `/kontak`, `/privasi` in another session and confirm the refund conditions and time limits; ask a lawyer about the lifetime and shutdown clauses
+- [ ] Researcher: fill `SITE_SELLER_NAME` and `SITE_SELLER_CITY` (seller identity on `/kontak`)
+- [ ] Researcher, `~/.arti` repo: bring the EULA `LICENSE.txt` in line with `/syarat` (it still says refund "sesuai garansi" and a period from key issue)
+- [ ] Researcher: confirm an already activated machine keeps working offline if the Worker is ever shut down (the `/syarat` lifetime clause says "kami berusaha")
+- [ ] Researcher: confirm the lifetime prices (kept Rp99.000 then Rp199.000, one-time) and read the new copy on `/`, `/fitur`, series mail 4 and the purchase mail
+- [ ] WhatsApp provider: brainstorm in a separate session (Cloud API with a dedicated number, or a third-party gateway); then a driver replaces `none`
+- [x] Midtrans driver built and tested with `Http::fake` (gateway interface, Snap, Status API, signature check); Xendit kept as a second driver
+- [ ] Researcher: Midtrans sandbox server key into `.env` (`MIDTRANS_SERVER_KEY`, `MIDTRANS_IS_PRODUCTION=false`), Payment Notification URL `<tunnel>/webhooks/midtrans` in the sandbox dashboard; ask Midtrans support whether an individual account may sell an e-course and software licences and whether NPWP is needed for QRIS/VA/e-wallet; production activation needs KTP and NPWP ([[purchase-production-checklist]])
+- [ ] Researcher: run the Midtrans sandbox end-to-end steps and the real-mail forgot-password test ([[purchase-production-checklist]] section 5); check that Snap accepts the redirect `callbacks` we send
+- [ ] Researcher, Worker repo: silent `resend`, check `months: 1000`, optional idempotent `extend`; client shows "Lifetime" ([[worker-changes-spec]])
+- [ ] Researcher, production: migrate, `permissions:sync`, env variables, Xendit callback URL, Cloudflare skip rule, `ADMIN_MFA_REQUIRED=true` ([[purchase-production-checklist]])
+- [ ] Look at the new pages in a real browser: `/beli`, `/beli/selesai/...`, `/lupa-sandi`, `/atur-sandi/...`, Filament Pesanan, Harga, Promo (only HTTP/Livewire tested)
+- [ ] Review `LicenseIssuanceResource` row action labels after the switch to links; `README` mentions
+- [ ] Learner change-password page for signed-in users (`/app/password`) still not built; "Lupa password?" covers the need
+- [x] "Download" section in `resources/content/arti-framework` (`download-installer`, behind login and course access, link to the installer on the public CDN); deployed by the researcher 2026-10-18; its version, link, size and SHA-256 are updated per release
 
 ### Landing page (arti.ai.id), see [[landing-page-concept]]
 

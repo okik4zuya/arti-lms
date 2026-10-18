@@ -38,6 +38,44 @@ return [
         'installer_url' => env('LICENSE_INSTALLER_URL'),
     ],
 
+    /*
+    | Which payment gateway new orders use: `midtrans` (default) or `xendit`. An existing order keeps the gateway it
+    | was created with, so switching never strands a payment in progress.
+    */
+    'payments' => [
+        'driver' => env('PAYMENT_GATEWAY', 'midtrans'),
+    ],
+
+    /*
+    | Midtrans (payment gateway). The server key lives in .env only: the sandbox key (starts with "SB-Mid-server-")
+    | while MIDTRANS_IS_PRODUCTION is false, the live key once it is true. The notification URL is set in the Midtrans
+    | dashboard (Settings, Configuration, Payment Notification URL): https://<site>/webhooks/midtrans
+    */
+    'midtrans' => [
+        'server_key' => env('MIDTRANS_SERVER_KEY'),
+        'is_production' => (bool) env('MIDTRANS_IS_PRODUCTION', false),
+        'snap_url' => env('MIDTRANS_SNAP_URL', env('MIDTRANS_IS_PRODUCTION', false) ? 'https://app.midtrans.com' : 'https://app.sandbox.midtrans.com'),
+        'api_url' => env('MIDTRANS_API_URL', env('MIDTRANS_IS_PRODUCTION', false) ? 'https://api.midtrans.com' : 'https://api.sandbox.midtrans.com'),
+    ],
+
+    /*
+    | Xendit (payment gateway). Secret key and callback token live in .env only; use the test-mode key
+    | in development. The callback token is the one shown next to the webhook URL in the Xendit dashboard.
+    */
+    'xendit' => [
+        'url' => env('XENDIT_API_URL', 'https://api.xendit.co'),
+        'secret_key' => env('XENDIT_SECRET_KEY'),
+        'callback_token' => env('XENDIT_CALLBACK_TOKEN'),
+    ],
+
+    /*
+    | WhatsApp delivery of purchases. `none` (default) sends nothing; `log` records that a message would have gone
+    | out (recipient tail and length only). A real provider is added as another driver once one is chosen.
+    */
+    'whatsapp' => [
+        'driver' => env('WHATSAPP_DRIVER', 'none'),
+    ],
+
     'slack' => [
         'notifications' => [
             'bot_user_oauth_token' => env('SLACK_BOT_USER_OAUTH_TOKEN'),

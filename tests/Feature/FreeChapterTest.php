@@ -85,7 +85,7 @@ class FreeChapterTest extends TestCase
         $this->get('/baca/04-hilang-memori-tak-berarti')
             ->assertSee('Kabari saya bila ada kelanjutannya')
             ->assertDontSee('Tidak sekarang')
-            ->assertSee('Beli lewat WhatsApp');
+            ->assertSee('Beli sekarang');
     }
 
     public function test_free_pages_are_in_the_sitemap_and_the_landing_links_to_the_chapter(): void
