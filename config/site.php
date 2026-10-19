@@ -28,6 +28,15 @@ return [
     ],
 
     /*
+    | Buy form on the landing page. Set SITE_CHECKOUT_ENABLED=false to show the form greyed out with a notice
+    | (e.g. while the payment gateway application is still under review). `closed_notice` is the text shown.
+    */
+    'checkout' => [
+        'enabled' => (bool) env('SITE_CHECKOUT_ENABLED', true),
+        'closed_notice' => env('SITE_CHECKOUT_NOTICE', 'Pembelian belum dibuka. Pengajuan akun pembayaran kami ke Midtrans sedang ditinjau. Begitu disetujui, formulir ini aktif otomatis dan Anda bisa langsung membeli.'),
+    ],
+
+    /*
     | Landing page offer. Prices are whole rupiah. `launch_sold` is the number of licenses the admin
     | has actually issued at the launch price; leave it empty to hide the live counter. Never round it.
     */

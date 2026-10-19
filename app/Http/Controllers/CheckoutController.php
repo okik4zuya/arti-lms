@@ -29,6 +29,10 @@ class CheckoutController extends Controller
     {
         $form = route('home').'#checkout';
 
+        if (! config('site.checkout.enabled')) {
+            return redirect()->to($form)->withErrors(['pembayaran' => config('site.checkout.closed_notice')]);
+        }
+
         $validator = Validator::make($request->all(), [
             'nama' => ['required', 'string', 'max:80'],
             'email' => ['required', 'email:rfc', 'max:190'],

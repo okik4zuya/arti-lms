@@ -19,12 +19,18 @@
     @if (! $gateway->isConfigured())
         <p class="form-error" role="alert">Pembayaran otomatis sedang belum tersedia. Hubungi <a href="mailto:{{ config('site.contact_email') }}">{{ config('site.contact_email') }}</a> dan kami bantu.</p>
     @else
+        @php($closed = ! config('site.checkout.enabled'))
         <h3 class="checkout__heading">Data Pembeli</h3>
+
+        @if ($closed)
+            <p class="checkout__closed" role="status"><strong>Segera dibuka.</strong> {{ config('site.checkout.closed_notice') }}</p>
+        @endif
 
         @error('pembayaran') <p class="form-error" role="alert">{{ $message }}</p> @enderror
 
         <form method="POST" action="{{ route('checkout.store') }}" class="stack">
             @csrf
+            <fieldset @disabled($closed) style="border:0;padding:0;margin:0;min-width:0;{{ $closed ? 'opacity:.55' : '' }}" class="stack">
             <div class="form-field" style="position:absolute;left:-9999px" aria-hidden="true">
                 <label for="beli-website">Website</label>
                 <input id="beli-website" name="website" type="text" tabindex="-1" autocomplete="off">
@@ -78,8 +84,9 @@
                 @error('setuju') <span class="form-error">{{ $message }}</span> @enderror
             </div>
 
-            <button type="submit" class="btn btn--cta btn--lg">Beli &amp; Akses Sekarang <span aria-hidden="true">&rarr;</span></button>
+            <button type="submit" class="btn btn--cta btn--lg" @disabled($closed)>{{ $closed ? 'Segera dibuka' : 'Beli & Akses Sekarang' }} @unless ($closed)<span aria-hidden="true">&rarr;</span>@endunless</button>
             <p class="muted checkout__note">Pesanan diproses aman melalui checkout {{ $gateway->label() }}. ARTi tidak menyimpan data kartu atau rekening Anda. Password tidak pernah dikirim: Anda memilihnya sendiri lewat tautan di email.</p>
+            </fieldset>
         </form>
 
         <p class="checkout__note">Butuh bantuan? <a href="mailto:{{ config('site.contact_email') }}">{{ config('site.contact_email') }}</a></p>
