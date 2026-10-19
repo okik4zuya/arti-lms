@@ -36,7 +36,7 @@ class Order extends Model
 
     protected $fillable = [
         'public_id', 'type', 'name', 'email', 'whatsapp', 'amount', 'price_tier', 'launch_slot', 'promotion_id', 'promo_slot',
-        'status', 'gateway', 'gateway_ref', 'checkout_url', 'expires_at',
+        'status', 'gateway', 'gateway_ref', 'method_choice', 'checkout_url', 'expires_at',
     ];
 
     protected function casts(): array

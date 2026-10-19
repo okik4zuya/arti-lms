@@ -56,6 +56,12 @@ return [
         'is_production' => (bool) env('MIDTRANS_IS_PRODUCTION', false),
         'snap_url' => env('MIDTRANS_SNAP_URL', env('MIDTRANS_IS_PRODUCTION', false) ? 'https://app.midtrans.com' : 'https://app.sandbox.midtrans.com'),
         'api_url' => env('MIDTRANS_API_URL', env('MIDTRANS_IS_PRODUCTION', false) ? 'https://api.midtrans.com' : 'https://api.sandbox.midtrans.com'),
+        // Snap `enabled_payments` behind the two cards on the landing form. Names must be active in the Midtrans
+        // dashboard (Settings, Snap Preferences, Payment); edit here, comma separated in .env, if one is not.
+        'methods' => [
+            'va' => array_filter(explode(',', (string) env('MIDTRANS_METHODS_VA', 'bca_va,bni_va,bri_va,permata_va,echannel,gopay,shopeepay'))),
+            'qris' => array_filter(explode(',', (string) env('MIDTRANS_METHODS_QRIS', 'other_qris'))),
+        ],
     ],
 
     /*

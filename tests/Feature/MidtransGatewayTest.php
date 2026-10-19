@@ -81,7 +81,7 @@ class MidtransGatewayTest extends TestCase
         Http::swap(new Factory);
         Http::fake(['snap.test/snap/v1/transactions' => Http::response(['token' => 'tok', 'redirect_url' => 'https://app.sandbox.midtrans.com/snap/v4/redirection/tok'], 201)]);
 
-        $this->post('/beli', ['nama' => 'Budi', 'email' => 'Budi@Example.test', 'whatsapp' => '081234567890', 'setuju' => '1'])
+        $this->post('/beli', ['nama' => 'Budi', 'email' => 'Budi@Example.test', 'whatsapp' => '081234567890', 'metode' => 'va', 'setuju' => '1'])
             ->assertRedirect('https://app.sandbox.midtrans.com/snap/v4/redirection/tok');
 
         $order = Order::firstOrFail();
@@ -100,27 +100,42 @@ class MidtransGatewayTest extends TestCase
         });
     }
 
+    public function test_each_method_card_narrows_snap_to_its_own_payment_types(): void
+    {
+        Http::swap(new Factory);
+        Http::fake(['snap.test/snap/v1/transactions' => Http::response(['token' => 'tok', 'redirect_url' => 'https://app.sandbox.midtrans.com/snap/v4/redirection/tok'], 201)]);
+
+        $this->post('/beli', ['nama' => 'Budi', 'email' => 'qris@example.test', 'metode' => 'qris', 'setuju' => '1'])->assertRedirect();
+        $this->post('/beli', ['nama' => 'Budi', 'email' => 'va@example.test', 'metode' => 'va', 'setuju' => '1'])->assertRedirect();
+
+        $sent = Http::recorded()->map(fn ($pair) => $pair[0]['enabled_payments'])->all();
+        $this->assertSame(['other_qris'], $sent[0]);
+        $this->assertContains('bca_va', $sent[1]);
+        $this->assertContains('gopay', $sent[1]);
+        $this->assertNotContains('other_qris', $sent[1]);
+    }
+
     public function test_when_snap_refuses_the_place_is_given_back(): void
     {
         Http::swap(new Factory);
         Http::fake(['snap.test/*' => Http::response(['error_messages' => ['x']], 401)]);
 
-        $this->post('/beli', ['nama' => 'Budi', 'email' => 'budi@example.test', 'setuju' => '1'])->assertSessionHasErrors('pembayaran');
+        $this->post('/beli', ['nama' => 'Budi', 'email' => 'budi@example.test', 'metode' => 'va', 'setuju' => '1'])->assertSessionHasErrors('pembayaran');
 
         $order = Order::firstOrFail();
         $this->assertSame([Order::FAILED, null], [$order->status, $order->launch_slot]);
     }
 
-    public function test_without_a_server_key_the_buy_page_falls_back_to_whatsapp(): void
+    public function test_without_a_server_key_the_landing_has_no_form_and_names_the_support_email(): void
     {
         config(['services.midtrans.server_key' => '']);
 
-        $this->get('/beli')->assertRedirectContains('https://wa.me/6281234567890');
+        $this->get('/')->assertDontSee('Data Pembeli')->assertSee('mailto:hi@arti.ai.id', false);
     }
 
     public function test_the_buy_page_and_legal_pages_name_midtrans(): void
     {
-        $this->get('/beli')->assertOk()->assertSee('Pembayaran diproses Midtrans')->assertDontSee('Xendit');
+        $this->get('/')->assertOk()->assertSee('diproses aman melalui checkout Midtrans')->assertDontSee('Xendit');
         $this->get('/privasi')->assertSee('Midtrans (PT Midtrans)', false);
         $this->get('/syarat')->assertSee('diproses oleh Midtrans');
     }

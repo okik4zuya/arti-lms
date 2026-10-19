@@ -25,13 +25,14 @@ interface PaymentGateway
     public function isConfigured(): bool;
 
     /**
-     * Create the hosted payment page for an order.
+     * Create the hosted payment page for an order. `$method` is the buyer's choice on the landing form (`va` or
+     * `qris`); a gateway that cannot narrow its page ignores it.
      *
      * @return array{id:string,invoice_url:string,status?:string}
      *
      * @throws PaymentGatewayException
      */
-    public function createInvoice(Order $order, string $successUrl, string $failureUrl, int $durationSeconds = 3600): array;
+    public function createInvoice(Order $order, string $successUrl, string $failureUrl, int $durationSeconds = 3600, ?string $method = null): array;
 
     /**
      * The authoritative, normalised state of a payment, looked up by the reference stored in orders.gateway_ref.

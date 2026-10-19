@@ -5,8 +5,21 @@ metadata:
   type: project
   tier: T0
   created: 2026-09-08 21:36
-  updated: 2026-10-18 22:37
+  updated: 2026-10-19 06:34
 ---
+
+### Landing checkout form and WhatsApp removal (2026-10-19), see [[landing-checkout-form]]
+
+- [x] Buy form on the landing (`#checkout`), va/qris method cards to Snap `enabled_payments`, `orders.method_choice`, mobile buy bar, `/beli` redirects to the form; tests rewritten and green
+- [x] Floating WhatsApp button, panel, `/kontak` WhatsApp form and every "Beli lewat WhatsApp" removed; support email hi@arti.ai.id in the footer, `/kontak`, status page
+- [ ] Researcher: `php artisan migrate` (dev, then production) for `orders.method_choice`; `npm run build` before deploy (new entry `sticky-buy.js`)
+- [ ] Researcher: with ngrok and `queue:work` running, pay once with QRIS and once with the VA card in the Midtrans sandbox; change the method on a second try; check Snap shows only the chosen methods
+- [ ] Researcher: confirm `other_qris` and `shopeepay` are active in the Midtrans dashboard (else adjust `MIDTRANS_METHODS_VA` / `MIDTRANS_METHODS_QRIS`); decide whether DANA can be claimed on the card label
+- [ ] Researcher: look at the form, the method cards and the buy bar in a real browser and on a phone (never seen rendered)
+- [ ] Researcher: re-read `/syarat` and `/privasi` after the WhatsApp sentences were removed; set `SITE_CONTACT_EMAIL` only if the address should differ from hi@arti.ai.id
+- [ ] Decide: the form note says a WhatsApp copy of the purchase mail is sent, but the driver is still `none`; either build the provider first or soften the note
+- [ ] Decide: remove the now unused WhatsApp number and default-message fields from Filament "Pengaturan situs" (and their tests), and `SITE_CONTACT_WHATSAPP`, or keep them for the manual licence flow
+- [ ] Run the full `php artisan test` suite once (only the touched files were run)
 
 ### Learner app UX, content cache and landing tweaks (2026-10-18 night), see [[learner-app-ux]]
 

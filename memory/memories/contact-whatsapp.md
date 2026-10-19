@@ -1,11 +1,13 @@
 ---
 name: contact-whatsapp
-description: How the WhatsApp number, the floating button's contact panel (form in a dialog), the /kontak fallback page work, where the number is set (Filament "Pengaturan situs" over .env), and the gotchas
+description: SUPERSEDED 2026-10-19 (floating button, panel and WhatsApp buy options removed from the UI, see landing-checkout-form); history of how the WhatsApp number, the floating button's contact panel (form in a dialog), the /kontak fallback page work, where the number is set (Filament "Pengaturan situs" over .env), and the gotchas
 metadata:
   type: project
   created: 2026-10-15 09:54
-  updated: 2026-10-15 10:25
+  updated: 2026-10-19 06:34
 ---
+
+**Superseded 2026-10-19:** the floating button, the contact panel, `contact-panel.js`, the `/kontak` WhatsApp form (and `POST /kontak`), `Offer::buyUrl()` and every "Beli lewat WhatsApp" link were removed; support is the email hi@arti.ai.id ([[landing-checkout-form]]). Still alive: the Filament "Pengaturan situs" number and messages (unused by the public UI), `Offer::whatsappUrl()` for the admin's manual licence flow, and the optional buyer-number delivery stage. Read the rest as history.
 
 Built 2026-10-15 after the finalisation pass ([[landing-page-concept]], [[legal-review-notes]]). Code is in the working tree or in whatever commits the researcher kept; they reset the commits made in this session, so check `git log` before assuming.
 
@@ -42,3 +44,4 @@ The floating button opens a `<dialog id="wa-panel">` holding the contact form; e
 - 2026-10-15 09:54 — created.
 - 2026-10-15 10:08 — panel replaces direct links; /kontak kept as fallback; contrast fixed.
 - 2026-10-15 10:25 — default messages editable in Filament (CONFIG_KEYS); suite 110 green.
+- 2026-10-19 06:34 — marked superseded (WhatsApp UI removed).

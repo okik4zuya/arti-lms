@@ -113,10 +113,4 @@ class Offer
 
         return $number ? 'https://wa.me/'.$number.'?text='.rawurlencode($message) : null;
     }
-
-    /** WhatsApp link with a pre-filled message, or the contact page while no number is configured. */
-    public function buyUrl(): string
-    {
-        return static::whatsappUrl((string) config('site.offer.whatsapp_message')) ?? route('kontak');
-    }
 }

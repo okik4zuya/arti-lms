@@ -5,7 +5,7 @@ metadata:
   type: project
   tier: T0
   created: 2026-09-08 21:36
-  updated: 2026-10-18 21:54
+  updated: 2026-10-19 06:34
 ---
 
 # arti-lms — Memory Index
@@ -30,7 +30,7 @@ metadata:
 - [Landing finalisation prompt](memories/landing-finalisation-prompt.md) — ready-to-paste prompt for the next session: brainstorm first, then landing copywriting evaluated with the reptilian-brain (six stimuli) concept
 - [Redis setup](memories/redis-setup.md) — Redis (Laragon, Predis, DBs 10/11, own prefix) for cache, session, queue and the course content cache; opcache benchmark; 2026-10-18 back on in dev; production still open
 - [Page speed](memories/page-speed.md) — what was measured and optimised on the public site, the `public/hot` measuring pitfall, results, and what is still unverified
-- [Contact and WhatsApp](memories/contact-whatsapp.md) — floating button opens the contact panel (dialog), /kontak as fallback, number editable in Filament over .env, gotchas
+- [Contact and WhatsApp](memories/contact-whatsapp.md) — SUPERSEDED 2026-10-19: floating button, panel and /kontak form removed; history of the number setting and gotchas
 - [License admin page](memories/license-admin.md) — Filament license issuing (A+: Worker enforces, Laravel keeps the record + encrypted key), what is verified, MFA/backup prerequisites, path to automatic purchases
 - [License Worker setup runbook](memories/license-worker-setup.md) — Worker deployed at lisensi.arti.ai.id and smoke-tested; progress, the Python User-Agent gotcha, what is still open (Laravel production, admin IP restriction, D1 backup, MFA)
 - [Domain migration to arti.ai.id](memories/domain-migration-arti-ai-id.md) — hostnames moved 2026-10-16, shared-VPS setup, gotchas (Brevo on ai.id, admin role, trusted proxy), what is open
@@ -40,6 +40,7 @@ metadata:
 - [List building](memories/list-building.md) — double opt-in mailing list; ARTi PDF download via R2 with thank-you dialog; sign-up cards on every free-chapter page; plus Filament "Daftar email" admin (filters, CSV, widgets, buyer marking), the 4-email welcome series (off by default), broadcasts, one-click unsubscribe; dev Redis -MISCONF gotcha
 - [Automatic purchase prompt](memories/automatic-purchase-prompt.md) — the ready-to-paste prompt for the next session: payment gateway, learner account, license key, email and WhatsApp delivery, decisions to discuss first, hard rules
 - [Automatic purchase plan](memories/automatic-purchase-plan.md) — what was built 2026-10-18 (Midtrans/Xendit gateway driver, orders, webhook, FulfillOrder, set-password link, forgot-password, quota, refund, reconcile, Filament pricing/promo), garansi mention list, decisions taken
+- [Landing checkout form](memories/landing-checkout-form.md) — 2026-10-19: buy form on the landing (#checkout), va/qris cards to Snap `enabled_payments`, mobile buy bar, WhatsApp UI removed, support email hi@arti.ai.id; unverified in a browser
 - [Worker changes spec](memories/worker-changes-spec.md) — hand-over for the Worker repo: silent resend, months 1000, optional idempotent extend, client "Lifetime" label
 - [Purchase production checklist](memories/purchase-production-checklist.md) — env variable names (mail scheme/From gotchas), migrations, cron, Midtrans dashboard (Settings, Payment), Brevo, sandbox steps and the 2026-10-18 ngrok run (5b)
 - [Next-session prompt](memories/next-session-prompt.md) — purchase brainstorm prompt, deferred behind the landing copywriting session (sandbox result, WhatsApp provider, legal review, product side, production)

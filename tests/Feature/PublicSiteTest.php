@@ -21,7 +21,7 @@ class PublicSiteTest extends TestCase
             ->assertSee('ARTi Framework')
             ->assertSee('Masuk')
             ->assertSee('tidak lupa dan tidak mengarang')
-            ->assertSee('Memori per topik');
+            ->assertSee('Sesi berikutnya melanjutkan, bukan mengulang');
     }
 
     #[DataProvider('staticPages')]
@@ -45,11 +45,15 @@ class PublicSiteTest extends TestCase
 
     public function test_contact_page_shows_configured_channels_only(): void
     {
-        $this->get('/kontak')->assertSee('belum dibuka');
+        $this->get('/kontak')->assertSee('hi@arti.ai.id')->assertDontSee('belum dibuka');
 
         config(['site.contact_email' => 'halo@example.test']);
 
         $this->get('/kontak')->assertSee('halo@example.test')->assertDontSee('belum dibuka');
+
+        config(['site.contact_email' => null]);
+
+        $this->get('/kontak')->assertSee('belum dibuka');
     }
 
     public function test_old_pricing_and_download_urls_redirect_permanently(): void

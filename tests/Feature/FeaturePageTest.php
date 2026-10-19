@@ -55,11 +55,4 @@ class FeaturePageTest extends TestCase
         $this->assertFileExists(public_path('videos/landing/model-skill-alat.mp4'));
         $this->assertFileExists(public_path('images/landing/model-skill-alat.webp'));
     }
-
-    public function test_buy_button_points_to_whatsapp_when_a_number_is_configured(): void
-    {
-        config(['site.contact_whatsapp' => '081234567890']);
-
-        $this->get('/fitur')->assertSee('https://wa.me/6281234567890?text=', false);
-    }
 }

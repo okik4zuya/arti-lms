@@ -37,7 +37,7 @@
             <ul>
                 <li>Tidak menemukan emailnya? Cek folder spam, dan cari pengirim <strong>{{ parse_url(route('home'), PHP_URL_HOST) }}</strong>.</li>
                 <li>Password tidak pernah dikirim. Anda memilihnya sendiri lewat tautan di email. Tautannya tidak ada batas waktu dan hanya bisa dipakai sekali. Setelah password diatur, pakai <a href="{{ route('password.request') }}">Lupa password?</a> bila lupa.</li>
-                <li>Butuh bantuan? <a href="{{ $offer->buyUrl() }}" data-kontak="pembelian">Hubungi kami lewat WhatsApp</a> atau buka halaman <a href="{{ route('kontak') }}">kontak</a>.</li>
+                <li>Butuh bantuan? email kami di <a href="mailto:{{ config('site.contact_email') }}">{{ config('site.contact_email') }}</a> atau buka halaman <a href="{{ route('kontak') }}">kontak</a>.</li>
             </ul>
         </div>
     @endif

@@ -53,7 +53,7 @@ class MidtransClient implements PaymentGateway
         return hash_equals(hash('sha512', $orderId.$statusCode.$grossAmount.$key), strtolower($signature));
     }
 
-    public function createInvoice(Order $order, string $successUrl, string $failureUrl, int $durationSeconds = 3600): array
+    public function createInvoice(Order $order, string $successUrl, string $failureUrl, int $durationSeconds = 3600, ?string $method = null): array
     {
         $payload = [
             'transaction_details' => ['order_id' => $order->public_id, 'gross_amount' => $order->amount],
@@ -66,6 +66,12 @@ class MidtransClient implements PaymentGateway
             'expiry' => ['unit' => 'minutes', 'duration' => max(1, (int) ceil($durationSeconds / 60))],
             'callbacks' => ['finish' => $successUrl, 'error' => $failureUrl, 'pending' => $successUrl],
         ];
+
+        // The buyer's pick narrows Snap's list; without a pick (or an unknown one) Snap shows every active method.
+        $enabled = config('services.midtrans.methods.'.$method);
+        if (is_array($enabled) && $enabled !== []) {
+            $payload['enabled_payments'] = array_values($enabled);
+        }
 
         $response = $this->send(fn (PendingRequest $http) => $http->post($this->snapUrl().'/snap/v1/transactions', $payload));
 

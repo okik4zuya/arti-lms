@@ -64,13 +64,6 @@ class LegalPagesTest extends TestCase
         $this->get('/kontak')->assertSee('Penyelenggara:')->assertSee('Budi Peneliti, Bandung');
     }
 
-    public function test_the_contact_form_topic_is_named_refund_not_guarantee(): void
-    {
-        config(['site.contact_whatsapp' => '081234567890']);
-
-        $this->get('/kontak')->assertSee('Pengembalian dana')->assertDontSee('garansi');
-    }
-
     public function test_the_privacy_page_names_the_payment_and_email_processors_and_the_password_rule(): void
     {
         $this->get('/privasi')->assertOk()

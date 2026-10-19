@@ -1,9 +1,13 @@
 @extends('layouts.site')
 
 @section('title', 'Framework Riset untuk Claude Code, dari Ide sampai Submit')
-@section('description', 'Framework riset untuk Claude Code: memori antar sesi, referensi asli yang bisa dilacak, dan alur dari gap sampai submit. Termasuk e-course.')
+@section('description', 'Framework riset untuk Claude Code: referensi yang bisa dilacak, memori antar sesi, gambar dari data, dan naskah Word dengan sitasi Zotero. Termasuk e-course.')
 
 @section('main_class', 'site-main--flush')
+
+@push('head')
+    @vite(['resources/js/sticky-buy.js'])
+@endpush
 
 @section('content')
 <div class="landing">
@@ -14,11 +18,12 @@
             <p class="hero__eyebrow">ARTi Framework</p>
             <h1>Riset dengan AI yang tidak lupa dan tidak mengarang.</h1>
             <p class="hero__lead">
-                Framework riset untuk Claude Code, dari ide sampai submit.
+                Framework riset untuk Claude Code, dari ide sampai publish.
                 Dilengkapi e-course untuk mempelajarinya.
             </p>
+            <p class="hero__nots">Tanpa referensi yang tidak bisa dilacak. Tanpa mulai dari nol tiap sesi. Tanpa gambar yang terlihat buatan AI. Tanpa copy-paste ke Word.</p>
             <div class="hero__actions">
-                <a href="{{ route('checkout') }}" class="btn btn--primary btn--lg">Beli sekarang</a>
+                <a href="#checkout" class="btn btn--primary btn--lg">Beli sekarang</a>
                 <a href="#coba-gratis" class="btn btn--outline btn--lg">Coba gratis</a>
             </div>
             <p class="trust-line">Bayar sekali &middot; Windows &middot; Butuh Claude Code</p>
@@ -37,32 +42,57 @@
         </div>
     </section>
 
-    {{-- 3. Agitasi --}}
-    <section class="landing-section landing-section--alt">
+    {{-- 3. Agitasi: empat soal, urutan sama dengan section masalah --}}
+    <section class="landing-section landing-section--alt" id="soal">
         <div class="container container--narrow">
-            <h2>Kesalahan kecil yang tidak berhenti.</h2>
-            <p>Satu kalimat keliru dari AI masuk ke artikel Anda tanpa dicek ke sumber aslinya.</p>
-            <p>Artikel terbit. Orang lain merujuknya. Lalu artikel yang merujuk itu dirujuk lagi.</p>
-            <p>Kesalahan itu lama-lama dianggap benar. Bukan karena benar, tapi karena terus disebarkan.</p>
-            <ol class="chain" aria-label="Contoh alur penyebaran kesalahan">
-                <li class="chain__step chain__step--bad"><strong>AI menulis kalimat keliru</strong><span>Terdengar yakin, tapi tidak ada di sumbernya.</span></li>
-                <li class="chain__step chain__step--warn"><strong>Masuk ke naskah</strong><span>Tanpa dicek ke sumber aslinya.</span></li>
-                <li class="chain__step"><strong>Artikel terbit</strong><span>Orang lain mulai merujuknya.</span></li>
-                <li class="chain__step"><strong>Dirujuk lagi</strong><span>Artikel yang merujuk ikut dirujuk.</span></li>
-                <li class="chain__step chain__step--end"><strong>Dianggap benar</strong><span>Karena sering dikutip, bukan karena benar.</span></li>
-            </ol>
-            <p class="figure-note">Ilustrasi alur penyebaran kesalahan, bukan data.</p>
-            <p>Itu baru soal kredibilitas. Soal tenaga, ada cerita lama tentang Rithah yang memintal benang seharian, lalu menguraikannya lagi tiap malam. Bekerja dengan AI yang tidak punya memori terasa persis begitu. Kerja hari ini tidak pernah jadi pijakan untuk besok.</p>
-            <figure class="figure figure--model">
-                <img src="{{ asset('images/landing/benang-terurai.webp') }}" width="1200" height="560" loading="lazy"
-                     alt="Robot memintal benang biru menjadi gulungan besar di hari pertama. Di hari kedua dan ketiga, setelah sesi berakhir, gulungannya hilang, benangnya terurai, dan robot memulai gulungan kecil lagi dari awal">
-                <figcaption>Tiap sesi baru, kerja kemarin terurai lagi. Ilustrasi, bukan data.</figcaption>
-            </figure>
+            <h2>Empat soal yang terus berulang.</h2>
+
+            <article class="soal">
+                <p class="soal__tag">Soal kredibilitas</p>
+                <h3>Satu kalimat keliru ikut menyebar.</h3>
+                <p>Satu kalimat keliru dari AI masuk ke artikel Anda tanpa dicek ke sumber aslinya.</p>
+                <p>Artikel terbit. Orang lain merujuknya. Lalu artikel yang merujuk itu dirujuk lagi.</p>
+                <p>Kesalahan itu lama-lama dianggap benar. Bukan karena benar, tapi karena terus disebarkan.</p>
+                <ol class="chain" aria-label="Contoh alur penyebaran kesalahan">
+                    <li class="chain__step chain__step--bad"><strong>AI menulis kalimat keliru</strong><span>Terdengar yakin, tapi tidak ada di sumbernya.</span></li>
+                    <li class="chain__step chain__step--warn"><strong>Masuk ke naskah</strong><span>Tanpa dicek ke sumber aslinya.</span></li>
+                    <li class="chain__step"><strong>Artikel terbit</strong><span>Orang lain mulai merujuknya.</span></li>
+                    <li class="chain__step"><strong>Dirujuk lagi</strong><span>Artikel yang merujuk ikut dirujuk.</span></li>
+                    <li class="chain__step chain__step--end"><strong>Dianggap benar</strong><span>Karena sering dikutip, bukan karena benar.</span></li>
+                </ol>
+                <p class="figure-note">Ilustrasi alur penyebaran kesalahan, bukan data.</p>
+                <p>Yang dipertaruhkan adalah nama Anda di baris penulis.</p>
+            </article>
+
+            <article class="soal">
+                <p class="soal__tag">Soal tenaga</p>
+                <h3>Kerja kemarin terurai lagi.</h3>
+                <p>Pukul sebelas malam, sesi baru, dan Anda mengunggah PDF yang sama untuk ketiga kalinya.</p>
+                <p>Ada cerita lama tentang Rithah yang memintal benang seharian, lalu menguraikannya lagi tiap malam. Bekerja dengan AI yang tidak punya memori terasa persis begitu. Kerja hari ini tidak pernah jadi pijakan untuk besok.</p>
+                <figure class="figure figure--model">
+                    <img src="{{ asset('images/landing/benang-terurai.webp') }}" width="1200" height="560" loading="lazy"
+                         alt="Robot memintal benang biru menjadi gulungan besar di hari pertama. Di hari kedua dan ketiga, setelah sesi berakhir, gulungannya hilang, benangnya terurai, dan robot memulai gulungan kecil lagi dari awal">
+                    <figcaption>Tiap sesi baru, kerja kemarin terurai lagi. Ilustrasi, bukan data.</figcaption>
+                </figure>
+            </article>
+
+            <article class="soal">
+                <p class="soal__tag">Soal gambar</p>
+                <h3>Gambar yang Anda minta tiga kali, dan tetap terlihat buatan AI.</h3>
+                <p>Gambar buatan AI sering terasa janggal: huruf bergeser, panah tidak nyambung. Anda ragu memasukkannya ke naskah, lalu menggambar ulang di jam yang seharusnya untuk menulis.</p>
+            </article>
+
+            <article class="soal">
+                <p class="soal__tag">Soal output</p>
+                <h3>Naskahnya bagus, tapi belum selesai.</h3>
+                <p>Hasil AI disalin ke Word, formatnya bergeser, dan sitasi jadi teks biasa. Ganti gaya jurnal berarti mengetik ulang semuanya, dan itu terulang di tiap submit dan revisi.</p>
+            </article>
+
             <p class="aside">Bukan berarti AI-nya buruk. Alatnya hebat, tapi belum jadi sistem.</p>
         </div>
     </section>
 
-    {{-- 4. Solusi --}}
+    {{-- 4. Solusi: empat jawaban, pasangan dari empat soal --}}
     <section class="landing-section">
         <div class="container">
             <h2>Solusinya: Claude diajari cara kerja riset, dan diberi alatnya.</h2>
@@ -76,33 +106,44 @@
                 <li class="legend__item"><strong>Skill</strong><span>Lembar cara kerja: langkah riset yang sudah tersusun, dari gap sampai balasan reviewer.</span></li>
                 <li class="legend__item"><strong>Alat</strong><span>Perkakas untuk mengerjakannya: cari literatur, ubah PDF, siapkan naskah dan gambar.</span></li>
             </ul>
-            <p>Itu yang ARTi beri. Di atasnya ada tiga fondasi yang menjaga kerjanya tetap benar dan tidak lupa.</p>
-            <div class="grid grid--3">
-                <div class="panel">
-                    <span class="icon-wrap"><x-glyph name="folder" /></span>
-                    <h3>Memori per topik</h3>
-                    <p>Keputusan dan konteks proyek tersimpan sebagai berkas kecil per topik, dengan indeks. Sesi berikutnya melanjutkan, bukan mengulang.</p>
-                </div>
-                <div class="panel">
-                    <span class="icon-wrap"><x-glyph name="referensi" /></span>
-                    <h3>Referensi asli dan bisa dilacak</h3>
-                    <p>Satu basis data rujukan per proyek. Setiap kutipan menunjuk ke sumber yang benar-benar ada, dan teks lengkap PDF diubah ke Markdown agar bisa dicari.</p>
-                </div>
-                <div class="panel">
-                    <span class="icon-wrap"><x-glyph name="catatan" /></span>
-                    <h3>Scratchbook</h3>
-                    <p>Tempat menimbun temuan dan kutipan per bagian naskah, dengan penanda asal setiap klaim. Klaim tanpa sumber tidak boleh masuk naskah.</p>
-                </div>
+            <p>Itu yang ARTi beri. Untuk empat soal tadi, jawabannya begini.</p>
+
+            <h3 class="skills-title">Empat soal, empat jawaban</h3>
+
+            <div class="panel answer">
+                <p class="soal__tag">Soal kredibilitas</p>
+                <h4>Kutipan yang menunjuk ke sumber nyata</h4>
+                <p><span class="answer__k">Dulu</span><span>Kutipan dicek satu per satu, karena AI bisa menulis rujukan yang tidak ada.</span></p>
+                <p><span class="answer__k answer__k--with">Dengan ARTi</span><span>Satu basis data rujukan per proyek: setiap kutipan menunjuk ke sumber yang benar-benar ada, dan teks lengkap PDF diubah ke Markdown agar bisa dicari. Di Scratchbook, setiap klaim punya penanda asal, dan klaim tanpa sumber tidak boleh masuk naskah.</span></p>
+                <p class="answer__gain"><strong>Yang kembali ke Anda:</strong> kualitas, dan tenang saat naskah dicek.</p>
             </div>
 
-            <h3 class="skills-title">Gambar dari data, bukan dari imajinasi AI</h3>
-            <p>Diagram, grafik, dan tabel dibuat dari data dan spesifikasi yang Anda setujui, bukan digambar mesin. Sumbernya jelas dan hasilnya bisa Anda edit lagi, jadi tidak ada gambar yang Anda ragukan asalnya.</p>
-            <p class="muted">Untuk diagram, grafik, tabel, dan gambar gabungan. Bukan untuk foto atau ilustrasi bebas.</p>
+            <div class="panel answer">
+                <p class="soal__tag">Soal tenaga</p>
+                <h4>Sesi berikutnya melanjutkan, bukan mengulang</h4>
+                <p><span class="answer__k">Dulu</span><span>Tiap sesi baru: unggah ulang literatur, jelaskan ulang aturan, ingatkan ulang tujuan.</span></p>
+                <p><span class="answer__k answer__k--with">Dengan ARTi</span><span>Keputusan dan konteks proyek tersimpan sebagai berkas kecil per topik, dengan indeks. Sesi berikutnya membaca memori itu dan melanjutkan.</span></p>
+                <p class="answer__gain"><strong>Yang kembali ke Anda:</strong> waktu dan tenaga.</p>
+            </div>
 
-            <h3 class="skills-title">Hebatnya lagi, naskah langsung jadi Word dengan Zotero</h3>
-            <p>Naskah Anda ditulis dan diperbaiki bersama AI, lalu hasilnya langsung jadi berkas Word. Sitasinya sudah berupa field Zotero, tanpa <strong>copy paste</strong>.</p>
-            <p class="callout">ARTi mengeluarkan berkas Word yang sudah berisi field Zotero.</p>
-            <p class="muted">Satu klik Refresh di Zotero, dan format sitasi mengikuti gaya yang Anda pilih. Butuh Zotero di Word.</p>
+            <div class="panel answer">
+                <p class="soal__tag">Soal gambar</p>
+                <h4>Gambar dari data, bukan dari imajinasi AI</h4>
+                <p><span class="answer__k">Dulu</span><span>Gambar AI yang diragukan asalnya, lalu digambar ulang sendiri.</span></p>
+                <p><span class="answer__k answer__k--with">Dengan ARTi</span><span>Diagram, grafik, dan tabel dibuat dengan kode dari data dan spesifikasi yang Anda setujui, bukan digambar mesin. Sumbernya jelas dan hasilnya bisa Anda edit lagi.</span></p>
+                <p class="answer__gain"><strong>Yang kembali ke Anda:</strong> kualitas, dan gambar yang tidak Anda ragukan asalnya.</p>
+                <p class="muted">Untuk diagram, grafik, tabel, dan gambar gabungan. Bukan untuk foto atau ilustrasi bebas.</p>
+            </div>
+
+            <div class="panel answer">
+                <p class="soal__tag">Soal output</p>
+                <h4>Naskah langsung jadi Word dengan Zotero</h4>
+                <p><span class="answer__k">Dulu</span><span>Copy-paste ke Word, format bergeser, sitasi jadi teks biasa.</span></p>
+                <p><span class="answer__k answer__k--with">Dengan ARTi</span><span>Naskah Anda ditulis dan diperbaiki bersama AI, lalu hasilnya langsung jadi berkas Word. Sitasinya sudah berupa field Zotero, tanpa <strong>copy paste</strong>.</span></p>
+                <p class="callout">ARTi mengeluarkan berkas Word yang sudah berisi field Zotero.</p>
+                <p class="answer__gain"><strong>Yang kembali ke Anda:</strong> waktu dan tenaga, di tiap submit dan revisi.</p>
+                <p class="muted">Satu klik Refresh di Zotero, dan format sitasi mengikuti gaya yang Anda pilih. Butuh Zotero di Word.</p>
+            </div>
         </div>
     </section>
 
@@ -268,6 +309,8 @@
                         <tr><th scope="row">Memori antar sesi</th><td>Bisa, tapi strukturnya terserah Anda</td><td>File per topik + indeks, aturan baca dan tulis sudah baku</td></tr>
                         <tr><th scope="row">Anti-ngawur</th><td>Tergantung disiplin Anda</td><td>Wajib bertanda sumber, scratchbook sebagai gerbang</td></tr>
                         <tr><th scope="row">Alur riset</th><td>Prompt dibuat dari nol tiap tahap</td><td>Dipaketkan jadi skill</td></tr>
+                        <tr><th scope="row">Gambar</th><td>Tergantung Anda</td><td>Dibuat dari data dan spesifikasi, bisa diedit</td></tr>
+                        <tr><th scope="row">Naskah Word dengan sitasi Zotero</th><td>Tergantung Anda</td><td>Berkas Word langsung berisi field Zotero</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -342,6 +385,46 @@
         </div>
     </section>
 
+    {{-- 10b. Yang kembali ke Anda --}}
+    <section class="landing-section landing-section--alt" id="manfaat">
+        <div class="container">
+            <h2>Yang kembali ke Anda.</h2>
+            <div class="grid grid--2">
+                <div class="panel">
+                    <h3>Waktu</h3>
+                    <p>Tidak mengulang unggahan dan penjelasan, tidak merapikan sitasi dengan tangan.</p>
+                </div>
+                <div class="panel">
+                    <h3>Tenaga</h3>
+                    <p>Tidak menggambar ulang, tidak menyalin dan merapikan naskah dari obrolan.</p>
+                </div>
+                <div class="panel">
+                    <h3>Kualitas</h3>
+                    <p>Kutipan yang bisa dilacak, gambar dari data, dan sitasi yang mengikuti gaya jurnal.</p>
+                </div>
+                <div class="panel">
+                    <h3>Bayar sekali</h3>
+                    <p>Satu kali bayar, berlaku selamanya, tanpa biaya bulanan dari ARTi.</p>
+                </div>
+            </div>
+            <p class="callout"><strong>Pengalaman saya:</strong> tiga paper saya tulis paralel dengan ARTi, sambil menyiapkan topik riset lain.</p>
+        </div>
+    </section>
+
+    {{-- 10c. Soal langganan Claude --}}
+    <section class="landing-section" id="langganan">
+        <div class="container container--narrow">
+            <h2>Soal langganan Claude.</h2>
+            <p>ARTi berjalan di atas Claude Code, yang butuh langganan Claude sendiri: sekitar US$20, kira-kira Rp400.000 per bulan (harga terbaru ada di situs Claude). Terasa berat? Ada tiga cara memandangnya.</p>
+            <ul class="checklist">
+                <li>Itu sekitar <strong>Rp13.000 per hari</strong>.</li>
+                <li>Satu bulan bisa memuat penyusunan naskah, proposal, balasan reviewer, bahan ajar, dan dokumen kerja lain. Ini bukan janji hasil: diterima atau tidaknya naskah tetap keputusan jurnal.</li>
+                <li>Anda <strong>tidak harus berlangganan terus</strong>. ARTi sekali bayar, sedangkan langganan Claude bisa dipakai di bulan Anda mengerjakan naskah, lalu dihentikan.</li>
+            </ul>
+            <p class="honest"><strong>Jujur:</strong> kalau Anda hanya sesekali bertanya ke AI, langganan ini tidak sepadan. Ia terasa manfaatnya saat kerjanya panjang.</p>
+        </div>
+    </section>
+
     {{-- 11. Penawaran --}}
     <section class="landing-section landing-section--alt" id="harga">
         <div class="container container--narrow">
@@ -354,35 +437,13 @@
             @endif
 
             <div class="panel offer">
-                @if ($offer->promotion())
-                    <p class="offer__price">
-                        <s>{{ $offer->format($offer->normalPrice()) }}</s>
-                        <strong>{{ $offer->format($offer->promotion()->price) }}</strong>
-                        <span>bayar sekali</span>
-                    </p>
-                    <p class="offer__quota">Promo sampai <strong>{{ $offer->promotion()->ends_at->locale('id')->translatedFormat('j F Y, H.i') }}</strong>. Setelah itu harganya kembali normal.</p>
-                @elseif ($offer->launchActive())
-                    <p class="offer__price">
-                        <s>{{ $offer->format($offer->normalPrice()) }}</s>
-                        <strong>{{ $offer->format($offer->launchPrice()) }}</strong>
-                        <span>bayar sekali</span>
-                    </p>
-                    <p class="offer__quota">Tersisa <strong>{{ $offer->remaining() }} dari {{ $offer->quota() }}</strong>.</p>
-                    <p>Setelah itu harganya {{ $offer->format($offer->normalPrice()) }}, tetap bayar sekali.</p>
+                @if ($offer->launchActive() && ! $offer->promotion())
                     <p><strong>Kenapa murah sekarang?</strong> E-course masih ditulis. Anda membeli lebih awal dengan harga lebih rendah, dan bab baru ikut Anda dapat.</p>
-                @else
-                    <p class="offer__price">
-                        <strong>{{ $offer->format($offer->normalPrice()) }}</strong>
-                        <span>bayar sekali</span>
-                    </p>
                 @endif
 
                 <p><strong>Yang Anda dapat:</strong> e-course ARTi Framework &middot; lisensi ARTi Framework &middot; pembaruan ARTi tanpa biaya tambahan.</p>
 
-                <p><strong>Cara membeli:</strong> tekan tombol, isi nama dan email, lalu bayar dengan QRIS, virtual account, atau e-wallet. Akun belajar, kunci lisensi, dan tautan unduhan dikirim ke email Anda.</p>
-
-                <a href="{{ route('checkout') }}" class="btn btn--primary btn--lg">Beli sekarang</a>
-                <p class="muted">Atau <a href="{{ $offer->buyUrl() }}" data-kontak="pembelian">beli lewat WhatsApp</a>.</p>
+                @include('site.partials.checkout')
             </div>
         </div>
     </section>
@@ -417,8 +478,16 @@
                     <p>Tidak. Anda membayar sekali. Skill dan berkas Anda berjalan di komputer Anda sendiri, dan data Anda tetap milik Anda.</p>
                 </details>
                 <details>
+                    <summary>Apakah sitasi bisa diganti ke gaya jurnal lain?</summary>
+                    <p>Bisa, selama Anda memakai Zotero di Word. Sitasinya berupa field Zotero, jadi satu klik Refresh dan formatnya mengikuti gaya yang Anda pilih.</p>
+                </details>
+                <details>
+                    <summary>Apakah gambarnya boleh dipakai di jurnal?</summary>
+                    <p>Gambar dibuat dari data Anda dan bisa diedit, bukan hasil generator gambar. Tetap cek ketentuan jurnal tujuan Anda. ARTi tidak membuat foto atau ilustrasi bebas.</p>
+                </details>
+                <details>
                     <summary>Berapa total biayanya?</summary>
-                    <p>{{ $offer->format($offer->currentPrice()) }} sekali bayar untuk ARTi, ditambah langganan Claude Anda sendiri.</p>
+                    <p>{{ $offer->format($offer->currentPrice()) }} sekali bayar untuk ARTi, ditambah langganan Claude Anda sendiri. Langganan itu bisa Anda mulai dan hentikan sendiri; lihat <a href="#langganan">Soal langganan Claude</a>.</p>
                 </details>
             </div>
         </div>
@@ -427,14 +496,20 @@
     {{-- 13. Penutup --}}
     <section class="landing-closing">
         <div class="container container--narrow">
+            <p class="closing__lines">Referensi yang bisa dilacak. Sesi yang melanjutkan. Gambar dari data. Sitasi yang bisa disegarkan.</p>
             <p class="tagline tagline--lg">Dari ide sampai publish, bersama ARTi.</p>
             <div class="hero__actions hero__actions--center">
-                <a href="{{ route('checkout') }}" class="btn btn--primary btn--lg">Beli sekarang</a>
+                <a href="#checkout" class="btn btn--primary btn--lg">Beli sekarang</a>
                 <a href="#coba-gratis" class="btn btn--outline btn--lg">Coba gratis dulu</a>
             </div>
             <p class="disclaimer">ARTi tidak berafiliasi dengan Anthropic. Claude dan Claude Code adalah produk Anthropic.</p>
         </div>
     </section>
 
+</div>
+
+<div class="buy-bar" data-buy-bar hidden>
+    <p class="buy-bar__price"><span>Akses selamanya</span> <strong>{{ $offer->format($offer->currentPrice()) }}</strong></p>
+    <a href="#checkout" class="btn btn--cta">Dapatkan ARTi</a>
 </div>
 @endsection

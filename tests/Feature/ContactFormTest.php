@@ -15,117 +15,35 @@ class ContactFormTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected function payload(array $override = []): array
-    {
-        return array_merge(['nama' => 'Budi', 'topik' => 'instalasi', 'pesan' => 'Instalasi berhenti di langkah 2.'], $override);
-    }
-
-    public function test_no_form_while_no_number_is_set(): void
-    {
-        config(['site.contact_whatsapp' => null]);
-
-        $this->get('/kontak')->assertOk()->assertSee('belum dibuka')->assertDontSee('Kirim lewat WhatsApp');
-        $this->post('/kontak', $this->payload())->assertNotFound();
-    }
-
-    public function test_form_redirects_to_whatsapp_with_the_message(): void
-    {
-        config(['site.contact_whatsapp' => '0812-3456-7890']);
-
-        $this->get('/kontak')->assertOk()->assertSee('Kirim lewat WhatsApp')->assertSee('Bantuan instalasi');
-
-        $response = $this->post('/kontak', $this->payload());
-        $location = $response->headers->get('Location');
-
-        $this->assertStringStartsWith('https://wa.me/6281234567890?text=', $location);
-        $text = urldecode(substr($location, strlen('https://wa.me/6281234567890?text=')));
-        $this->assertStringContainsString('Halo, saya Budi.', $text);
-        $this->assertStringContainsString('Keperluan: Bantuan instalasi', $text);
-        $this->assertStringContainsString('Instalasi berhenti di langkah 2.', $text);
-    }
-
-    public function test_name_is_optional(): void
+    public function test_there_is_no_floating_whatsapp_button_or_panel_anywhere(): void
     {
         config(['site.contact_whatsapp' => '081234567890']);
 
-        $location = $this->post('/kontak', $this->payload(['nama' => '']))->headers->get('Location');
-        $text = urldecode(substr($location, strlen('https://wa.me/6281234567890?text=')));
+        foreach (['/', '/fitur', '/kontak', '/scipeek', '/artipdf', '/baca/01-2-masalah-utama'] as $path) {
+            $html = $this->get($path)->assertOk()->getContent();
 
-        $this->assertStringStartsWith("Halo.\nKeperluan: Bantuan instalasi", $text);
-        $this->assertStringNotContainsString('saya', $text);
-    }
-
-    public function test_form_validates_input(): void
-    {
-        config(['site.contact_whatsapp' => '081234567890']);
-
-        $this->from('/kontak')->post('/kontak', $this->payload(['nama' => '', 'topik' => 'x', 'pesan' => '']))
-            ->assertRedirect('/kontak')
-            ->assertSessionHasErrors(['topik', 'pesan'])
-            ->assertSessionDoesntHaveErrors(['nama']);
-    }
-
-    public function test_topic_query_preselects_the_option_on_the_contact_page(): void
-    {
-        config(['site.contact_whatsapp' => '081234567890']);
-
-        $this->get('/kontak?topik=instalasi')->assertSee('value="instalasi" selected', false);
-        $this->get('/kontak?topik=bogus')->assertDontSee('selected');
-    }
-
-    public function test_panel_is_in_the_layout_only_with_a_number_and_not_on_the_contact_page(): void
-    {
-        config(['site.contact_whatsapp' => null]);
-        $this->get('/')->assertDontSee('wa-panel')->assertDontSee('contact-panel');
-
-        config(['site.contact_whatsapp' => '081234567890']);
-        $this->get('/')
-            ->assertSee('<dialog id="wa-panel"', false)
-            ->assertSee('data-wa="https://wa.me/6281234567890"', false)
-            ->assertSee('Saya ingin membeli ARTi paket perintis.')
-            ->assertSee('aria-controls="wa-panel"', false);
-        $this->get('/kontak')->assertDontSee('<dialog', false)->assertSee('Kirim lewat WhatsApp');
-    }
-
-    public function test_buy_buttons_open_the_panel_but_keep_their_whatsapp_link(): void
-    {
-        config(['site.contact_whatsapp' => '081234567890']);
-
-        // The main buy buttons go to the checkout (which falls back to WhatsApp when the gateway is off);
-        // the WhatsApp fallback links keep opening the panel.
-        foreach (['/', '/beli'] as $path) {
-            config(['services.midtrans.server_key' => 'SB-Mid-server-test']);
-            $this->get($path)->assertSee('data-kontak="pembelian"', false);
+            $this->assertStringNotContainsString('wa-float', $html, $path);
+            $this->assertStringNotContainsString('wa-panel', $html, $path);
+            $this->assertStringNotContainsString('data-kontak', $html, $path);
+            $this->assertStringNotContainsString('wa.me', $html, $path);
+            $this->assertStringNotContainsString('contact-panel', $html, $path);
         }
-        $this->get('/fitur')->assertSee(route('checkout'), false)->assertDontSee('data-kontak="pembelian"', false);
-        $this->get('/')->assertSee('href="https://wa.me/6281234567890?text=', false);
     }
 
-    public function test_a_number_saved_in_the_admin_overrides_the_env_default(): void
+    public function test_the_footer_shows_the_support_email_on_every_page(): void
     {
-        config(['site.contact_whatsapp' => '081111111111']);
+        foreach (['/', '/fitur', '/kontak', '/privasi'] as $path) {
+            $this->get($path)->assertSee('href="mailto:hi@arti.ai.id"', false);
+        }
 
-        SiteSetting::put('contact_whatsapp', '+62 899-0000-1111');
-        (new \App\Providers\AppServiceProvider($this->app))->boot();
-
-        $this->assertSame('+62 899-0000-1111', config('site.contact_whatsapp'));
-        $this->get('/kontak')->assertSee('Kirim lewat WhatsApp');
+        config(['site.contact_email' => 'bantuan@example.test']);
+        $this->get('/')->assertSee('href="mailto:bantuan@example.test"', false)->assertDontSee('hi@arti.ai.id');
     }
 
-    public function test_default_messages_saved_in_the_admin_reach_the_panel_and_the_links(): void
+    public function test_the_contact_page_is_email_only_and_the_old_form_is_gone(): void
     {
-        config(['site.contact_whatsapp' => '081234567890']);
-
-        SiteSetting::put('whatsapp_message', 'Halo, saya mau paket perintis sekarang.');
-        SiteSetting::put('chat_message', 'Halo, boleh tanya dulu?');
-        (new \App\Providers\AppServiceProvider($this->app))->boot();
-
-        $this->assertSame('Halo, saya mau paket perintis sekarang.', config('site.offer.whatsapp_message'));
-        $html = $this->get('/')->getContent();
-
-        $this->assertStringContainsString('Saya mau paket perintis sekarang.', $html);
-        $this->assertStringContainsString(rawurlencode('Halo, boleh tanya dulu?'), $html);
-        $this->assertStringContainsString(rawurlencode('Halo, saya mau paket perintis sekarang.'), $html);
+        $this->get('/kontak')->assertOk()->assertSee('hi@arti.ai.id')->assertDontSee('Kirim lewat WhatsApp')->assertDontSee('<form', false);
+        $this->post('/kontak', ['topik' => 'instalasi', 'pesan' => 'x'])->assertStatus(405);
     }
 
     public function test_admin_can_save_default_messages_and_blank_falls_back_to_the_config(): void
@@ -177,17 +95,5 @@ class ContactFormTest extends TestCase
             ->assertHasNoFormErrors();
 
         $this->assertSame('081234567890', SiteSetting::find('contact_whatsapp')->value);
-    }
-
-    public function test_floating_whatsapp_button_shows_only_with_a_number_and_not_on_the_contact_page(): void
-    {
-        config(['site.contact_whatsapp' => null]);
-        $this->get('/')->assertDontSee('wa-float');
-
-        config(['site.contact_whatsapp' => '081234567890']);
-        $this->get('/')->assertSee('class="wa-float"', false)->assertSee('https://wa.me/6281234567890?text=', false)->assertSee('aria-label="Chat lewat WhatsApp"', false);
-        $this->get('/fitur')->assertSee('wa-float');
-        $this->get('/baca/01-2-masalah-utama')->assertSee('wa-float');
-        $this->get('/kontak')->assertDontSee('wa-float');
     }
 }

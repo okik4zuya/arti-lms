@@ -4,7 +4,7 @@ description: Written plan for automatic purchases (gateway, orders, webhook, Ful
 metadata:
   type: project
   created: 2026-10-18 14:15
-  updated: 2026-10-18 19:41
+  updated: 2026-10-19 06:34
 ---
 
 Plan stage of the session described in [[automatic-purchase-prompt]]. **The sections "Verified", "Architecture" and "Decisions pending" are the original plan; what was built is under "Built 2026-10-18", "Gateway abstraction" and "Sandbox 2026-10-18 (evening)" below.** Builds on [[license-admin]], [[license-admin-roadmap]], [[list-building]], [[r2-storage]], [[legal-review-notes]]. Worker side: `~/.arti/memory/memories/licensing-update-plan.md`.
@@ -77,6 +77,7 @@ b) orders + webhook + signature + idempotency + tests with `Http::fake`; c) forg
 - Product direction: **one-time, lifetime purchase** instead of Rp199.000/year (product adapts later). Consequences recorded: no renewal order type, no reminder mail, Worker `extend order_ref` no longer needed (only `resend silent`), no course-access expiry question, and every "per tahun / satu tahun / Rp16.600 per bulan / setelah satu tahun" claim on the landing, `/syarat`, series mail 4 and tests must be reworded. Price and the meaning of "lifetime" still to be answered.
 
 ## Change log
+- 2026-10-19 06:34 — landing form, method cards and WhatsApp removal: see [[landing-checkout-form]].
 - 2026-10-18 19:41 — sandbox run, password-page UX, copy-paste links, installer link and terminal step removed from mails and WhatsApp.
 - 2026-10-18 15:40 — built (see "Built 2026-10-18").
 - 2026-10-18 14:15 — created (plan stage, no code).

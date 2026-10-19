@@ -15,7 +15,7 @@ class LandingPageTest extends TestCase
             ->assertSee('Rp99.000')
             ->assertSee('Tersisa')
             ->assertSee('63 dari 100')
-            ->assertSee('bayar sekali', false)
+            ->assertSee('Sekali pembayaran')
             ->assertDontSee('Garansi')
             ->assertDontSee('uang kembali')
             ->assertSee('Windows saja')
@@ -37,13 +37,6 @@ class LandingPageTest extends TestCase
         $this->get('/')
             ->assertSee('Satu paket, satu harga.')
             ->assertDontSee('Harga perintis untuk');
-    }
-
-    public function test_buy_buttons_point_to_whatsapp_when_a_number_is_configured(): void
-    {
-        config(['site.contact_whatsapp' => '081234567890']);
-
-        $this->get('/')->assertSee('https://wa.me/6281234567890?text=', false);
     }
 
     public function test_demo_shows_a_soon_badge_until_a_video_is_set_and_the_chapter_link_can_be_overridden(): void
@@ -181,6 +174,67 @@ class LandingPageTest extends TestCase
             ->assertSee('<strong>gambarnya terlalu AI</strong>, jadi ragu memasukkan ke naskah.', false)
             ->assertSee('Gambar dari data, bukan dari imajinasi AI')
             ->assertSee('Bukan untuk foto atau ilustrasi bebas.');
+    }
+
+    public function test_the_hero_names_the_four_problems_and_goes_to_publish(): void
+    {
+        $this->get('/')
+            ->assertSee('dari ide sampai publish.')
+            ->assertSee('Tanpa referensi yang tidak bisa dilacak.')
+            ->assertSee('Tanpa copy-paste ke Word.')
+            ->assertDontSee('dari ide sampai submit');
+    }
+
+    public function test_the_four_problems_are_agitated_in_order_and_answered_in_the_same_order(): void
+    {
+        $html = $this->get('/')->assertOk()->getContent();
+
+        $tags = ['Soal kredibilitas', 'Soal tenaga', 'Soal gambar', 'Soal output'];
+        $positions = [];
+        foreach ($tags as $tag) {
+            $this->assertSame(2, substr_count($html, $tag), $tag.' appears once as agitation and once as answer');
+            $first = strpos($html, $tag);
+            $positions[] = [$first, strpos($html, $tag, $first + 1)];
+        }
+
+        $this->assertSame($positions, collect($positions)->sortBy(0)->values()->all(), 'agitation order');
+        $this->assertSame(array_column($positions, 1), collect(array_column($positions, 1))->sort()->values()->all(), 'answer order');
+        $this->assertGreaterThan(max(array_column($positions, 0)), min(array_column($positions, 1)), 'answers come after all four problems');
+        $this->assertStringNotContainsString('Kesalahan kecil yang tidak berhenti', $html);
+    }
+
+    public function test_every_answer_states_before_after_and_what_comes_back(): void
+    {
+        $html = $this->get('/')->getContent();
+
+        $this->assertSame(4, substr_count($html, 'answer__k answer__k--with'));
+        $this->assertSame(4, substr_count($html, 'Yang kembali ke Anda:'));
+        $this->assertStringContainsString('waktu dan tenaga', $html);
+        $this->assertStringContainsString('kualitas', $html);
+    }
+
+    public function test_the_value_summary_and_the_claude_subscription_come_before_the_price(): void
+    {
+        $html = $this->get('/')
+            ->assertSee('Yang kembali ke Anda.')
+            ->assertSee('Bayar sekali')
+            ->assertSee('Pengalaman saya:')
+            ->assertSee('Soal langganan Claude.')
+            ->assertSee('Rp13.000 per hari')
+            ->assertSee('tidak harus berlangganan terus')
+            ->assertSee('Ini bukan janji hasil')
+            ->getContent();
+
+        $this->assertLessThan(strpos($html, 'id="harga"'), strpos($html, 'id="langganan"'));
+        $this->assertLessThan(strpos($html, 'id="langganan"'), strpos($html, 'id="manfaat"'));
+    }
+
+    public function test_the_closing_repeats_the_four_gains_without_absolute_promises(): void
+    {
+        $this->get('/')
+            ->assertSee('Referensi yang bisa dilacak. Sesi yang melanjutkan. Gambar dari data. Sitasi yang bisa disegarkan.')
+            ->assertDontSee('Tidak ada lagi')
+            ->assertDontSee('dijamin');
     }
 
     public function test_landing_makes_no_first_claim_and_no_fabricated_proof(): void

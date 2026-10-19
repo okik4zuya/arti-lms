@@ -10,30 +10,30 @@ use App\Services\Payments\PaymentGatewayException;
 use App\Support\Offer;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 
 /**
- * Buying through the payment gateway. WhatsApp stays as the fallback: when the gateway is not configured, or
- * fails, the buyer is pointed there. The success page reveals nothing but the order's state; the key and the
+ * Buying through the payment gateway, fully automatic. When the gateway fails, the buyer is pointed to the support email. The success page reveals nothing but the order's state; the key and the
  * account only ever travel by email and WhatsApp.
  */
 class CheckoutController extends Controller
 {
-    public function show(Offer $offer, PaymentGateway $gateway): View|RedirectResponse
+    /** The form lives on the landing page; this address stays for old links, mails and the other pages' buttons. */
+    public function show(): RedirectResponse
     {
-        if (! $gateway->isConfigured()) {
-            return redirect()->away($offer->buyUrl());
-        }
-
-        return view('site.beli', ['offer' => $offer, 'promotion' => $offer->promotion(), 'gateway' => $gateway]);
+        return redirect()->to(route('home').'#checkout');
     }
 
     public function store(Request $request, CreateCheckout $checkout): RedirectResponse
     {
-        $data = $request->validate([
+        $form = route('home').'#checkout';
+
+        $validator = Validator::make($request->all(), [
             'nama' => ['required', 'string', 'max:80'],
             'email' => ['required', 'email:rfc', 'max:190'],
             'whatsapp' => ['nullable', 'string', 'max:30', 'regex:/^\+?[0-9][0-9 \-]{7,18}$/'],
+            'metode' => ['required', 'in:va,qris'],
             'setuju' => ['accepted'],
             'website' => ['nullable', 'max:0'], // honeypot: a person never fills it
         ], [
@@ -41,16 +41,24 @@ class CheckoutController extends Controller
             'email.required' => 'Isi alamat email Anda.',
             'email.email' => 'Alamat email tidak valid.',
             'whatsapp.regex' => 'Isi nomor saja, contoh 081234567890.',
+            'metode.required' => 'Pilih metode pembayaran.',
+            'metode.in' => 'Pilih metode pembayaran.',
             'setuju.accepted' => 'Centang persetujuan syarat dan kebijakan privasi.',
             'website.max' => 'Permintaan tidak dapat diproses.',
         ]);
 
+        if ($validator->fails()) {
+            return redirect()->to($form)->withInput()->withErrors($validator);
+        }
+
+        $data = $validator->validated();
+
         try {
-            $order = $checkout->handle($data['nama'], $data['email'], Offer::normalizeNumber($data['whatsapp'] ?? null));
+            $order = $checkout->handle($data['nama'], $data['email'], Offer::normalizeNumber($data['whatsapp'] ?? null), $data['metode']);
         } catch (AlreadyPurchasedException) {
-            return back()->withInput()->withErrors(['email' => 'Email ini sudah punya lisensi aktif. Masuk ke akun Anda, atau hubungi kami bila ada yang keliru.']);
+            return redirect()->to($form)->withInput()->withErrors(['email' => 'Email ini sudah punya lisensi aktif. Masuk ke akun Anda, atau hubungi kami bila ada yang keliru.']);
         } catch (PaymentGatewayException) {
-            return back()->withInput()->withErrors(['pembayaran' => 'Halaman pembayaran belum bisa dibuka. Coba lagi sebentar, atau beli lewat WhatsApp.']);
+            return redirect()->to($form)->withInput()->withErrors(['pembayaran' => 'Halaman pembayaran belum bisa dibuka. Coba lagi sebentar, atau hubungi '.config('site.contact_email').'.']);
         }
 
         return redirect()->away($order->checkout_url);

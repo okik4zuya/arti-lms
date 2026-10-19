@@ -45,7 +45,6 @@ Route::group(array_filter(['domain' => config('app.domains.main')]), function ()
     Route::redirect('harga', '/#harga', 301);
     Route::redirect('unduh', '/', 301);
     Route::get('kontak', [ContactController::class, 'show'])->name('kontak');
-    Route::post('kontak', [ContactController::class, 'send'])->middleware('throttle:10,1')->name('kontak.send');
     Route::view('privasi', 'site.privasi')->name('privasi');
     Route::view('syarat', 'site.syarat')->name('syarat');
 
@@ -93,7 +92,7 @@ Route::group(array_filter(['domain' => config('app.domains.main')]), function ()
     Route::post('logout', [AuthController::class, 'destroy'])
         ->middleware('auth')->name('logout');
 
-    // ---- Buying through the gateway (WhatsApp stays as the fallback on every buy button)
+    // ---- Buying through the gateway (the form is on the landing page)
     Route::get('beli', [CheckoutController::class, 'show'])->name('checkout');
     Route::post('beli', [CheckoutController::class, 'store'])->middleware('throttle:checkout')->name('checkout.store');
     Route::get('beli/selesai/{order}', [CheckoutController::class, 'done'])->middleware('throttle:checkout-status')

@@ -47,7 +47,7 @@ class XenditClient implements PaymentGateway
      *
      * @return array{id:string,invoice_url:string,status:string,expiry_date?:string}
      */
-    public function createInvoice(Order $order, string $successUrl, string $failureUrl, int $durationSeconds = 3600): array
+    public function createInvoice(Order $order, string $successUrl, string $failureUrl, int $durationSeconds = 3600, ?string $method = null): array
     {
         return $this->send(fn (PendingRequest $http) => $http->post('/v2/invoices', array_filter([
             'external_id' => $order->public_id,

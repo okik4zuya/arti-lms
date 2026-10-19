@@ -47,7 +47,7 @@ class CheckoutTest extends TestCase
     private function buy(array $over = [], string $ip = '10.1.1.1')
     {
         return $this->withServerVariables(['REMOTE_ADDR' => $ip])->post('/beli', $over + [
-            'nama' => 'Budi', 'email' => 'budi@example.test', 'whatsapp' => '081234567890', 'setuju' => '1',
+            'nama' => 'Budi', 'email' => 'budi@example.test', 'whatsapp' => '081234567890', 'metode' => 'va', 'setuju' => '1',
         ]);
     }
 
@@ -61,23 +61,67 @@ class CheckoutTest extends TestCase
         }
     }
 
-    public function test_without_a_gateway_the_buy_page_sends_the_visitor_to_whatsapp(): void
+    public function test_the_buy_page_sends_the_visitor_to_the_form_on_the_landing_page(): void
     {
-        config(['services.xendit.secret_key' => '']);
-
-        $this->get('/beli')->assertRedirectContains('https://wa.me/6281234567890');
+        $this->get('/beli')->assertRedirect(route('home').'#checkout');
     }
 
-    public function test_the_buy_page_shows_the_launch_price_the_remaining_places_and_the_whatsapp_fallback(): void
+    public function test_the_landing_form_shows_the_launch_price_the_methods_the_whatsapp_note_and_the_fallback(): void
     {
         $this->holdLaunchSlots(3);
 
-        $this->get('/beli')->assertOk()
-            ->assertSee('Harga perintis')
-            ->assertSee('Rp99.000')
-            ->assertSee('tersisa 97 dari 100')
-            ->assertSee('Beli lewat WhatsApp')
-            ->assertSee('noindex', false);
+        $this->get('/')->assertOk()
+            ->assertSee('id="checkout"', false)
+            ->assertSee('Harga perintis. Tersisa 97 dari 100')
+            ->assertSee('99.000')
+            ->assertSee('Sekali pembayaran')
+            ->assertSee('Virtual Account / GoPay / ShopeePay')
+            ->assertSee('QRIS')
+            ->assertSee('Nomor WhatsApp')
+            ->assertSee('(opsional)', false)
+            ->assertSee('notifikasi pengiriman produk dengan isi yang sama')
+            ->assertSee('Beli &amp; Akses Sekarang', false)
+            ->assertSee('data-buy-bar', false)
+            ->assertSee('mailto:hi@arti.ai.id', false)
+            ->assertDontSee('Beli lewat WhatsApp');
+    }
+
+    public function test_without_a_gateway_the_landing_shows_a_support_note_instead_of_a_form(): void
+    {
+        config(['services.xendit.secret_key' => '']);
+
+        $this->get('/')->assertSee('id="checkout"', false)->assertDontSee('Data Pembeli')->assertDontSee('WhatsApp')->assertSee('mailto:hi@arti.ai.id', false);
+    }
+
+    public function test_the_payment_method_is_required_and_must_be_one_of_the_two_cards(): void
+    {
+        $this->buy(['metode' => null])->assertSessionHasErrors('metode');
+        $this->buy(['metode' => 'kartu'])->assertSessionHasErrors('metode');
+
+        $this->assertSame(0, Order::count());
+    }
+
+    public function test_errors_and_typed_values_come_back_to_the_form_on_the_landing_page(): void
+    {
+        $this->buy(['email' => 'bukan-email', 'nama' => 'Budi'])
+            ->assertRedirect(route('home').'#checkout')
+            ->assertSessionHasErrors('email')
+            ->assertSessionHasInput('nama', 'Budi');
+    }
+
+    public function test_the_choice_is_stored_and_a_changed_choice_replaces_the_open_order_without_a_second_place(): void
+    {
+        $this->buy(['metode' => 'va']);
+        $first = Order::firstOrFail();
+        $this->assertSame('va', $first->method_choice);
+
+        $this->buy(['metode' => 'qris']);
+
+        $this->assertSame(2, Order::count());
+        $first->refresh();
+        $this->assertSame([Order::EXPIRED, null], [$first->status, $first->launch_slot]);
+        $second = Order::where('status', Order::PENDING)->firstOrFail();
+        $this->assertSame(['qris', 1], [$second->method_choice, $second->launch_slot]);
     }
 
     public function test_a_purchase_reserves_the_price_and_a_place_and_sends_the_buyer_to_the_payment_page(): void
@@ -219,7 +263,7 @@ class CheckoutTest extends TestCase
     {
         $promo = Promotion::create(['name' => 'event', 'label' => 'Promo Hari Peneliti', 'price' => 79000, 'starts_at' => now()->subDay(), 'ends_at' => now()->addDays(3), 'active' => true]);
 
-        $this->get('/beli')->assertSee('Promo Hari Peneliti')->assertSee('Rp79.000')->assertDontSee('Harga perintis');
+        $this->get('/')->assertSee('Promo Hari Peneliti')->assertSee('79.000')->assertDontSee('Harga perintis');
         $this->buy();
 
         $order = Order::firstOrFail();

@@ -42,15 +42,4 @@ class OfferTest extends TestCase
         $this->assertSame('Rp99.000', $offer->format(99000));
         $this->assertSame(16600, $offer->perMonthNormal());
     }
-
-    public function test_buy_url_uses_whatsapp_when_configured_else_the_contact_page(): void
-    {
-        config(['site.contact_whatsapp' => null]);
-        $this->assertSame(route('kontak'), (new Offer)->buyUrl());
-
-        config(['site.contact_whatsapp' => '+62 812-3456-7890']);
-        $url = (new Offer)->buyUrl();
-        $this->assertStringStartsWith('https://wa.me/6281234567890?text=', $url);
-        $this->assertStringContainsString('paket%20perintis', $url);
-    }
 }

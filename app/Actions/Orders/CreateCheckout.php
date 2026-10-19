@@ -27,7 +27,7 @@ class CreateCheckout
      * @throws AlreadyPurchasedException
      * @throws \App\Services\Payments\PaymentGatewayException when no payment page could be created (the reserved place is given back)
      */
-    public function handle(string $name, string $email, ?string $whatsapp): Order
+    public function handle(string $name, string $email, ?string $whatsapp, ?string $method = null): Order
     {
         $email = mb_strtolower(trim($email));
 
@@ -36,15 +36,22 @@ class CreateCheckout
         $open = Order::where('email', $email)->where('type', 'purchase')->where('status', Order::PENDING)
             ->where('expires_at', '>', now())->whereNotNull('checkout_url')->latest()->first();
 
-        if ($open !== null) {
+        // The payment page was built for one method; a buyer who now wants the other gets a fresh page, and the old
+        // order closes (it keeps working if paid late, like any expired one).
+        if ($open !== null && $open->method_choice === $method) {
             return $open;
+        }
+
+        if ($open !== null) {
+            $open->transition([Order::PENDING], Order::EXPIRED, ['launch_slot' => null, 'promo_slot' => null]);
+            $open->logEvent('method_changed', (string) $method);
         }
 
         if (LicenseIssuance::where('email', $email)->where('status', LicenseIssuance::ACTIVE)->exists()) {
             throw new AlreadyPurchasedException;
         }
 
-        $order = $this->reserve($name, $email, $whatsapp);
+        $order = $this->reserve($name, $email, $whatsapp, $method);
 
         try {
             $invoice = $this->gateway->createInvoice(
@@ -52,6 +59,7 @@ class CreateCheckout
                 route('checkout.done', ['order' => $order->public_id]),
                 route('checkout.done', ['order' => $order->public_id, 'gagal' => 1]),
                 $this->windowMinutes() * 60,
+                $method,
             );
         } catch (Throwable $e) {
             $order->transition([Order::PENDING], Order::FAILED, ['launch_slot' => null, 'promo_slot' => null]);
@@ -66,11 +74,11 @@ class CreateCheckout
         return $order;
     }
 
-    private function reserve(string $name, string $email, ?string $whatsapp): Order
+    private function reserve(string $name, string $email, ?string $whatsapp, ?string $method): Order
     {
         for ($attempt = 1; ; $attempt++) {
             try {
-                return DB::transaction(fn () => $this->place($name, $email, $whatsapp));
+                return DB::transaction(fn () => $this->place($name, $email, $whatsapp, $method));
             } catch (UniqueConstraintViolationException $e) {
                 // Another payment took the place we picked; count again. Real duplicates of other columns are not retried.
                 if ($attempt >= 5 || ! str_contains($e->getMessage(), 'slot')) {
@@ -80,7 +88,7 @@ class CreateCheckout
         }
     }
 
-    private function place(string $name, string $email, ?string $whatsapp): Order
+    private function place(string $name, string $email, ?string $whatsapp, ?string $method): Order
     {
         $attributes = ['tier' => 'normal', 'amount' => $this->offer->normalPrice(), 'launch' => null, 'promotion' => null, 'promo' => null];
 
@@ -99,6 +107,7 @@ class CreateCheckout
             'name' => $name,
             'email' => $email,
             'whatsapp' => $whatsapp,
+            'method_choice' => $method,
             'amount' => $attributes['amount'],
             'price_tier' => $attributes['tier'],
             'launch_slot' => $attributes['launch'],
