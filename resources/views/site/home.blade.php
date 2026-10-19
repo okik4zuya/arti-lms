@@ -437,10 +437,6 @@
             @endif
 
             <div class="panel offer">
-                @if ($offer->launchActive() && ! $offer->promotion())
-                    <p><strong>Kenapa murah sekarang?</strong> E-course masih ditulis. Anda membeli lebih awal dengan harga lebih rendah, dan bab baru ikut Anda dapat.</p>
-                @endif
-
                 <p><strong>Yang Anda dapat:</strong> e-course ARTi Framework &middot; lisensi ARTi Framework &middot; pembaruan ARTi tanpa biaya tambahan.</p>
 
                 @include('site.partials.checkout')
