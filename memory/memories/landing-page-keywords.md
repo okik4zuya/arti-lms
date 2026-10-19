@@ -4,7 +4,7 @@ description: YouTube keyword findings (2026-10-14) on how Indonesian dosen/stude
 metadata:
   type: reference
   created: 2026-10-14 22:16
-  updated: 2026-10-14 22:16
+  updated: 2026-10-19 08:36
 ---
 
 Method: `yt-keyword-audit` (`suggest` ~47 seeds, `videos` 8 queries, `--lang id --region ID`, about 800 API units). Autocomplete = relative popularity only, not volume; an empty seed means rarely searched on YouTube, not "no pain". Video view counts are cumulative and sampled from the top results. The project CLAUDE.md has no `## YouTube research` block yet, so settings were session-only. Companion data for the channel: `G:\My Drive\YT Dosen Berarti\memory\memories\keyword-research.md`. Feeds [[landing-page-concept]].
@@ -36,5 +36,13 @@ Method: `yt-keyword-audit` (`suggest` ~47 seeds, `videos` 8 queries, `--lang id 
 ## Limits
 Autocomplete is relative, not volume. Videos are the top results of 8 queries, mixed ages (2020-2026). "Pain" is inferred from titles, not from viewer interviews; still validate with 5-10 dosen. Not checked: Google web search, TikTok/Instagram, Facebook group language (where the ads would run).
 
+## Course-package demand run (2026-10-19)
+Method: `suggest` 20 seeds (`--lang id`, free) and `videos` 7 queries (`--lang id --region ID`, about 700 units). Top 10 per query only, views cumulative, ages mixed. Feeds the course-package brainstorm ([[course-packages-prompt]]).
+- **SLR: strong, proven demand in Indonesian.** Autocomplete is rich ("cara membuat artikel slr dengan ai", "slr tembus scopus", "systematic literature review scispace/prisma/scopus", "prisma flow diagram"). Indonesian videos: Syamsul Hadi UST 107k (Scopus+VOSviewer+SciSpace, 2025), Hendra Nusa Putra Elicit 58k (2023), Ahmad Fauzi SLR series Part 1 54k (2024) and automatic extraction 30k (2025), Dr. Fauzi Channel ChatGPT+Scholar 24k (2026), dunia kampus PRISMA flow diagram 53k and SLR example 14k, Sobat Mahasiswa 13k. Occupied by Elicit, SciSpace, ChatGPT, NotebookLM; **no Indonesian video on Claude Code + PRISMA found**. English Claude-for-research videos are big and recent (Stuckler 153k, Stapleton 85k to 89k, 2025-2026), so interest in Claude among academics is rising. Trap: "slr ai" returns airsoft/car results; use "cara membuat artikel SLR dengan AI", "SLR PRISMA", "SLR Scopus".
+- **Paper writing with AI: big but generic.** "menulis artikel scopus dengan ai" has autocomplete; Ahmad Fauzi 73k (2024), Mimbar Intelek "kurang dari 1 jam" 30k (2025); English "0% AI detection" 335k. "menulis artikel jurnal dengan ai" itself is empty. Thesis/skripsi AI videos (Braintext 100k, 89k) show a larger student audience than dosen; ARTi targets dosen.
+- **BIMA: real, but about the portal, not the writing.** Autocomplete is very rich ("proposal bima 2025/2026", "cara mengisi tkt/rab/proposal bima", "template", "contoh", "submit/upload", "bedah proposal"). The leader is the official DPPM tutorial (74.9k penelitian, 21k PkM, 2023). Titles cluster in Nov-Dec 2025 and May 2025 (call and revision), which suggests an annual cycle (not verified). AI-for-BIMA videos exist but are small: Hendra Nusa Putra 1.8k, sarwono wono 0.8k and 0.2k. Demand is for form-filling (TKT, RAB, upload) and yearly rules, so a course tied to one year's guide goes stale. **The angle "AI for the proposal substance" is not proven.**
+- Not checked: Google web search, Facebook groups, whether ARTi has a grant-proposal skill, BIMA call dates.
+
 ## Change log
+- 2026-10-19 08:36 — added the course-package demand run (SLR, paper writing, BIMA).
 - 2026-10-14 22:16 — created from the pain-point keyword run.

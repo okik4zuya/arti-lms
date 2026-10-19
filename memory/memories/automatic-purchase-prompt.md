@@ -48,3 +48,6 @@ Sesi pembelian otomatis ARTi (repo arti-lms). Tujuan: pembeli membayar lewat pay
 - Jangan menyimpan data kartu atau rahasia di repo atau log; tanggapan webhook dan log tidak boleh memuat key lisensi atau password.
 - Ubah warna merek di halaman publik hanya setelah saya melihat pilihannya. Jangan menginstal perangkat lunak sistem.
 - Obrolan dalam bahasa Indonesia; semua berkas proyek (kode, komentar, memory) dalam bahasa Inggris. Ikuti ritual penutup di CLAUDE.md arti-lms.
+
+## Change log
+- 2026-10-19 08:43 — marked as used (the purchase flow was built 2026-10-18, see [[automatic-purchase-plan]]); change log added in the memory tidy-up.

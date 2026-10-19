@@ -4,8 +4,10 @@ description: Draft v1 of the ARTi landing page copy in Indonesian, section by se
 metadata:
   type: project
   created: 2026-10-14 23:05
-  updated: 2026-10-18 22:37
+  updated: 2026-10-19 08:15
 ---
+
+**2026-10-19: this mirror is stale for sections 1, 3, 4, 8, 10b, 10c, 12 and 13** (hero lead and "Tanpa" line, four agitation blocks, four answer cards, new rows, value summary, Claude subscription block, FAQ, closing). The Blade view is the source; the decisions are in [[landing-copy-four-problems]].
 
 Synced to the Blade views on 2026-10-15 (finalisation session). **The Blade views stay the source of truth**; this file is a readable mirror, and later edits go to the views first. Outline and rules: [[landing-page-concept]]. Facts: [[landing-page-info]]. Pain wording: [[landing-page-keywords]]. Voice: "saya/Anda", short sentences, honest passages (`Jujur:`), no hype; the site says "ARTi" rather than "kami". Sections 4, 4b, 6, 7, 9 and 13 below changed since draft v1; the fact-check list at the bottom is updated.
 
@@ -218,6 +220,7 @@ Footer: Kontak · Privasi · Syarat · Umpan artikel (the last one still shown; 
 - `/syarat` and `/privasi` now restate the offer, refund, Anthropic data flow and cookies, but still need legal review: see [[legal-review-notes]].
 
 ## Change log
+- 2026-10-19 08:15 — marked stale for the four-problems pass, see [[landing-copy-four-problems]].
 - 2026-10-18 22:37 — problem section rewritten in the researcher's voice (pains 1 and 2, bold on pain 3, pain 4 ending "belum lagi merapikan Zotero", bold closing line "Saya juga merasakannya, ..."); section 4 title is the researcher's pick. Blade is the source for exact text.
 - 2026-10-18 22:30 — fourth pain paragraph (figures "terlalu AI") and the section-4 block "Gambar dari data, bukan dari imajinasi AI" added; Blade is the source for the exact text.
 - 2026-10-18 22:15 — section 2 third pain replaced by the researcher's own sentence; section 4 title changed and the Word-with-Zotero block added; Zotero line in section 10; `/fitur` arti-docx description mentions Zotero. Note: section 7's "Lisensi ... satu tahun" line above is stale (the Blade says "Bayar sekali, berlaku selamanya").

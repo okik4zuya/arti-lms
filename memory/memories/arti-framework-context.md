@@ -4,7 +4,7 @@ description: What the ARTi Framework/ebook is, and how it relates to this LMS pr
 metadata:
   type: project
   created: 2026-09-08 23:22
-  updated: 2026-09-09 13:40
+  updated: 2026-10-19 08:39
 ---
 
 **ARTi Workflow / ARTi Framework** is a research-writing methodology and Claude-skill package for
@@ -30,12 +30,10 @@ of ebook-writing progress; content migration (pushing drafted Markdown chapters 
 `resources/content/arti-framework/`, per [[tech-stack-options]]'s chosen mechanism) happens
 per-chapter as each is actually written.
 
-**Business model context:** public-course scale (hundreds–thousands of learners), sold via
-Facebook ads → landing page → WhatsApp → manual payment, MVP uses admin-manual learner account
-creation (no self-registration); an automated Scalev checkout integration is a documented but
-deferred later phase.
+**Business model context (updated 2026-10-19):** public-course scale; sold via ads → landing page → form with automatic Midtrans payment → learner account and licence by email ([[automatic-purchase-plan]], [[landing-checkout-form]]). The manifest now has 6 sections (a Download section was added) and only Pendahuluan is written. Amati, Replikasi and Tambah Inovasi are the "Workflow Paper Riset" kept inside the main product; further workflow courses (SLR first) are separate products ([[course-packages-decisions]]).
 
 ## Change log
+- 2026-10-19 08:39 — business model paragraph replaced (it still described WhatsApp and manual payment); pointers to the course-package decisions
 - 2026-09-08 — captured ARTi Framework background context for arti-lms
 - 2026-09-09 13:40 — corrected: ebook drafting happens in this repo's own `resources/inbox/`, not a
   separate project; recorded the finalized 5-section/18-chapter outline and linked

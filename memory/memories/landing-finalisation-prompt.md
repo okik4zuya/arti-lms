@@ -4,8 +4,10 @@ description: Ready-to-paste prompt for the next session: brainstorm first, then 
 metadata:
   type: project
   created: 2026-10-15 09:10
-  updated: 2026-10-18 21:54
+  updated: 2026-10-19 08:15
 ---
+
+**2026-10-19: partly done.** The brainstorm on pains, value and the reptilian-brain pass ran and the copy was rebuilt ([[landing-copy-four-problems]]); what is left of this prompt is the media items, the 375 px and phone checks and the leftover inconsistencies. The next chat is about course packages instead ([[course-packages-prompt]]).
 
 Paste the block below into the next chat. It replaces the 2026-10-15 prompt (the audit, SEO and commit pass it described is done, see [[landing-page-concept]] "Finalisation pass"). Written in Indonesian because it is the researcher's own message to Claude. The purchase-flow brainstorm that was planned for "the next session" is deferred, see [[next-session-prompt]].
 
@@ -32,5 +34,6 @@ Finalisasi landing page ARTi (repo arti-lms), termasuk copywriting. Sesi ini **d
 ```
 
 ## Change log
+- 2026-10-19 08:15 — marked partly done.
 - 2026-10-18 21:54 — rewritten for the copywriting and reptilian-brain session (the 2026-10-15 finalisation prompt is done).
 - 2026-10-15 09:10 — created.

@@ -4,7 +4,7 @@ description: Agreed concept and build record for the ARTi landing page (position
 metadata:
   type: project
   created: 2026-10-14 22:11
-  updated: 2026-10-18 22:37
+  updated: 2026-10-19 08:15
 ---
 
 Concept from the 2026-10-14 brainstorm. Facts and decisions it rests on: [[landing-page-info]]. Built and committed (see Build status and the finalisation section below). Page language: Indonesian, voice "saya/Anda", short sentences, honest "Jujur: ..." passages (see [[content-authoring-workflow]]).
@@ -130,6 +130,7 @@ Concept from the 2026-10-14 brainstorm. Facts and decisions it rests on: [[landi
 Record the real demo and its poster; real hero screenshot; decide the author section; check the new sections at true 375px; fill the prod `.env` values. Checklist in `todo-list.md`.
 
 ## Change log
+- 2026-10-19 08:15 — four-problems copy pass, value summary and Claude subscription block, hero lead "sampai publish": see [[landing-copy-four-problems]].
 - 2026-10-18 22:37 — figure pain and block, problem section final wording and closing line (see the 22:15 "Changes" section).
 - 2026-10-18 22:15 — pain 3 replaced, arti-docx/Zotero highlight block, section 4 title, claim rule (see "Changes 2026-10-18 (22:15 ...)").
 - 2026-10-18 21:54 — header, hero button, narrative problem section, SciPeek wording, "berbahasa Indonesia" removal (see "Changes 2026-10-18" at the bottom).

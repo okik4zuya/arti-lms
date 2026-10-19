@@ -4,7 +4,7 @@ description: The buy form on the landing page (#checkout), the two payment-metho
 metadata:
   type: project
   created: 2026-10-19 06:34
-  updated: 2026-10-19 06:34
+  updated: 2026-10-19 08:15
 ---
 
 Built 2026-10-19 after the researcher showed a competitor's (Scalev, course.dosen.my.id) checkout section. Builds on [[automatic-purchase-plan]] (gateway, orders, webhook) and replaces the WhatsApp contact UI in [[contact-whatsapp]]. All uncommitted.
@@ -23,6 +23,7 @@ Built 2026-10-19 after the researcher showed a competitor's (Scalev, course.dose
 - Card label is "Virtual Account / GoPay / ShopeePay" (the competitor says DANA; DANA is **not** confirmed for the researcher's Midtrans account, so it is not claimed).
 - Mobile buy bar: `[data-buy-bar]` at the end of `home.blade.php`, script `resources/js/sticky-buy.js` (own vite entry), shows after 200 px scroll and hides while `#checkout` is visible; CSS hides it from 768 px. Yellow `.btn--cta` and the `.checkout`/`.method` styles are in `site.css`.
 - Without a configured gateway the form is replaced by a note with the support email (no WhatsApp fallback).
+- Form label is "Nama" (was "Nama lengkap"), placeholder "Masukkan nama Anda" (2026-10-19).
 - Support email: `config('site.contact_email')`, default `hi@arti.ai.id` (`SITE_CONTACT_EMAIL` overrides); in the footer of every page, on `/kontak` (now email only; the WhatsApp form, `POST /kontak`, `contact-form` partial and `contact-panel.js` are deleted) and on the payment status page. `Offer::buyUrl()` is deleted. `/syarat` and `/privasi` lost their "buy via WhatsApp" sentences (the researcher should re-read them).
 
 ## Not touched on purpose
@@ -41,4 +42,5 @@ Built 2026-10-19 after the researcher showed a competitor's (Scalev, course.dose
 - Tests that asserted the old `/beli` page or WhatsApp links (CheckoutTest, MidtransGatewayTest, ContactFormTest, LandingPageTest, FeaturePageTest, PublicSiteTest, OfferTest) were rewritten; copy changes in the form label ("Harga perintis. Tersisa N dari 100") are asserted by LandingPageTest.
 
 ## Change log
+- 2026-10-19 08:15 — label "Nama".
 - 2026-10-19 06:34 — created.

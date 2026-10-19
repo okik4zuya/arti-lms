@@ -31,8 +31,8 @@
             </div>
 
             <div class="form-field">
-                <label for="beli-nama" class="form-label">Nama lengkap</label>
-                <input id="beli-nama" name="nama" type="text" class="form-input" value="{{ old('nama') }}" maxlength="80" required autocomplete="name" placeholder="Masukkan nama lengkap" @error('nama') aria-invalid="true" @enderror>
+                <label for="beli-nama" class="form-label">Nama</label>
+                <input id="beli-nama" name="nama" type="text" class="form-input" value="{{ old('nama') }}" maxlength="80" required autocomplete="name" placeholder="Masukkan nama Anda" @error('nama') aria-invalid="true" @enderror>
                 @error('nama') <span class="form-error">{{ $message }}</span> @enderror
             </div>
 
