@@ -37,7 +37,7 @@
         <h2>Pembelian dan lisensi</h2>
         <ul>
             <li>Bila Anda membeli lewat situs, nama, alamat email, dan nomor WhatsApp (opsional) yang Anda isi disimpan sebagai pesanan, bersama jumlah, harga yang berlaku, status, metode pembayaran, dan waktunya. Dari sini dibuat akun belajar dan lisensi Anda.</li>
-            <li>Pembayaran diproses oleh {{ $gateways->current()->label() }} ({{ $gateways->current()->company() }}) menurut kebijakan privasi {{ $gateways->current()->label() }} sendiri. {{ $gateways->current()->label() }} menerima nama, email, dan nomor telepon yang Anda isi serta jumlah pesanan, dan Anda mengisi data pembayaran Anda langsung di halaman {{ $gateways->current()->label() }}. ARTi hanya menerima status pembayaran, metode pembayaran, dan nomor invoice. ARTi tidak menerima dan tidak menyimpan nomor kartu atau rekening Anda.</li>
+            <li>Pembayaran diproses oleh penyedia pembayaran berlisensi di Indonesia, menurut kebijakan privasi penyedia itu sendiri. Penyedia pembayaran menerima nama, email, dan nomor telepon yang Anda isi serta jumlah pesanan, dan Anda mengisi data pembayaran Anda langsung di halaman penyedia pembayaran. ARTi hanya menerima status pembayaran, metode pembayaran, dan nomor invoice. ARTi tidak menerima dan tidak menyimpan nomor kartu atau rekening Anda.</li>
             <li>Email pembelian (akun, tautan untuk memilih password, kunci lisensi, tautan unduhan) dan email &ldquo;Lupa password?&rdquo; dikirim lewat layanan pengiriman email Brevo. Tautan untuk memilih password disimpan di server hanya sebagai hash dan dihapus begitu dipakai.</li>
             <li>Nomor WhatsApp yang Anda isi dipakai untuk bantuan dan, bila layanan pengiriman WhatsApp ARTi sedang aktif, untuk mengirim ringkasan pembelian yang sama dengan email. Ringkasan itu memuat kunci lisensi Anda, jadi isi nomor yang hanya Anda pakai.</li>
             <li>Halaman status pesanan hanya menampilkan status dan alamat email yang disamarkan, dan hanya dapat dibuka oleh yang memegang nomor pesanan.</li>
@@ -95,7 +95,7 @@
         <p>Akses ke data pembeli dibatasi untuk admin dan petugas dukungan, kunci lisensi disimpan terenkripsi atau sebagai hash, bukti pembayaran disimpan di penyimpanan privat, dan password serta tautan pengaturan password disimpan sebagai hash. Bila terjadi kegagalan pelindungan data pribadi, kami memberi tahu Anda secara tertulis sesuai batas waktu dan ketentuan UU PDP.</p>
 
         <h2>Penyedia layanan dan transfer ke luar negeri</h2>
-        <p>Pemrosesan pembayaran dilakukan {{ $gateways->current()->label() }}, penyedia di Indonesia. Sebagian layanan lain dijalankan penyedia di luar negeri, yaitu server lisensi dan jaringan situs (Cloudflare), pengiriman email (Brevo), dan Anthropic untuk pemrosesan oleh Claude Code. Kami memilih penyedia yang menerapkan pelindungan data yang memadai, dan hanya mengirim data yang dibutuhkan untuk layanan itu.</p>
+        <p>Pemrosesan pembayaran dilakukan penyedia pembayaran berlisensi di Indonesia. Sebagian layanan lain dijalankan penyedia di luar negeri, yaitu server lisensi dan jaringan situs (Cloudflare), pengiriman email (Brevo), dan Anthropic untuk pemrosesan oleh Claude Code. Kami memilih penyedia yang menerapkan pelindungan data yang memadai, dan hanya mengirim data yang dibutuhkan untuk layanan itu.</p>
 
         <h2>Anak-anak</h2>
         <p>ARTi ditujukan untuk peneliti dan mahasiswa dewasa. Kami tidak dengan sengaja memproses data anak.</p>

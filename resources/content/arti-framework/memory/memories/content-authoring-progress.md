@@ -4,7 +4,7 @@ description: Narrative status of arti-framework ebook content drafting, per chap
 metadata:
   type: project
   created: 2026-09-10 19:40
-  updated: 2026-09-11 07:50
+  updated: 2026-10-20 11:56
 ---
 
 Companion to the checklist at the top of `todo-list.md` (which tracks done/not-done only). This
@@ -206,3 +206,5 @@ Not started. No inbox source material confirmed yet beyond the finalized structu
   manifest.yaml. Noted `ContentController::show()`'s signature now takes `Course $course` (not a
   slug string) in [[content-authoring-workflow]]'s verification snippet — all three
   tinker-verified rendering after the fix.
+- 2026-10-20 10:12 — Copied from the arti-lms repo memory (content writing now has its own repo). Maintain this copy only. The 2026-09-11 "not yet render-verified" notes are still unverified.
+- 2026-10-20 11:56 — BONUS Prompt Guide written: 15 pages in `manifest.yaml` (see [[prompt-guide-plan]]). Pendahuluan state above is unchanged and still not render-verified.

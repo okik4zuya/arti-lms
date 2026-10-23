@@ -133,11 +133,11 @@ class MidtransGatewayTest extends TestCase
         $this->get('/')->assertDontSee('Data Pembeli')->assertSee('mailto:hi@arti.ai.id', false);
     }
 
-    public function test_the_buy_page_and_legal_pages_name_midtrans(): void
+    public function test_the_buy_page_and_legal_pages_do_not_name_the_gateway(): void
     {
-        $this->get('/')->assertOk()->assertSee('diproses aman melalui checkout Midtrans')->assertDontSee('Xendit');
-        $this->get('/privasi')->assertSee('Midtrans (PT Midtrans)', false);
-        $this->get('/syarat')->assertSee('diproses oleh Midtrans');
+        $this->get('/')->assertOk()->assertSee('diproses aman oleh penyedia pembayaran berlisensi')->assertDontSee('Midtrans')->assertDontSee('Xendit');
+        $this->get('/privasi')->assertSee('penyedia pembayaran berlisensi')->assertDontSee('Midtrans');
+        $this->get('/syarat')->assertSee('diproses oleh penyedia pembayaran berlisensi')->assertDontSee('Midtrans');
     }
 
     // ------------------------------------------------------------- webhook

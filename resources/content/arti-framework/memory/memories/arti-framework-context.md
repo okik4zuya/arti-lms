@@ -4,7 +4,7 @@ description: What the ARTi Framework/ebook is, and how it relates to this LMS pr
 metadata:
   type: project
   created: 2026-09-08 23:22
-  updated: 2026-10-19 08:39
+  updated: 2026-10-20 10:12
 ---
 
 **ARTi Workflow / ARTi Framework** is a research-writing methodology and Claude-skill package for
@@ -38,3 +38,4 @@ per-chapter as each is actually written.
 - 2026-09-09 13:40 — corrected: ebook drafting happens in this repo's own `resources/inbox/`, not a
   separate project; recorded the finalized 5-section/18-chapter outline and linked
   [[subchapter-hierarchy]]
+- 2026-10-20 10:12 — Copied from the arti-lms repo memory. The app/LMS side stays in `C:/laragon6/www/arti-lms`; this folder holds the content only.

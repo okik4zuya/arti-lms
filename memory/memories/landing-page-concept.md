@@ -7,7 +7,7 @@ metadata:
   updated: 2026-10-19 08:15
 ---
 
-Concept from the 2026-10-14 brainstorm. Facts and decisions it rests on: [[landing-page-info]]. Built and committed (see Build status and the finalisation section below). Page language: Indonesian, voice "saya/Anda", short sentences, honest "Jujur: ..." passages (see [[content-authoring-workflow]]).
+Concept from the 2026-10-14 brainstorm. Facts and decisions it rests on: [[landing-page-info]]. Built and committed (see Build status and the finalisation section below). Page language: Indonesian, voice "saya/Anda", short sentences, honest "Jujur: ..." passages (see [[content-repo-pointer]]).
 
 ## Positioning
 - Product: e-course (LMS) + ARTi Framework license, one package. Audience: dosen first, then S2/S3.

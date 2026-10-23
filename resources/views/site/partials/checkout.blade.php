@@ -14,7 +14,7 @@
     @endif
     <p class="muted">Sekali pembayaran &bull; tanpa biaya bulanan</p>
 
-    <p class="checkout__product">Produk: ARTi Framework &ndash; e-course dan lisensi</p>
+    <p class="checkout__product">Produk digital: e-course ARTi Framework dengan tools pendukung (tanpa pengiriman fisik)</p>
 
     @if (! $gateway->isConfigured())
         <p class="form-error" role="alert">Pembayaran otomatis sedang belum tersedia. Hubungi <a href="mailto:{{ config('site.contact_email') }}">{{ config('site.contact_email') }}</a> dan kami bantu.</p>
@@ -63,7 +63,7 @@
                     <input type="radio" name="metode" value="va" @checked($pick === 'va') required>
                     <span class="method__card">
                         <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M16 15h2"/></svg>
-                        Virtual Account / GoPay / ShopeePay
+                        Virtual Account / e-wallet
                     </span>
                 </label>
                 <label class="method">
@@ -85,7 +85,7 @@
             </div>
 
             <button type="submit" class="btn btn--cta btn--lg" @disabled($closed)>{{ $closed ? 'Segera dibuka' : 'Beli & Akses Sekarang' }} @unless ($closed)<span aria-hidden="true">&rarr;</span>@endunless</button>
-            <p class="muted checkout__note">Pesanan diproses aman melalui checkout {{ $gateway->label() }}. ARTi tidak menyimpan data kartu atau rekening Anda. Password tidak pernah dikirim: Anda memilihnya sendiri lewat tautan di email.</p>
+            <p class="muted checkout__note">Pembayaran diproses aman oleh penyedia pembayaran berlisensi di Indonesia. ARTi tidak menyimpan data kartu atau rekening Anda. Password tidak pernah dikirim: Anda memilihnya sendiri lewat tautan di email.</p>
             </fieldset>
         </form>
 

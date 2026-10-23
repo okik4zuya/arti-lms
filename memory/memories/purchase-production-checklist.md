@@ -4,7 +4,7 @@ description: Everything the researcher must set or check before automatic purcha
 metadata:
   type: reference
   created: 2026-10-18 15:28
-  updated: 2026-10-18 19:41
+  updated: 2026-10-19 16:00
 ---
 
 Names only; values are the researcher's (`.env` is never opened by Claude). Design in [[automatic-purchase-plan]]; Worker side in [[worker-changes-spec]]; server layout in [[domain-migration-arti-ai-id]].
@@ -24,6 +24,7 @@ Names only; values are the researcher's (`.env` is never opened by Claude). Desi
 | `SITE_SELLER_NAME`, `SITE_SELLER_CITY` | who sells ARTi, shown on `/kontak`; fill both before launch (electronic-trade rules ask for the seller's identity) |
 | `ADMIN_MFA_REQUIRED` | set `true` before the panel is used in production |
 | `SITE_LAUNCH_SOLD` | no longer needed: prices, quota and the manual count are on **Harga** in Filament |
+| `SITE_CHECKOUT_ENABLED` | `false` greys out the buy form on the landing with a "Segera dibuka" notice and makes `POST /beli` refuse (added 2026-10-19 while the Midtrans application is under review); set `true` or remove the line once approved, then `php artisan config:cache`. Text from `SITE_CHECKOUT_NOTICE`. The CSS for the notice needs `npm run build` on the server |
 
 ## 2. Server
 1. `php artisan migrate --force` (new: `orders`, `order_events`, `promotions`, `setting_changes`), then `php artisan permissions:sync` (new permissions `order.view`, `order.resend`, `order.refund`, `order.resolve`).
@@ -67,5 +68,6 @@ DKIM, SPF and DMARC pass for `arti.ai.id` (done 2026-10-16). Send a real reset m
 - Timing: "known email" requests do slightly more work than unknown ones; the answer text and status are identical.
 
 ## Change log
+- 2026-10-19 16:00 — added `SITE_CHECKOUT_ENABLED` kill switch row.
 - 2026-10-18 19:41 — Midtrans menu fixed (Settings, Payment), mail scheme/From notes, installer URL retired, sandbox run recorded (5b).
 - 2026-10-18 15:28 — created.

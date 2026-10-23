@@ -75,7 +75,7 @@ class CheckoutTest extends TestCase
             ->assertSee('Harga perintis. Tersisa 97 dari 100')
             ->assertSee('99.000')
             ->assertSee('Sekali pembayaran')
-            ->assertSee('Virtual Account / GoPay / ShopeePay')
+            ->assertSee('Virtual Account / e-wallet')
             ->assertSee('QRIS')
             ->assertSee('Nomor WhatsApp')
             ->assertSee('(opsional)', false)

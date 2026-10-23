@@ -4,7 +4,7 @@ description: Rules + repeatable workflow for drafting arti-framework ebook subch
 metadata:
   type: project
   created: 2026-09-10 04:08
-  updated: 2026-09-11 07:37
+  updated: 2026-10-20 11:56
 ---
 
 Started 2026-09-10 when the user said content-writing will now be the main ongoing work on this
@@ -188,3 +188,5 @@ This file (content-authoring-workflow) stays for rules that don't change per-cha
   blocked), added `⟦Title⟧` wiki-link resolution (`ContentController::resolveWikiLinks()`), and
   designed table CSS in `app.css`. Corrected the now-stale claim in the Readability styling section
   above that credited plain `CommonMarkConverter`/library-default `html_input` for `<style>` passthrough.
+- 2026-10-20 10:12 — Copied from the arti-lms repo memory when content writing moved to its own repo (this folder). App code named here (`ContentController`, `resolveWikiLinks()`, `php artisan cache:clear`, the verification script) still lives in the arti-lms app repo at `C:/laragon6/www/arti-lms`; the inbox source files are at `C:/laragon6/www/arti-lms/resources/inbox/`. The arti-lms copy is no longer maintained for content; update only this one.
+- 2026-10-20 11:56 — Prompt Guide pages (BONUS) follow a terse format: short title, one "Anda/Claude" line, prompts with short labels, one "Lanjut bila" line; no per-file prose. Details in [[prompt-guide-plan]].

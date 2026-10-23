@@ -35,7 +35,7 @@ convention chapters used before) — content lives at
   content nodes. `example-course`/`second-course` manifests updated to wrap their existing
   `01-intro` content dir as a subchapter under a new label-only `introduction` chapter (no directory
   renames needed). `arti-framework/manifest.yaml` got the full 18-chapter/5-section ARTi ebook
-  skeleton (see [[arti-framework-context]] / `resources/inbox/ebook-outline-v2.md`) with **one
+  skeleton (see [[content-repo-pointer]] / `resources/inbox/ebook-outline-v2.md`) with **one
   placeholder subchapter slot per chapter** — no subchapter content actually drafted yet, per the
   "structural skeleton only" decision. Only `arti-framework/01-intro` has a real content file;
   the other 17 chapters' placeholder subchapter slugs have no content dir yet (404 if visited,

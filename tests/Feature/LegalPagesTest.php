@@ -19,7 +19,7 @@ class LegalPagesTest extends TestCase
             ->assertSee('Rp199.000')
             ->assertSee('Rp99.000')
             ->assertSee('Lisensi tidak punya tanggal kedaluwarsa')
-            ->assertSee('Midtrans')
+            ->assertSee('penyedia pembayaran berlisensi')
             ->assertSee('tidak pernah mengirim atau meminta password')
             ->assertSee('id="pengembalian"', false)
             ->assertSee('Pengembalian dana')
@@ -67,8 +67,7 @@ class LegalPagesTest extends TestCase
     public function test_the_privacy_page_names_the_payment_and_email_processors_and_the_password_rule(): void
     {
         $this->get('/privasi')->assertOk()
-            ->assertSee('Midtrans')
-            ->assertSee('PT Midtrans')
+            ->assertSee('penyedia pembayaran berlisensi')
             ->assertSee('Brevo')
             ->assertSee('tidak menerima dan tidak menyimpan nomor kartu atau rekening')
             ->assertSee('Password tidak pernah dikirim, disimpan dalam bentuk asli, atau dicatat di log')

@@ -131,8 +131,36 @@ sections:
       - slug: prompt-guide
         title: Prompt Guide
         subchapters:
-          - slug: prompt-guide-01
-            title: Prompt Guide
+          - slug: prompt-guide-01-sesi
+            title: "Sesi"
+          - slug: prompt-guide-02-profil-dan-topik
+            title: "Profil dan Topik"
+          - slug: prompt-guide-03-keyword-dan-ris
+            title: "Keyword dan RIS"
+          - slug: prompt-guide-04-gap-map
+            title: "Gap Map"
+          - slug: prompt-guide-05-fulltext
+            title: "Fulltext"
+          - slug: prompt-guide-06-idea-canvas
+            title: "Idea Canvas"
+          - slug: prompt-guide-07-research-design
+            title: "Research Design"
+          - slug: prompt-guide-08-journal-target
+            title: "Journal Target"
+          - slug: prompt-guide-09-journal-profile
+            title: "Journal Profile"
+          - slug: prompt-guide-10-blueprint
+            title: "Blueprint"
+          - slug: prompt-guide-11-data
+            title: "Data"
+          - slug: prompt-guide-12-scratchbook
+            title: "Scratchbook"
+          - slug: prompt-guide-13-style-dan-manuscript
+            title: "Style dan Manuscript"
+          - slug: prompt-guide-14-revisi
+            title: "Revisi"
+          - slug: prompt-guide-15-skill
+            title: "Skill"
   - title: Download
     chapters:
       - slug: download

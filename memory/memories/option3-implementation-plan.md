@@ -186,7 +186,7 @@ composer require league/flysystem-aws-s3-v3
 
 ## Open decisions for next session
 - Single repo (content lives inside `arti-lms`) vs. content as a separate repo/submodule pulled in
-  at deploy — not yet decided, matters once the ebook migration ([[arti-framework-context]])
+  at deploy — not yet decided, matters once the ebook migration ([[content-repo-pointer]])
   actually happens
 - Exact `manifest.yaml` schema vs. pure directory-scan for chapter ordering
 

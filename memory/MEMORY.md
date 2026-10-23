@@ -5,12 +5,12 @@ metadata:
   type: project
   tier: T0
   created: 2026-09-08 21:36
-  updated: 2026-10-19 14:18
+  updated: 2026-10-20 10:15
 ---
 
 # arti-lms — Memory Index
 
-- [ARTi Framework context](memories/arti-framework-context.md) — what the ebook/framework is (finalized 5-section/18-chapter outline), drafted in this repo's own resources/inbox/
+- [Content repo pointer](memories/content-repo-pointer.md) — ebook content writing moved to resources/content/arti-framework/; its memory holds the authoring rules, progress and ebook context
 - [Subchapter hierarchy](memories/subchapter-hierarchy.md) — Section>Chapter>Subchapter content level, per-subchapter progress; sidebar is a `<details>` accordion with per-level type scale and badges numbered continuously per section
 - [Tech stack options](memories/tech-stack-options.md) — 3 candidate stacks; Option 3 (git-backed Markdown, server-rendered) + relative-path image workflow chosen
 - [Option 3 implementation plan](memories/option3-implementation-plan.md) — full build checklist + Laravel setup commands
@@ -18,8 +18,6 @@ metadata:
 - [Course layout responsive](memories/course-layout-responsive.md) — off-canvas sidebar + sections/chapters manifest grouping; clear the manifest cache when re-verifying; headless Chrome/Edge work directly; mobile drawer QA still open
 - [Branding: login page](memories/branding-login.md) — login redesign, `/` redirects to login/dashboard, primary blue from the logo dot (#2563eb)
 - [Feedback: check memory before env probes](memories/feedback-check-memory-before-env-probes.md) — don't re-run discovery for facts memory already records
-- [Content authoring workflow](memories/content-authoring-workflow.md) — rules for drafting arti-framework subchapters, plus the Markdown rendering pipeline (GFM tables, wiki-link resolution, per-subchapter `<style>`)
-- [Content authoring progress](memories/content-authoring-progress.md) — narrative status per chapter; the checklist itself lives in todo-list.md
 - [ARTi App architecture](memories/arti-app-architecture.md) — this repo grows into the ARTi App; licensing stays on its Cloudflare Worker; phase-1 public routes built, risks and next steps
 - [Landing page info](memories/landing-page-info.md) — sources, assets, proof, contradictions and open decisions for the landing page
 - [Landing page concept](memories/landing-page-concept.md) — positioning, copy formula, outline, offer rules and the build record, including media placed (explainer, dashboard, e-course screenshots)
@@ -47,6 +45,7 @@ metadata:
 - [Landing: Workflow Paper SLR](memories/landing-slr-workflow.md) — raw material for the future SLR course page: keyword and competitor evidence, wording to use or avoid, ARTi-SLR facts, selling rules, open questions; nothing built
 - [Worker changes spec](memories/worker-changes-spec.md) — hand-over for the Worker repo: silent resend, months 1000, optional idempotent extend, client "Lifetime" label
 - [Purchase production checklist](memories/purchase-production-checklist.md) — env variable names (mail scheme/From gotchas), migrations, cron, Midtrans dashboard (Settings, Payment), Brevo, sandbox steps and the 2026-10-18 ngrok run (5b)
+- [Custom-domain email (Gmail)](memories/custom-domain-email.md) — hi@arti.ai.id: receiving via Cloudflare Email Routing done; sending via Brevo SMTP in Gmail still open, steps and SPF merge
 - [Next-session prompt](memories/next-session-prompt.md) — old purchase brainstorm prompt, mostly superseded (the purchase is built); still lists WhatsApp provider, legal review and production steps
 - [Duitku fallback](memories/duitku-fallback.md) — backup gateway if Midtrans rejects the account or category: individual requirements (no NIB, NPWP yes), fees, API quirks (status-check rate limit), support questions; not built
 - [Mayar fallback](memories/mayar-fallback.md) — Mayar.id vs Midtrans: fees (about 3x on QRIS), NPWP optional for individuals, API gaps (no redirect/order id/webhook signature documented), questions for support; saved, not pursued
@@ -55,3 +54,4 @@ metadata:
 - [Landing explainer storyboard](memories/landing-explainer-storyboard.md) — the 40 s explainer: 7 scenes, build and render recipe, installed on the landing page
 - [VPS OOM incident 2026-10-19](memories/vps-oom-incident-2026-10-19.md) — 522 + SSH dead, Netdata 894 MB killed mysqld, bot scanner flood, fixes done and pending, stay-on-shared-VPS decision, webhook-in-Laravel rationale
 - [VPS maintenance guide](memories/vps-maintenance-guide.md) — runbook: health checks, outage steps, monitoring, R2 backup system and restore, hardening settings, gotchas
+- [SES migration plan](memories/ses-migration-plan.md) — 2026-10-19 brainstorm: Brevo 300/day to Amazon SES, option B (SES + Brevo failover), bounce webhook, DNS, phases, open decisions; nothing built

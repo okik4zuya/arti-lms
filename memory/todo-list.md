@@ -5,7 +5,7 @@ metadata:
   type: project
   tier: T0
   created: 2026-09-08 21:36
-  updated: 2026-10-19 14:18
+  updated: 2026-10-20 10:15
 ---
 
 Closed items are deleted; their history lives in the linked topic files. Tidied 2026-10-19: ~120 checked items removed, merged duplicates, restored a lost block of old items from git (section "Older build items").
@@ -26,7 +26,6 @@ Closed items are deleted; their history lives in the linked topic files. Tidied 
 - [ ] Later: design the SLR course page from [[landing-slr-workflow]]
 - [ ] Write Workflow Paper Riset (Amati, Replikasi, Tambah Inovasi) first, then SLR; no multi-product system before SLR has enough published chapters
 - [ ] BIMA on hold: decide whether ARTi has or needs a grant-proposal skill and whether to maintain it yearly; optional test video first
-- [ ] Rename the manifest placeholders (English titles) when each chapter is written; BONUS "Panduan Instalasi" duplicates the written `19-cara-instalasi-arti-framework`
 
 ### Landing copy, four problems, see [[landing-copy-four-problems]]
 
@@ -39,7 +38,10 @@ Closed items are deleted; their history lives in the linked topic files. Tidied 
 - [ ] Align the "Baca bab 1 gratis" buttons (`/scipeek`, `/artipdf`, `/fitur`, 404, series mail 4) and the "wujud" wording (home `#wujud`, `/fitur`, series mail 2) if wanted
 
 ### Checkout form and purchase, see [[landing-checkout-form]], [[automatic-purchase-plan]], [[purchase-production-checklist]]
-
+- [ ] Midtrans application under review: keep `SITE_CHECKOUT_ENABLED=false` in production, flip to `true` and `config:cache` once approved, then one real payment ([[purchase-production-checklist]])
+- [ ] Production deploy of 2026-10-19: commit and push (`vite.config.js` entries, "Kenapa murah" removed, checkout kill switch), then `git pull`, `npm run build`, `config:cache`, `queue:restart` on the VPS as `deploy`
+- [ ] Gmail send-as `hi@arti.ai.id` through Brevo SMTP plus merged SPF record ([[custom-domain-email]])
+- [ ] Decide on the SES migration (option B, do AWS prep now, bounce webhook timing) ([[ses-migration-plan]])
 - [ ] Researcher: `php artisan migrate` (dev, then production) for `orders.method_choice`; `npm run build` before any deploy (`sticky-buy.js`)
 - [ ] Researcher: with ngrok and `queue:work`, pay once with QRIS and once with the VA card in the sandbox, change method on a second try, check Snap shows only the chosen methods
 - [ ] Researcher: confirm `other_qris` and `shopeepay` are active in the Midtrans dashboard (else adjust `MIDTRANS_METHODS_VA` / `_QRIS`); decide whether DANA may be claimed
@@ -86,7 +88,6 @@ Closed items are deleted; their history lives in the linked topic files. Tidied 
 - [ ] Decide the app name ("ARTi LMS" in the learner app, "ARTi Framework" on the site); name "ARTi Workflow" vs "ARTi Framework" outside the ebook; offline grace after activation
 - [ ] Fill `SITE_LAUNCH_SOLD` in the prod `.env` (`APP_DOMAIN_MAIN=arti.ai.id` is set)
 - [ ] Remove or disable the unused trial path (`/trial`, `arti-license trial`, `trial` tier) in the licensing Worker before deploy
-- [ ] Revise ebook chapter 3 wording ("not a product, not a tool to install") to match the paid-bundle story
 
 ### List building, see [[list-building]]
 
@@ -119,16 +120,9 @@ Closed items are deleted; their history lives in the linked topic files. Tidied 
 - [ ] Re-enable Bot Fight Mode on arti.ai.id only after a WAF skip rule for `lisensi.arti.ai.id`
 - [ ] Move arti-lms to a dedicated VPS at the first paying buyer with real volume, swap above 1.5 GB again, or another OOM (1.9 GB RAM shared by 7 sites; see [[vps-oom-incident-2026-10-19]])
 
-### Content authoring (arti-framework), rules in [[content-authoring-workflow]], per-chapter notes in [[content-authoring-progress]]
+### Content authoring
 
-Chapters 1 and 3 are written; written subchapters are listed in `manifest.yaml`.
-
-- [ ] Chapter 2 "Claude dan Claude Code": subchapter "Claude bisa pakai skill agar hasil lebih maksimal" (outline stub, no bullets yet)
-- [ ] Amati: 4 The Researcher Profile, 5 Mapping the Gap, 6 Reading a Journal Tactically
-- [ ] Replikasi: 7 Feasibility Before Ambition, 8 The Scratchbook Discipline
-- [ ] Tambah Inovasi: 9 Scoring Novelty Honestly, 10 Manuscript Blueprint, 11 Voice and Technical Depth, 12 Iteration Log and Novelty Floor, 13 Cover Letters and Submission Checklist, 14 Answering Reviewers, 15 After Acceptance
-- [ ] BONUS: 16 Toolkit Quick Reference, 17 Panduan Instalasi, 18 Prompt Guide
-- [ ] Download section: update version, link, size and SHA-256 per release
+- [ ] Ebook content todos moved to `resources/content/arti-framework/memory/todo-list.md` ([[content-repo-pointer]])
 
 ### Older build items (restored 2026-10-19 from git `f220715`; a block was lost in commit `1037246`; may be stale, verify before acting)
 

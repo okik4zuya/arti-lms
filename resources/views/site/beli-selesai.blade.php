@@ -20,7 +20,7 @@
         @elseif ($state === 'pending' && ! $failed)
             <p class="hero__eyebrow">Menunggu pembayaran</p>
             <h1>Pembayaran belum selesai.</h1>
-            <p class="hero__lead">Bila Anda baru membayar, tunggu beberapa saat: halaman ini memeriksa ulang sendiri setiap beberapa detik. Bila belum, lanjutkan pembayaran di halaman {{ $gateway->label() }}.</p>
+            <p class="hero__lead">Bila Anda baru membayar, tunggu beberapa saat: halaman ini memeriksa ulang sendiri setiap beberapa detik. Bila belum, lanjutkan pembayaran di halaman pembayaran.</p>
             @if ($order->checkout_url)
                 <p><a class="btn btn--primary" href="{{ $order->checkout_url }}">Lanjutkan pembayaran</a></p>
             @endif

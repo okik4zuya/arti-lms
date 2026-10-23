@@ -33,7 +33,7 @@ return [
     */
     'checkout' => [
         'enabled' => (bool) env('SITE_CHECKOUT_ENABLED', true),
-        'closed_notice' => env('SITE_CHECKOUT_NOTICE', 'Pembelian belum dibuka. Pengajuan akun pembayaran kami ke Midtrans sedang ditinjau. Begitu disetujui, formulir ini aktif otomatis dan Anda bisa langsung membeli.'),
+        'closed_notice' => env('SITE_CHECKOUT_NOTICE', 'Pembelian belum dibuka. Verifikasi akun pembayaran kami sedang berjalan. Begitu disetujui, formulir ini aktif otomatis dan Anda bisa langsung membeli.'),
     ],
 
     /*
