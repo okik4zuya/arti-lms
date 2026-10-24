@@ -365,6 +365,14 @@
                     <p class="muted"><strong>Jujur:</strong> ubah PDF ke Markdown di sini hanya mengambil teks, tabel dan persamaan tidak dipertahankan. Installer belum bertanda tangan, jadi Windows bisa menampilkan peringatan.</p>
                     <a href="{{ route('artipdf') }}" class="btn btn--outline">Lihat ARTi PDF</a>
                 </div>
+                @if (config('site.tools_enabled'))
+                <div class="panel">
+                    <h3>Buat gambar riset dari hasil AI</h3>
+                    <p>Alat gratis di browser: ubah kode dari Gemini, ChatGPT, atau Claude menjadi diagram alur, grafik, dan graphical abstract. Tanpa akun, berkas tidak diunggah.</p>
+                    <p class="muted"><strong>Jujur:</strong> hasilnya lebih sederhana daripada ARTi, dan keluaran AI gratis sering perlu diperbaiki beberapa kali.</p>
+                    <a href="{{ route('tools.index') }}" class="btn btn--outline">Lihat Tools gratis</a>
+                </div>
+                @endif
             </div>
         </div>
     </section>

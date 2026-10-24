@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Multi-panel figure</title>
+<meta name="arti:width" content="190mm">
+<meta name="arti:height" content="100mm">
+<meta name="arti:dpi" content="600">
+<meta name="arti:min-pt" content="7">
+<style>
+:root {
+  --font: Arial, Helvetica, sans-serif;
+  --ink: #000000;
+  --paper: #ffffff;
+  --dark-fill: #4D4D4D;
+  --accent: #2b6cb0;
+  --muted: #9a9a9a;
+  --fs-label: 9pt;
+  --fs-body: 8pt;
+}
+* { box-sizing: border-box; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+html, body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--font); }
+body { width: var(--page-w); height: var(--page-h); overflow: visible; font-size: var(--fs-body); line-height: 1.2; }
+.sheet { width: var(--page-w); height: var(--page-h); display: grid; gap: 3mm; padding: 3mm; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
+.panel { position: relative; min-width: 0; min-height: 0; overflow: hidden; margin: 0; }
+.panel > svg { display: block; width: 100%; height: 100%; }
+.tag { position: absolute; left: 0; top: 0; z-index: 2; font-weight: 700; font-size: var(--fs-label); background: var(--paper); padding: 0 1mm 0 0; line-height: 1; }
+.span2 { grid-column: 1 / span 2; }
+</style>
+</head>
+<body>
+<div class="sheet">
+  <figure class="panel span2"><span class="tag">(a)</span>
+    <svg viewBox="0 0 700 150" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Three-step workflow">
+      <defs><marker id="ah" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z"/></marker></defs>
+      <rect x="40" y="40" width="170" height="70" fill="#fff" stroke="#000" stroke-width="2"/>
+      <text x="125" y="82" font-size="22" text-anchor="middle" font-family="Arial">Synthesis</text>
+      <rect x="265" y="40" width="170" height="70" fill="#fff" stroke="#000" stroke-width="2"/>
+      <text x="350" y="82" font-size="22" text-anchor="middle" font-family="Arial">Activation</text>
+      <rect x="490" y="40" width="170" height="70" fill="#4D4D4D" stroke="#000" stroke-width="2"/>
+      <text x="575" y="82" font-size="22" text-anchor="middle" font-family="Arial" fill="#fff">Testing</text>
+      <line x1="212" y1="75" x2="260" y2="75" stroke="#000" stroke-width="3" marker-end="url(#ah)"/>
+      <line x1="437" y1="75" x2="485" y2="75" stroke="#000" stroke-width="3" marker-end="url(#ah)"/>
+    </svg>
+  </figure>
+  <figure class="panel"><span class="tag">(b)</span>
+    <svg viewBox="0 0 320 220" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Bar chart of uptake">
+      <line x1="50" y1="185" x2="300" y2="185" stroke="#000" stroke-width="2"/>
+      <line x1="50" y1="25" x2="50" y2="185" stroke="#000" stroke-width="2"/>
+      <rect x="90" y="125" width="60" height="60" fill="#9a9a9a"/>
+      <rect x="190" y="55" width="60" height="130" fill="#2b6cb0"/>
+      <text x="120" y="205" font-size="18" text-anchor="middle" font-family="Arial">Parent</text>
+      <text x="220" y="205" font-size="18" text-anchor="middle" font-family="Arial">New</text>
+      <text x="22" y="105" font-size="18" text-anchor="middle" font-family="Arial" transform="rotate(-90 22 105)">Uptake (a.u.)</text>
+    </svg>
+  </figure>
+  <figure class="panel"><span class="tag">(c)</span>
+    <svg viewBox="0 0 320 220" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Line trend">
+      <line x1="50" y1="185" x2="300" y2="185" stroke="#000" stroke-width="2"/>
+      <line x1="50" y1="25" x2="50" y2="185" stroke="#000" stroke-width="2"/>
+      <polyline points="70,160 130,130 190,95 250,60 290,45" fill="none" stroke="#2b6cb0" stroke-width="3"/>
+      <polyline points="70,165 130,155 190,145 250,138 290,132" fill="none" stroke="#9a9a9a" stroke-width="3"/>
+      <text x="175" y="210" font-size="18" text-anchor="middle" font-family="Arial">Time (h)</text>
+    </svg>
+  </figure>
+</div>
+</body>
+</html>

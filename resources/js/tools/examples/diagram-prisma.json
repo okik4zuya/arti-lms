@@ -1,0 +1,21 @@
+{
+  "arti": "diagram/1",
+  "direction": "TB",
+  "nodes": [
+    { "id": "ident", "label": "Identifikasi: 1.240 artikel dari 3 basis data", "style": "plain" },
+    { "id": "dup", "label": "Duplikat dihapus: 310", "style": "soft" },
+    { "id": "skrin", "label": "Penyaringan judul dan abstrak: 930 artikel", "style": "plain" },
+    { "id": "ex1", "label": "Dikeluarkan: 780", "style": "soft" },
+    { "id": "teks", "label": "Penilaian teks lengkap: 150 artikel", "style": "plain" },
+    { "id": "ex2", "label": "Dikeluarkan: 98 (alasan dicatat)", "style": "soft" },
+    { "id": "inc", "label": "Termasuk dalam tinjauan: 52 artikel", "style": "dark" }
+  ],
+  "edges": [
+    { "from": "ident", "to": "dup" },
+    { "from": "ident", "to": "skrin" },
+    { "from": "skrin", "to": "ex1" },
+    { "from": "skrin", "to": "teks" },
+    { "from": "teks", "to": "ex2" },
+    { "from": "teks", "to": "inc" }
+  ]
+}

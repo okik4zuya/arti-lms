@@ -16,10 +16,16 @@ class SeoController extends Controller
             ? array_values(array_diff(self::PAGES, ['articles.index']))
             : self::PAGES;
 
+        // The tools hub is listed only once it is switched on (SITE_TOOLS_ENABLED).
+        $tools = config('site.tools_enabled')
+            ? array_merge([route('tools.index')], array_map(fn (string $slug) => route('tools.show', $slug), array_keys(config('tools.tools'))))
+            : [];
+
         return response()
             ->view('site.sitemap', [
                 'pages' => array_merge(
                     array_map(fn (string $name) => route($name), $pages),
+                    $tools,
                     array_map(fn (array $item) => route('free.show', $item['slug']), $free->subchapters())
                 ),
                 'articles' => $articles->all(),

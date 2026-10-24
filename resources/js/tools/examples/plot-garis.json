@@ -1,0 +1,14 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "data": { "values": [
+    { "jam": 0, "seri": "Baru", "nilai": 0.0 }, { "jam": 2, "seri": "Baru", "nilai": 1.8 }, { "jam": 4, "seri": "Baru", "nilai": 3.1 },
+    { "jam": 6, "seri": "Baru", "nilai": 3.9 }, { "jam": 0, "seri": "Acuan", "nilai": 0.0 }, { "jam": 2, "seri": "Acuan", "nilai": 0.9 },
+    { "jam": 4, "seri": "Acuan", "nilai": 1.5 }, { "jam": 6, "seri": "Acuan", "nilai": 1.9 }
+  ] },
+  "mark": { "type": "line", "point": true },
+  "encoding": {
+    "x": { "field": "jam", "type": "quantitative", "title": "Waktu (jam)" },
+    "y": { "field": "nilai", "type": "quantitative", "title": "Serapan (mg/g)" },
+    "color": { "field": "seri", "type": "nominal", "title": null }
+  }
+}

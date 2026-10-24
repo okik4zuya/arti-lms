@@ -5,7 +5,7 @@ metadata:
   type: project
   tier: T0
   created: 2026-09-08 21:36
-  updated: 2026-10-23 11:34
+  updated: 2026-10-24 18:30
 ---
 
 Closed items are deleted; their history lives in the linked topic files. Tidied 2026-10-19: ~120 checked items removed, merged duplicates, restored a lost block of old items from git (section "Older build items").
@@ -71,12 +71,14 @@ Closed items are deleted; their history lives in the linked topic files. Tidied 
 
 ### Tools hub /tools, see [[tools-hub-plan]]
 
-- [ ] Researcher: Gem limit check (6,000-character instruction accepted? knowledge file count? free account can Share, second account opens link?) and commit the Mayar work before the tools diff
-- [ ] P0 spikes: iframe capture and print (composite), Vega chunk size, dagre text measure and `.drawio` styles from `render.py`, keyword suggest run
-- [ ] P1 scaffold: `config/tools.php`, `ToolController`, routes, shell views, nav badge, `SITE_TOOLS_ENABLED`, sitemap
-- [ ] P2 composite tool and Gem text; P3 diagram tool and Gem text; P4 plot tool and Gem text; P5 journal-profile page and Gem text
-- [ ] P6 hub finalisation: decision tree, `#coba-gratis` card, `/privasi` sentence, tests, 375 px check, deploy with `npm ci` and `npm run build`
-- [ ] Researcher: create the Gems and send share URLs; one real round per Gem; open a `.drawio` in draw.io; phone check; decide if a trial CTA should return
+- [ ] Researcher: Gem limit check (6,000-character instruction accepted? knowledge file count? free account can Share, second account opens link?); the instructions are 2.5-3.4k characters, so only the knowledge-file count matters
+- [ ] Researcher: create the 4 Gems from `resources/gems/` (paste `*.instruksi.md`, upload `*.pengetahuan.md`), set `GEM_*_URL`, try one real round per Gem with a weak model and fix the instruction where output is invalid
+- [ ] Researcher: look at /tools and the 3 tool pages in a real browser and on a phone; test "Cetak / simpan PDF" (new tab and print dialog) and PNG in Firefox; open a downloaded .drawio in draw.io
+- [ ] Journal-profile page: add a worked example output the researcher got from the Gem (not invented); hub decision tree as 4 questions if wanted; keyword run for titles (S5)
+- [ ] Decide the funnel CTA (sign-up form plus bab 1 now; licence trial path is on the removal list)
+- [ ] Commit the tools work (uncommitted with the Mayar work), then deploy: `git pull`, `npm ci`, `npm run build`, `config:cache`, set `SITE_TOOLS_ENABLED=true` and the Gem URLs
+- [ ] Look into 3 failing tests outside tools: `FilamentPricingTest` (promotion) and two `RefundAndReconcileTest` cases (probably the Mayar default gateway)
+- [ ] After release: validate with about 5 students (idea to usable image, where the paste-back loop breaks)
 
 ### Learner app UX, see [[learner-app-ux]]
 

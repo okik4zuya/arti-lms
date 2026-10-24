@@ -72,6 +72,9 @@
         </ul>
         <p>Tautan ke situs lain (YouTube, Chrome Web Store, GitHub) membawa Anda ke layanan yang punya kebijakan privasinya sendiri.</p>
 
+        <h2>Alat gratis di /tools</h2>
+        <p>Alat gambar di halaman /tools (diagram, grafik, gambar gabungan) berjalan seluruhnya di browser Anda. Teks, data, dan gambar yang Anda tempel tidak dikirim ke server ARTi. Server hanya menerima permintaan halaman biasa. Instruksi yang Anda tempel ke Gemini, ChatGPT, atau Claude tunduk pada kebijakan privasi masing-masing penyedia.</p>
+
         <h2>Dasar dan tujuan pemrosesan</h2>
         <ul>
             <li>Data akun, pesanan, pembayaran, dan lisensi diproses untuk melaksanakan perjanjian dengan Anda: menerbitkan lisensi, memberi akses e-course, mengirim email pembelian, memberi dukungan, dan menangani pengembalian dana.</li>

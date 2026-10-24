@@ -1,0 +1,14 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "data": { "values": [
+    { "kelompok": "Kontrol", "tes": "Pretest", "skor": 52 }, { "kelompok": "Kontrol", "tes": "Posttest", "skor": 58 },
+    { "kelompok": "Eksperimen", "tes": "Pretest", "skor": 51 }, { "kelompok": "Eksperimen", "tes": "Posttest", "skor": 74 }
+  ] },
+  "mark": "bar",
+  "encoding": {
+    "x": { "field": "kelompok", "type": "nominal", "title": null, "axis": { "labelAngle": 0 } },
+    "xOffset": { "field": "tes" },
+    "y": { "field": "skor", "type": "quantitative", "title": "Skor rata-rata" },
+    "color": { "field": "tes", "type": "nominal", "title": null }
+  }
+}

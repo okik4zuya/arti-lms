@@ -100,6 +100,12 @@ return [
     'artipdf_version' => '1.0.7',
     'artipdf_size' => '63 MB',
     'youtube_url' => 'https://www.youtube.com/@dosenberarti',
+
+    /*
+    | Free tools hub (/tools). Off: the pages still answer but carry noindex, and the menu item, sitemap entries and
+    | the #coba-gratis card are hidden, so a phase can be deployed before it is announced.
+    */
+    'tools_enabled' => (bool) env('SITE_TOOLS_ENABLED', false),
     'scipeek_url' => 'https://chromewebstore.google.com/detail/arti-scipeek-%E2%80%94-journal-qu/dhbbdhnepmodmcheapjhcaolpcmpoanj',
 
     /*

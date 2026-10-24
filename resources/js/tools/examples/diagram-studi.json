@@ -1,0 +1,20 @@
+{
+  "arti": "diagram/1",
+  "direction": "TB",
+  "nodes": [
+    { "id": "pop", "label": "Populasi: 120 mahasiswa semester 3", "style": "dark" },
+    { "id": "pre", "label": "Pretest", "style": "plain" },
+    { "id": "kelas_a", "label": "Kelas eksperimen: pembelajaran berbasis proyek", "style": "plain" },
+    { "id": "kelas_b", "label": "Kelas kontrol: pembelajaran konvensional", "style": "plain" },
+    { "id": "post", "label": "Posttest", "style": "plain" },
+    { "id": "uji", "label": "Analisis: uji-t sampel independen", "style": "dark" }
+  ],
+  "edges": [
+    { "from": "pop", "to": "pre" },
+    { "from": "pre", "to": "kelas_a", "label": "acak" },
+    { "from": "pre", "to": "kelas_b", "label": "acak" },
+    { "from": "kelas_a", "to": "post" },
+    { "from": "kelas_b", "to": "post" },
+    { "from": "post", "to": "uji" }
+  ]
+}

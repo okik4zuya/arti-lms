@@ -4,7 +4,7 @@ description: Detailed implementation plan for the free tools hub at /tools in ar
 metadata:
   type: project
   created: 2026-10-24 17:58
-  updated: 2026-10-24 17:58
+  updated: 2026-10-24 18:30
 ---
 
 Source plan (strategy, rationale, extension): `G:\My Drive\hq\memory\memories\free-tools-gem-plan.md`. This file is the **build plan inside arti-lms**; it does not repeat the strategy. The browser extension (E0-E3) is out of scope here, but the contract markers below are chosen now so the extension can reuse them.
@@ -143,5 +143,18 @@ S4 limit check; create 4 Gems (after the texts exist) and send share URLs; one r
 - Vega bundle weight on slow phones: lazy chunk, show a loading state on the workbench only.
 - Hub page `content-visibility` / anchor behaviour from `site.css` (`no-cv` class) applies to long sections; keep workbench sections out of `content-visibility`.
 
+## Build record (2026-10-24, uncommitted)
+Built P1-P5 and most of P6 in one session; the flag `SITE_TOOLS_ENABLED` is **false by default**, so nothing is public yet.
+- **Backend:** `config/tools.php` (cards, `limits`, Gem URLs from `GEM_*_URL`), `ToolController` (hub, tool page, knowledge download `/tools/{tool}/pengetahuan.md`), routes, `SeoController` sitemap entries only when enabled, nav item in `site-links`, `#coba-gratis` card in `home.blade.php`, a sentence in `/privasi`, subscriber source `tools`, `.env.example` block.
+- **Views:** `site/tools/{index,show}` plus partials (gem-block, cta, workbench-start/-composite/-diagram/-plot). CSS in `resources/css/tools.css` (imported by `site.css`).
+- **JS** (`resources/js/tools/`): `core/` (errors with the paste-back format, clipboard, download, workbench wiring), `lib/` (composite-spec/-lint/-render, diagram-spec/-layout/-svg, plot-spec/-theme, csv), entries `composite.js`, `diagram.js`, `plot.js`, `gem.js`, `examples/`. Dependencies pinned: vega 6.4.0, vega-lite 6.5.0, @dagrejs/dagre 3.1.2 (ajv, html-to-image, vega-embed were tried and dropped). Plot chunk is 795 kB (274 kB gzip) and loads only on `/tools/plot`.
+- **Gem texts** in `resources/gems/`: 4 instructions (2.5-3.4k characters, all under 4,000) and 4 knowledge files (plot and composite ones were generated from the examples).
+- **Tests:** `tests/Feature/ToolsPagesTest.php` (12), pages added to `PublicPageQualityTest`, `npm run test:tools` = `node --test resources/js/tools/tools.test.js` (21, Node's runner, no extra dependency). Full PHP suite: 478 pass, 4 fail, none in tools files (DomainRoutingTest is the known one; FilamentPricingTest and two RefundAndReconcileTest cases fail on gateway/order state and were not investigated, likely the uncommitted Mayar work).
+- **Checked in headless Chrome** (CDP script over Node 22 WebSocket, `public/hot` moved aside): composite PNG exact size (4488x2362 for 190x100 mm at 600 dpi, 1328x531 px), both templates pass; bad fixtures give E_SCRIPT, E_EXTERNAL, E_OVERFLOW, E_SVG_TEXT_CLIPPED, W_TEXT_SMALL; diagram examples lay out and export .drawio/SVG/PNG; plot examples render, SVG/PNG (170 mm = 2008 px), E_DATA_URL/E_COMPILE/E_JSON; no horizontal overflow at 375 px on hub, tools and journal page; Gem copy button works.
+- **Bug found by the browser check:** the lint measured a hidden iframe (preview container `hidden`), so overflow checks passed vacuously; fixed by unhiding the preview before mounting. Remember when adding checks: measure only visible DOM.
+- **S1 answered:** iframe `sandbox="allow-same-origin"` without scripts lets the parent lint it; PNG via SVG `foreignObject` serialisation of the document works in Chrome (no html-to-image needed). PDF = new tab from a Blob with an injected `print()`; **not tested** (only the code path). Safari PNG untested.
+- **Not done / open:** the PDF print tab and Safari/Firefox; `.drawio` opened in draw.io desktop; real Gem rounds (Gem editor limits S4 still unchecked); the journal-profile page has no worked example output yet; hub decision tree is a plain list, not the 4-question tree; keyword run (S5) not done; the screenshot showed blank space under the workbench section, probably `content-visibility` in a captureBeyondViewport shot, not checked in a real scroll.
+
 ## Change log
+- 2026-10-24 18:30: build record added (P1-P5 built, hub finished except the items listed under "Not done / open").
 - 2026-10-24 17:58: created from the planning session (source plan read, `compose.py` and `render.py` inspected, Gemini facts searched: free-account Gems confirmed, sharing and limits unverified).

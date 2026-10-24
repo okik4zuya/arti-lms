@@ -18,6 +18,7 @@ class Subscriber extends Model
         'baca-2' => 'Baca gratis, halaman 2',
         'baca-3' => 'Baca gratis, halaman 3',
         'baca-4' => 'Baca gratis, halaman 4',
+        'tools' => 'Tools gratis (/tools)',
     ];
 
     public const PENDING = 'pending';

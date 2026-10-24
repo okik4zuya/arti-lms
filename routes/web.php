@@ -18,6 +18,7 @@ use App\Http\Controllers\PaymentWebhookController;
 use App\Http\Controllers\ProgressController;
 use App\Http\Controllers\SeoController;
 use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\ToolController;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Support\Facades\Route;
 
@@ -36,6 +37,11 @@ Route::group(array_filter(['domain' => config('app.domains.main')]), function ()
     Route::view('scipeek', 'site.scipeek')->name('scipeek');
     Route::view('artipdf', 'site.artipdf')->name('artipdf');
     Route::get('artipdf/unduh', [DownloadController::class, 'artipdf'])->middleware('throttle:download')->name('artipdf.unduh');
+
+    // ---- Free tools hub: pages and Gem texts only; every tool runs in the browser -----------
+    Route::get('tools', [ToolController::class, 'index'])->name('tools.index');
+    Route::get('tools/{tool}', [ToolController::class, 'show'])->where('tool', '[a-z-]+')->name('tools.show');
+    Route::get('tools/{tool}/pengetahuan.md', [ToolController::class, 'knowledge'])->where('tool', '[a-z-]+')->name('tools.knowledge');
 
     // ---- Mailing list (double opt-in; the links in the email are signed) -------------
     Route::post('daftar', [SubscriptionController::class, 'store'])->middleware('throttle:subscribe')->name('subscribe.store');

@@ -1,0 +1,17 @@
+{
+  "arti": "diagram/1",
+  "direction": "LR",
+  "nodes": [
+    { "id": "sampel", "label": "Pengambilan sampel", "style": "plain" },
+    { "id": "prep", "label": "Preparasi dan penimbangan", "style": "plain" },
+    { "id": "ukur", "label": "Pengukuran", "style": "plain" },
+    { "id": "olah", "label": "Pengolahan data", "style": "plain" },
+    { "id": "hasil", "label": "Hasil dan interpretasi", "style": "dark" }
+  ],
+  "edges": [
+    { "from": "sampel", "to": "prep" },
+    { "from": "prep", "to": "ukur", "label": "3 ulangan" },
+    { "from": "ukur", "to": "olah" },
+    { "from": "olah", "to": "hasil" }
+  ]
+}

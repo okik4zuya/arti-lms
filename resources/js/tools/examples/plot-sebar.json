@@ -1,0 +1,15 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "data": { "values": [
+    { "dosis": 10, "respons": 12 }, { "dosis": 20, "respons": 19 }, { "dosis": 30, "respons": 33 }, { "dosis": 40, "respons": 38 },
+    { "dosis": 50, "respons": 51 }, { "dosis": 60, "respons": 55 }, { "dosis": 70, "respons": 69 }, { "dosis": 80, "respons": 74 }
+  ] },
+  "layer": [
+    { "mark": "point" },
+    { "mark": { "type": "line", "color": "#000000", "strokeDash": [6, 4] }, "transform": [ { "regression": "respons", "on": "dosis" } ] }
+  ],
+  "encoding": {
+    "x": { "field": "dosis", "type": "quantitative", "title": "Dosis (mg)" },
+    "y": { "field": "respons", "type": "quantitative", "title": "Respons (a.u.)" }
+  }
+}

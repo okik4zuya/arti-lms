@@ -1,0 +1,13 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "title": "Jumlah artikel per tahun",
+  "data": { "values": [
+    { "tahun": "2019", "jumlah": 14 }, { "tahun": "2020", "jumlah": 22 }, { "tahun": "2021", "jumlah": 31 },
+    { "tahun": "2022", "jumlah": 47 }, { "tahun": "2023", "jumlah": 63 }, { "tahun": "2024", "jumlah": 58 }
+  ] },
+  "mark": "bar",
+  "encoding": {
+    "x": { "field": "tahun", "type": "ordinal", "title": "Tahun terbit", "axis": { "labelAngle": 0 } },
+    "y": { "field": "jumlah", "type": "quantitative", "title": "Jumlah artikel" }
+  }
+}

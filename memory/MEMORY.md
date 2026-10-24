@@ -54,5 +54,5 @@ metadata:
 - [Landing explainer storyboard](memories/landing-explainer-storyboard.md) — the 40 s explainer: 7 scenes, build and render recipe, installed on the landing page
 - [VPS OOM incident 2026-10-19](memories/vps-oom-incident-2026-10-19.md) — 522 + SSH dead, Netdata 894 MB killed mysqld, bot scanner flood, fixes done and pending, stay-on-shared-VPS decision, webhook-in-Laravel rationale
 - [VPS maintenance guide](memories/vps-maintenance-guide.md) — runbook: health checks, outage steps, monitoring, R2 backup system and restore, hardening settings, gotchas
-- [Tools hub plan](memories/tools-hub-plan.md) — 2026-10-24: build plan for /tools (hub + composite, diagram, plot tool pages + 4 Gem texts), client-only Vite JS, spec contracts, phases P0-P6 with acceptance checks, tests, risks; nothing built
+- [Tools hub plan](memories/tools-hub-plan.md) — 2026-10-24: build plan for /tools (hub + composite, diagram, plot tool pages + 4 Gem texts), client-only Vite JS, spec contracts, phases P0-P6, build record 2026-10-24 (built, flag off, what is checked and open)
 - [SES migration plan](memories/ses-migration-plan.md) — 2026-10-19 brainstorm: Brevo 300/day to Amazon SES, option B (SES + Brevo failover), bounce webhook, DNS, phases, open decisions; nothing built
