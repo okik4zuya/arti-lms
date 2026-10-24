@@ -10,6 +10,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ContentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DownloadController;
+use App\Http\Controllers\MayarWebhookController;
 use App\Http\Controllers\MidtransWebhookController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\PasswordResetController;
@@ -102,6 +103,8 @@ Route::group(array_filter(['domain' => config('app.domains.main')]), function ()
     Route::post('webhooks/pembayaran', PaymentWebhookController::class)->middleware('throttle:webhook')->name('webhooks.payment');
     // Midtrans: signature_key in the body plus a re-read of the transaction from Midtrans' Status API.
     Route::post('webhooks/midtrans', MidtransWebhookController::class)->middleware('throttle:webhook')->name('webhooks.midtrans');
+    // Mayar: no signature, so the URL carries a secret segment, plus a re-read of the payment request from Mayar's API.
+    Route::post('webhooks/mayar/{secret}', MayarWebhookController::class)->middleware('throttle:webhook')->where('secret', '[A-Za-z0-9_-]+')->name('webhooks.mayar');
 
     // ---- Payment proofs: signed, short-lived link, opened from the admin panel -------
     Route::get('bukti-pembayaran/{issuance}', LicenseProofController::class)

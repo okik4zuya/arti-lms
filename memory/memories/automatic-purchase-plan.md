@@ -4,7 +4,7 @@ description: Written plan for automatic purchases (gateway, orders, webhook, Ful
 metadata:
   type: project
   created: 2026-10-18 14:15
-  updated: 2026-10-19 06:34
+  updated: 2026-10-23 11:34
 ---
 
 Plan stage of the session described in [[automatic-purchase-prompt]]. **The sections "Verified", "Architecture" and "Decisions pending" are the original plan; what was built is under "Built 2026-10-18", "Gateway abstraction" and "Sandbox 2026-10-18 (evening)" below.** Builds on [[license-admin]], [[license-admin-roadmap]], [[list-building]], [[r2-storage]], [[legal-review-notes]]. Worker side: `~/.arti/memory/memories/licensing-update-plan.md`.
@@ -76,7 +76,11 @@ b) orders + webhook + signature + idempotency + tests with `Http::fake`; c) forg
 - **Gateway update 2026-10-18 (later):** Xendit turned out to require a NIB for the researcher; Midtrans researched. Midtrans' own docs ("What are the legal documents required...") list for a domestic **individual** account: owner's KTP and NPWP, **no NIB** (NIB/SIUP/TDP only for company and foundation accounts). Third-party guides disagree on NPWP (some say KTP is enough for QRIS, VA and GoPay and NPWP is only for cards). The bank account for an individual must be in the owner's own name. Individual and company accounts differ in the payment methods available (the comparison is an image in the docs, not readable). Website criteria: active site, clear product info, prices in IDR; prohibited businesses are scams, adult, gambling and similar (courses and software licences are not named either way). Sandbox is available at once; card activation can take about 10 working days. Midtrans support should confirm NPWP and the QRIS, VA and e-wallet methods for the individual account. The code is Xendit-specific (`XenditClient`, `SettleInvoice`); a gateway interface with a Midtrans Snap driver is the next build if the researcher confirms Midtrans.
 - Product direction: **one-time, lifetime purchase** instead of Rp199.000/year (product adapts later). Consequences recorded: no renewal order type, no reminder mail, Worker `extend order_ref` no longer needed (only `resend silent`), no course-access expiry question, and every "per tahun / satu tahun / Rp16.600 per bulan / setelah satu tahun" claim on the landing, `/syarat`, series mail 4 and tests must be reworded. Price and the meaning of "lifetime" still to be answered.
 
+## Gateway switch 2026-10-23
+The Midtrans application proved complicated, so **Mayar** is now the gateway (hosted Mayar page, fees borne by the seller); a third driver `MayarClient` plugs into `PaymentGateway` and orders, quota, `SettleInvoice`, fulfilment, refund and reconcile are unchanged. Midtrans and Xendit drivers stay. Mayar's webhook has no signature, so the URL carries a secret, the dashboard Webhook Token is checked, and status/amount are always re-read from the API. Everything, including the verified payload and the sandbox run: [[mayar-gateway]]. Buyer-facing texts no longer name a gateway (see [[landing-checkout-form]]).
+
 ## Change log
+- 2026-10-23 11:34 — Mayar driver added, see "Gateway switch 2026-10-23".
 - 2026-10-19 06:34 — landing form, method cards and WhatsApp removal: see [[landing-checkout-form]].
 - 2026-10-18 19:41 — sandbox run, password-page UX, copy-paste links, installer link and terminal step removed from mails and WhatsApp.
 - 2026-10-18 15:40 — built (see "Built 2026-10-18").

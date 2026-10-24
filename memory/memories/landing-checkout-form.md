@@ -4,7 +4,7 @@ description: The buy form on the landing page (#checkout), the two payment-metho
 metadata:
   type: project
   created: 2026-10-19 06:34
-  updated: 2026-10-19 08:15
+  updated: 2026-10-23 11:34
 ---
 
 Built 2026-10-19 after the researcher showed a competitor's (Scalev, course.dosen.my.id) checkout section. Builds on [[automatic-purchase-plan]] (gateway, orders, webhook) and replaces the WhatsApp contact UI in [[contact-whatsapp]]. All uncommitted.
@@ -41,6 +41,10 @@ Built 2026-10-19 after the researcher showed a competitor's (Scalev, course.dose
 - A Bash heredoc holding Blade/Python with apostrophes failed with "unexpected EOF" and wrote nothing; use the Write tool for files.
 - Tests that asserted the old `/beli` page or WhatsApp links (CheckoutTest, MidtransGatewayTest, ContactFormTest, LandingPageTest, FeaturePageTest, PublicSiteTest, OfferTest) were rewritten; copy changes in the form label ("Harga perintis. Tersisa N dari 100") are asserted by LandingPageTest.
 
+## Update 2026-10-23: gateway-neutral wording for the Mayar verification
+Buyer-facing text no longer names a gateway: the note under the button reads "Pembayaran diproses aman oleh penyedia pembayaran berlisensi di Indonesia", the product line "Produk digital: e-course ARTi Framework dengan tools pendukung (tanpa pengiriman fisik)", the method card "Virtual Account / e-wallet" (was "... / GoPay / ShopeePay"), the finish page says "halaman pembayaran", `/syarat` and `/privasi` say "penyedia pembayaran berlisensi di Indonesia", and the closed notice says "Verifikasi akun pembayaran kami sedang berjalan". The two method cards themselves are now meaningless with Mayar (its hosted page ignores the pick); removal agreed, **not yet done** ([[mayar-gateway]]). Name the provider in `/privasi` again after go-live.
+
 ## Change log
+- 2026-10-23 11:34 — gateway-neutral wording, cards pending removal.
 - 2026-10-19 08:15 — label "Nama".
 - 2026-10-19 06:34 — created.

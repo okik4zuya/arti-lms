@@ -4,7 +4,7 @@ description: How Redis is wired for local dev (Laragon Redis, Predis, own DBs an
 metadata:
   type: project
   created: 2026-10-15 08:40
-  updated: 2026-10-18 21:54
+  updated: 2026-10-23 11:34
 ---
 
 Set up 2026-10-15 08:40. Local only: `.env` is gitignored, so each environment needs its own.
@@ -19,6 +19,10 @@ Set up 2026-10-15 08:40. Local only: `.env` is gitignored, so each environment n
 
 ## Update 2026-10-18 (night)
 The dev `.env` had fallen back to the `database` drivers; the researcher switched cache, session and queue to Redis again (`CACHE_STORE`, `SESSION_DRIVER`, `QUEUE_CONNECTION` = `redis`) and added `CONTENT_CACHE_STORE=redis` for the course content cache ([[learner-app-ux]]). Checked through a fresh PHP process: both connections (db10, db11) write and read, so the earlier `-MISCONF` is gone; the Redis queue held 2 waiting `SeriesMail` jobs (left from the 2026-10-15 tests; `php artisan queue:clear redis` before `queue:work` if they should not be sent); the `jobs` table was empty. `phpunit.xml` now also pins `CONTENT_CACHE_STORE=array`. Production Redis is still undecided (own instance, or leave `CONTENT_CACHE_STORE` empty and the drivers on `database`).
+
+## Update 2026-10-23: MISCONF again, and what to use in production
+- During the Mayar sandbox run the set-password page threw `Predis ServerException: MISCONF ... not able to persist on disk` (sessions live in Redis). Cause: free RAM about 500 MB and a small page file, so the RDB `bgsave` fork fails and `stop-writes-on-bgsave-error yes` blocks every write. By the time it was checked `rdb_last_bgsave_status` was `ok` again and the link worked on reload (the error came before the password was set, so the one-time link was not used up). Dev fixes: free memory or enlarge the page file; `redis-cli CONFIG SET stop-writes-on-bgsave-error no` (not persistent, shared instance, the researcher decides); or `database` drivers for session/queue/cache in dev. Redis here is `C:\laragon6\bin\redis\redis-x64-5.0.14.1`, `save 900 1 300 10 60 10000`, `dir C:\laragon6`.
+- **Production advice (given 2026-10-23, the researcher had set everything to Redis):** the VPS has 1.9 GB RAM for 7 sites and swap in use ([[vps-oom-incident-2026-10-19]]), the same condition that broke dev. Put the **queue on `database`** (payment fulfilment jobs must survive a Redis OOM-kill or restart; `orders:reconcile` is only the safety net) and keep session and cache on Redis only if the instance is safe: `stop-writes-on-bgsave-error no` or snapshots off, a `maxmemory` limit with an eviction policy only if the queue is not on it, own DB numbers and prefix, never db0. Simplest: everything on `database` until a dedicated VPS. Switching the queue: drain Redis first (`LLEN queues:default` on the app's DB, `queue:work redis --stop-when-empty`), set `QUEUE_CONNECTION=database`, `config:cache`, `queue:restart`, check the `jobs` table exists.
 
 ## Verified
 Scripted check (standalone PHP booting Laravel): PING, a cache round trip into db11, queue size 0. A real HTTP request to `/login` created one session key in db10 with a 120-minute TTL, and the landing page rendered. Not verified: the Filament `/jamrud` login and the LMS pages under Redis sessions, and any behaviour under load.
@@ -39,6 +43,7 @@ Only **session** is touched by the landing (no app cache on `/`). 160 sequential
 - `composer audit` reports 4 advisories on `laravel/framework` (low, medium and high, e.g. temporary signed URL path confusion, debug-page XSS). Pre-existing, not from Predis; the app is on 11.x. Worth a framework upgrade pass.
 
 ## Change log
+- 2026-10-23 11:34 — MISCONF recurrence, dev fixes, production advice (queue on database).
 - 2026-10-18 21:54 — Redis for cache, session and queue back on in dev, content cache store, test pin.
 - 2026-10-15 09:04 — added the with/without Redis landing benchmark.
 - 2026-10-15 08:40 — created after wiring Redis for cache, session and queue.

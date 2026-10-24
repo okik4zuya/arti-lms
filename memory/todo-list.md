@@ -5,7 +5,7 @@ metadata:
   type: project
   tier: T0
   created: 2026-09-08 21:36
-  updated: 2026-10-20 10:15
+  updated: 2026-10-23 11:34
 ---
 
 Closed items are deleted; their history lives in the linked topic files. Tidied 2026-10-19: ~120 checked items removed, merged duplicates, restored a lost block of old items from git (section "Older build items").
@@ -38,7 +38,13 @@ Closed items are deleted; their history lives in the linked topic files. Tidied 
 - [ ] Align the "Baca bab 1 gratis" buttons (`/scipeek`, `/artipdf`, `/fitur`, 404, series mail 4) and the "wujud" wording (home `#wujud`, `/fitur`, series mail 2) if wanted
 
 ### Checkout form and purchase, see [[landing-checkout-form]], [[automatic-purchase-plan]], [[purchase-production-checklist]]
-- [ ] Midtrans application under review: keep `SITE_CHECKOUT_ENABLED=false` in production, flip to `true` and `config:cache` once approved, then one real payment ([[purchase-production-checklist]])
+- [ ] Mayar go-live ([[mayar-gateway]], [[purchase-production-checklist]] 5c): account verified, subdomain and shop name fixed, production API key and Webhook Token, Url Webhook with a new secret, `MAYAR_IS_PRODUCTION=true`; keep `SITE_CHECKOUT_ENABLED=false` until one real payment passes
+- [ ] Researcher: finish the Mayar sandbox checks: order reaches `fulfilled`, webhook retry makes no second key/mail, login and Download page after set-password; then revoke the test licence ("Kembalikan dana") and delete test orders/users
+- [ ] Remove the VA/QRIS method cards and `metode` validation (Mayar ignores the pick); add the sentence about Mayar's 4 receipt emails on `/beli` and the finish page; update the tests
+- [ ] Ask Mayar support: hold time and VAT, refunds, turning off or branding its emails, Webhook Token header name, 1.5% vs 4% rate, VA/QR by API ([[mayar-gateway]])
+- [ ] Optional: store Mayar `transactionId` and read `GET /transactions/{id}` for `expired` status and payment method; check the Webhook Token header in the production log
+- [ ] Production Redis: set queue to `database` (drain Redis first), session/cache on Redis only with safe settings ([[redis-setup]]); dev: free RAM or `stop-writes-on-bgsave-error no`
+- [ ] Commit the Mayar driver, tests, config, route and the gateway-neutral wording (nothing of 2026-10-23 is committed)
 - [ ] Production deploy of 2026-10-19: commit and push (`vite.config.js` entries, "Kenapa murah" removed, checkout kill switch), then `git pull`, `npm run build`, `config:cache`, `queue:restart` on the VPS as `deploy`
 - [ ] Gmail send-as `hi@arti.ai.id` through Brevo SMTP plus merged SPF record ([[custom-domain-email]])
 - [ ] Decide on the SES migration (option B, do AWS prep now, bounce webhook timing) ([[ses-migration-plan]])
@@ -59,9 +65,18 @@ Closed items are deleted; their history lives in the linked topic files. Tidied 
 - [ ] Decide: WhatsApp delivery note on the form (driver still `none`): build a provider or soften the note; WhatsApp provider brainstorm in a separate session
 - [ ] Decide: remove the unused WhatsApp number and default-message fields from Filament "Pengaturan situs" (and tests, `SITE_CONTACT_WHATSAPP`), or keep them for the manual licence flow
 - [ ] Decide: different subject for resent purchase mails (Gmail folds the repeated body); copy-paste link in the `confirm-subscription` mail
-- [ ] Backup gateway: Duitku researched, not built ([[duitku-fallback]]); ask its support only if Midtrans refuses the account
+- [ ] Backup gateway: Duitku researched, not built ([[duitku-fallback]]); Midtrans driver stays as a switch (`PAYMENT_GATEWAY`); use Duitku only if Mayar refuses the account
 - [ ] Run the full `php artisan test` suite once (only touched files were run); `DomainRoutingTest::test_generated_urls_use_the_main_domain` fails even on a clean stash (pre-existing)
 - [ ] Review `LicenseIssuanceResource` row action labels after the switch to links; README mentions; README "nine skills" to ten
+
+### Tools hub /tools, see [[tools-hub-plan]]
+
+- [ ] Researcher: Gem limit check (6,000-character instruction accepted? knowledge file count? free account can Share, second account opens link?) and commit the Mayar work before the tools diff
+- [ ] P0 spikes: iframe capture and print (composite), Vega chunk size, dagre text measure and `.drawio` styles from `render.py`, keyword suggest run
+- [ ] P1 scaffold: `config/tools.php`, `ToolController`, routes, shell views, nav badge, `SITE_TOOLS_ENABLED`, sitemap
+- [ ] P2 composite tool and Gem text; P3 diagram tool and Gem text; P4 plot tool and Gem text; P5 journal-profile page and Gem text
+- [ ] P6 hub finalisation: decision tree, `#coba-gratis` card, `/privasi` sentence, tests, 375 px check, deploy with `npm ci` and `npm run build`
+- [ ] Researcher: create the Gems and send share URLs; one real round per Gem; open a `.drawio` in draw.io; phone check; decide if a trial CTA should return
 
 ### Learner app UX, see [[learner-app-ux]]
 

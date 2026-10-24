@@ -4,7 +4,7 @@ description: Everything the researcher must set or check before automatic purcha
 metadata:
   type: reference
   created: 2026-10-18 15:28
-  updated: 2026-10-19 16:00
+  updated: 2026-10-23 11:34
 ---
 
 Names only; values are the researcher's (`.env` is never opened by Claude). Design in [[automatic-purchase-plan]]; Worker side in [[worker-changes-spec]]; server layout in [[domain-migration-arti-ai-id]].
@@ -15,6 +15,7 @@ Names only; values are the researcher's (`.env` is never opened by Claude). Desi
 | `PAYMENT_GATEWAY` | `midtrans` (default, the researcher's choice 2026-10-18) or `xendit`; an order keeps the gateway it was created with |
 | `MIDTRANS_SERVER_KEY` | sandbox key (starts with `SB-Mid-server-`) while testing, live server key in production (Midtrans dashboard, Settings, Access Keys). The client key is not used: the buyer is redirected to the Snap page |
 | `MIDTRANS_IS_PRODUCTION` | `false` for sandbox (default), `true` with the live key; picks `app.sandbox.midtrans.com` / `api.sandbox.midtrans.com` or the production hosts (`MIDTRANS_SNAP_URL`, `MIDTRANS_API_URL` override) |
+| `MAYAR_API_KEY`, `MAYAR_WEBHOOK_SECRET`, `MAYAR_WEBHOOK_TOKEN`, `MAYAR_IS_PRODUCTION`, `MAYAR_API_URL` | when `PAYMENT_GATEWAY=mayar` ([[mayar-gateway]]). Key: Read & Write, from the dashboard of the same environment. Secret: a random letters/digits string you make yourself (goes into the webhook URL). Token: copy from the dashboard "API Keys & Token"; empty skips the token check. **`MAYAR_IS_PRODUCTION=true` is required in production**, otherwise the URL defaults to the sandbox host and the production key is refused (or set `MAYAR_API_URL=https://api.mayar.id/hl/v2`) |
 | `XENDIT_SECRET_KEY`, `XENDIT_CALLBACK_TOKEN`, `XENDIT_API_URL` | only if `PAYMENT_GATEWAY=xendit` (Xendit needs a NIB, so unused for now) |
 | `LICENSE_API_URL`, `LICENSE_ADMIN_TOKEN` | already set; production is `https://lisensi.arti.ai.id/v1` |
 | `LICENSE_INSTALLER_URL` | **no longer used by mails or WhatsApp (2026-10-18)**: they point to the course Download page instead; the installer link lives only in `download-installer/index.md` |
@@ -60,6 +61,12 @@ DKIM, SPF and DMARC pass for `arti.ai.id` (done 2026-10-16). Send a real reset m
 - **Mail:** a resent purchase mail has the same subject, so Gmail folds the repeated body behind the "•••" button; click it. A different subject for resends was proposed, not built.
 - **Not yet run:** resend-notification idempotency, stopped-queue plus `orders:reconcile`, real forgot-password, download page after login, "Kembalikan dana" cleanup of the test licences (they hit the production Worker, `LICENSE_API_URL`).
 
+## 5c. Mayar: sandbox run 2026-10-23 and go-live list (details in [[mayar-gateway]])
+- **Sandbox setup:** `web.mayar.io`, API key (Read & Write), Webhook Token, Url Webhook `https://<tunnel>/webhooks/mayar/<MAYAR_WEBHOOK_SECRET>` (the path must include `webhooks/`; leaving it out gave 404 and FAILED), event `payment.received`; ngrok static domain `uncreditably-tamest-torie.ngrok-free.dev`; `.env`: `PAYMENT_GATEWAY=mayar`, `SITE_CHECKOUT_ENABLED=true`, `APP_URL` = tunnel, `APP_DOMAIN_MAIN` empty; `php artisan config:clear` after every `.env` change. Dev queue is **Redis**: `queue:work` must run (the order stays `paid` otherwise), and Redis must be writable ([[redis-setup]]).
+- **Result:** buy, Mayar page, simulate-payment button, redirect to `/beli/selesai/...`, webhook, order `paid`, purchase mail, set-password page all worked. Mayar also sends 4 emails of its own.
+- **Go-live list:** (1) Mayar account verified (deskripsi usaha, KTP, selfie, bank book); (2) choose the subdomain and shop name **before** creating the production key (changing them needs a new key); (3) production API key (Read & Write) and Webhook Token from `web.mayar.id`, QRIS and VA enabled, payout bank set; (4) Url Webhook `https://arti.ai.id/webhooks/mayar/<new secret>` (not the sandbox secret, which was shown in a chat); (5) `.env`: gateway, key, secret, token, `MAYAR_IS_PRODUCTION=true`, queue on `database`, `APP_URL`, mail, `ADMIN_MFA_REQUIRED`, seller name and city; (6) `migrate --force`, `permissions:sync`, `config:cache`, `route:cache`, `event:cache`, `queue:restart`; (7) Cloudflare skip rule for `/webhooks/mayar/*`; (8) cron `schedule:run`, a worker, backup running; (9) clean test data (revoke test licences, delete test orders/users); (10) one real payment, retry the webhook from Mayar's history (no second key), then `SITE_CHECKOUT_ENABLED=true`. Rollback: `SITE_CHECKOUT_ENABLED=false`, or `PAYMENT_GATEWAY=midtrans`.
+- Refunds: whether Mayar refunds from its dashboard is unconfirmed; "Kembalikan dana" in Filament only revokes the key and access.
+
 ## 6. Known limits
 - A queued WhatsApp job carries the one-time link in its payload until it runs; failed jobs are pruned after a week.
 - The status page `/beli/selesai/{id}` is reachable by anyone holding the id; it shows a masked email only.
@@ -68,6 +75,7 @@ DKIM, SPF and DMARC pass for `arti.ai.id` (done 2026-10-16). Send a real reset m
 - Timing: "known email" requests do slightly more work than unknown ones; the answer text and status are identical.
 
 ## Change log
+- 2026-10-23 11:34 — Mayar variables, sandbox run (5c) and the go-live list.
 - 2026-10-19 16:00 — added `SITE_CHECKOUT_ENABLED` kill switch row.
 - 2026-10-18 19:41 — Midtrans menu fixed (Settings, Payment), mail scheme/From notes, installer URL retired, sandbox run recorded (5b).
 - 2026-10-18 15:28 — created.

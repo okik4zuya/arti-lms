@@ -7,7 +7,7 @@ use InvalidArgumentException;
 /** Picks the payment gateway: the configured one for new orders, the order's own for an order that already exists. */
 class PaymentGateways
 {
-    public const DRIVERS = ['midtrans' => MidtransClient::class, 'xendit' => XenditClient::class];
+    public const DRIVERS = ['midtrans' => MidtransClient::class, 'xendit' => XenditClient::class, 'mayar' => MayarClient::class];
 
     public function current(): PaymentGateway
     {

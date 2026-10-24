@@ -5,7 +5,7 @@ metadata:
   type: project
   tier: T0
   created: 2026-09-08 21:36
-  updated: 2026-10-20 10:15
+  updated: 2026-10-23 11:34
 ---
 
 # arti-lms — Memory Index
@@ -26,7 +26,7 @@ metadata:
 - [ARTi PDF app facts](memories/artipdf-landing-facts.md) — standalone PDF GUI for the free section: release state (v1.0.6 public, 1.0.7 unreleased), features, unsigned installer, claims to avoid
 - [Landing: SciPeek and ARTi PDF pages](memories/landing-scipeek-artipdf.md) — concept for /scipeek and /artipdf, keyword evidence, decisions, prerequisites; both pages built
 - [Landing finalisation prompt](memories/landing-finalisation-prompt.md) — ready-to-paste prompt for the next session: brainstorm first, then landing copywriting evaluated with the reptilian-brain (six stimuli) concept
-- [Redis setup](memories/redis-setup.md) — Redis (Laragon, Predis, DBs 10/11, own prefix) for cache, session, queue and the course content cache; opcache benchmark; 2026-10-18 back on in dev; production still open
+- [Redis setup](memories/redis-setup.md) — Redis (Laragon, Predis, DBs 10/11, own prefix) for cache, session, queue and the course content cache; opcache benchmark; MISCONF returns on low RAM (2026-10-23); production advice: queue on database, session/cache on Redis only with safe settings
 - [Page speed](memories/page-speed.md) — what was measured and optimised on the public site, the `public/hot` measuring pitfall, results, and what is still unverified
 - [Contact and WhatsApp](memories/contact-whatsapp.md) — SUPERSEDED 2026-10-19: floating button, panel and /kontak form removed; history of the number setting and gotchas
 - [License admin page](memories/license-admin.md) — Filament license issuing (A+: Worker enforces, Laravel keeps the record + encrypted key), what is verified, MFA/backup prerequisites, path to automatic purchases
@@ -44,14 +44,15 @@ metadata:
 - [Course packages: decisions](memories/course-packages-decisions.md) — 2026-10-19 brainstorm: product map (Paper Riset inside ARTi, SLR second, BIMA on hold), licence-only-via-ARTi rule, package not OTO, pre-launch rules, system impact estimate, what is undecided
 - [Landing: Workflow Paper SLR](memories/landing-slr-workflow.md) — raw material for the future SLR course page: keyword and competitor evidence, wording to use or avoid, ARTi-SLR facts, selling rules, open questions; nothing built
 - [Worker changes spec](memories/worker-changes-spec.md) — hand-over for the Worker repo: silent resend, months 1000, optional idempotent extend, client "Lifetime" label
-- [Purchase production checklist](memories/purchase-production-checklist.md) — env variable names (mail scheme/From gotchas), migrations, cron, Midtrans dashboard (Settings, Payment), Brevo, sandbox steps and the 2026-10-18 ngrok run (5b)
+- [Purchase production checklist](memories/purchase-production-checklist.md) — env variable names (mail scheme/From gotchas, Mayar block), migrations, cron, Midtrans and Mayar dashboards, Brevo, sandbox steps, the ngrok runs (5b Midtrans, 5c Mayar) and the Mayar go-live list
 - [Custom-domain email (Gmail)](memories/custom-domain-email.md) — hi@arti.ai.id: receiving via Cloudflare Email Routing done; sending via Brevo SMTP in Gmail still open, steps and SPF merge
 - [Next-session prompt](memories/next-session-prompt.md) — old purchase brainstorm prompt, mostly superseded (the purchase is built); still lists WhatsApp provider, legal review and production steps
 - [Duitku fallback](memories/duitku-fallback.md) — backup gateway if Midtrans rejects the account or category: individual requirements (no NIB, NPWP yes), fees, API quirks (status-check rate limit), support questions; not built
-- [Mayar fallback](memories/mayar-fallback.md) — Mayar.id vs Midtrans: fees (about 3x on QRIS), NPWP optional for individuals, API gaps (no redirect/order id/webhook signature documented), questions for support; saved, not pursued
+- [Mayar gateway](memories/mayar-gateway.md) — 2026-10-23: Mayar is the gateway (hosted page, Midtrans driver kept): API facts, verified webhook payload, Webhook Token, driver built and sandbox-tested, problems and fixes, production steps, questions for support
 - [Learner app UX](memories/learner-app-ux.md) — 2026-10-18 night: empty-dashboard bug and cause, avatar menu, spinner, password UX, instant mark-complete, prev/next, resume card, Redis content cache, headless Chrome checking recipe, ideas not built
-- [PHP binary and shell notes](memories/php-binary-and-shell.md) — php path for artisan/tests, Bash heredoc and CRLF gotchas
+- [PHP binary and shell notes](memories/php-binary-and-shell.md) — php path for artisan/tests, MySQL not starting on port 3306 (Windows excluded range, fix), low-memory errors, Bash heredoc and CRLF gotchas
 - [Landing explainer storyboard](memories/landing-explainer-storyboard.md) — the 40 s explainer: 7 scenes, build and render recipe, installed on the landing page
 - [VPS OOM incident 2026-10-19](memories/vps-oom-incident-2026-10-19.md) — 522 + SSH dead, Netdata 894 MB killed mysqld, bot scanner flood, fixes done and pending, stay-on-shared-VPS decision, webhook-in-Laravel rationale
 - [VPS maintenance guide](memories/vps-maintenance-guide.md) — runbook: health checks, outage steps, monitoring, R2 backup system and restore, hardening settings, gotchas
+- [Tools hub plan](memories/tools-hub-plan.md) — 2026-10-24: build plan for /tools (hub + composite, diagram, plot tool pages + 4 Gem texts), client-only Vite JS, spec contracts, phases P0-P6 with acceptance checks, tests, risks; nothing built
 - [SES migration plan](memories/ses-migration-plan.md) — 2026-10-19 brainstorm: Brevo 300/day to Amazon SES, option B (SES + Brevo failover), bounce webhook, DNS, phases, open decisions; nothing built

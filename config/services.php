@@ -39,7 +39,7 @@ return [
     ],
 
     /*
-    | Which payment gateway new orders use: `midtrans` (default) or `xendit`. An existing order keeps the gateway it
+    | Which payment gateway new orders use: `midtrans` (default), `xendit` or `mayar`. An existing order keeps the gateway it
     | was created with, so switching never strands a payment in progress.
     */
     'payments' => [
@@ -62,6 +62,19 @@ return [
             'va' => array_filter(explode(',', (string) env('MIDTRANS_METHODS_VA', 'bca_va,bni_va,bri_va,permata_va,echannel,gopay,shopeepay'))),
             'qris' => array_filter(explode(',', (string) env('MIDTRANS_METHODS_QRIS', 'other_qris'))),
         ],
+    ],
+
+    /*
+    | Mayar (payment gateway, API v2). The API key lives in .env only and must match the environment: a sandbox key with
+    | api.mayar.io, a production key with api.mayar.id (MAYAR_API_URL overrides). Mayar signs nothing, so the webhook URL
+    | carries a secret: register https://<site>/webhooks/mayar/<MAYAR_WEBHOOK_SECRET> in the Mayar dashboard (Integration, Webhook).
+    */
+    'mayar' => [
+        'api_key' => env('MAYAR_API_KEY'),
+        'api_url' => env('MAYAR_API_URL', env('MAYAR_IS_PRODUCTION', false) ? 'https://api.mayar.id/hl/v2' : 'https://api.mayar.io/hl/v2'),
+        'webhook_secret' => env('MAYAR_WEBHOOK_SECRET'),
+        // The dashboard's "Webhook Token" (Integration, API Keys & Token); empty skips the check.
+        'webhook_token' => env('MAYAR_WEBHOOK_TOKEN'),
     ],
 
     /*
